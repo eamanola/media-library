@@ -1,0 +1,114 @@
+.media-item {
+  --active-color: #ddd;
+  --accent-color: coral;
+  --default-color: #eee;
+  --border: 1px solid var(--default-color);
+  --margin: 0.5em;
+  --padding: 1em 0.5em;
+  --button-margin: 0.5em 0.5em 0 0.5em;
+  --button-padding: 0.5em 1em;
+  --border-radius: 0.5em;
+  --min-width: 12em;
+  --active-scale: 0.95;
+}
+.media-item {
+  display: inline-block;
+  text-align: center;
+  margin: var(--margin);
+  padding: var(--padding);
+  min-width: var(--min-width);
+  border: var(--border);
+  border-radius: var(--border-radius);
+  background: none;
+}
+
+.media-item.selected
+{
+  border-color: var(--accent-color);
+}
+
+/* .media-item:focus-within,  */
+.media-item-play-button:focus,
+.media-item-played-label:focus-within
+{
+  /* border-color: coral; */
+  outline: thin groove var(--accent-color);
+}
+
+.media-item-play-button:active,
+.media-item-played-label:active
+{
+  transform: scale(var(--active-scale));
+}
+
+.media-item:hover,
+.media-item-play-button:hover,
+.media-item-played-label:hover
+{
+  border-color: var(--active-color);
+}
+
+.media-item-play-button:hover,
+.media-item-played-label:hover
+{
+  cursor: pointer;
+}
+
+.media-item-image-container
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.media-item-image-container,
+.media-item-image-container img
+{
+  max-width: calc(var(--min-width) - 2em);
+  border-radius: var(--border-radius);
+  margin: 0 auto;
+}
+
+.media-item-image-container:active
+{
+  transform: scale(var(--active-scale));
+}
+
+.media-item-image-container:hover,
+.media-item.selected:focus-within .media-item-image-container
+{
+  background: center / auto 80% no-repeat url(https://uxwing.com/wp-content/themes/uxwing/download/video-photography-multimedia/play-button-icon.svg);
+  cursor: pointer;
+}
+
+.media-item .media-item-image-container:hover img,
+.media-item.selected:focus-within .media-item-image-container img {
+  opacity: 0.5;
+}
+
+.media-item-title {
+  max-width: calc(var(--min-width));
+  margin: 0 auto;
+  font-size: 0.8em;
+}
+
+.media-item-play-button,
+.media-item-played-label
+{
+  padding: var(--button-padding);
+  margin: var(--button-margin);
+  border-radius: var(--border-radius);
+  border: var(--border);
+  display: inline-block;
+  background: transparent;
+  font: inherit;
+}
+
+.media-item-played-label input[type="checkbox"] {
+  outline: none;
+  accent-color: var(--accent-color);
+  color: white;
+}
+/* .media-item-played-label input[type="checkbox"]:checked {
+  background-color: #eee;
+} */

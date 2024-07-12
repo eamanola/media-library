@@ -9,7 +9,7 @@ import { router as mediaLibraryRouter } from './media-library';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '',
     element: <App />,
     children: [
       ...usersRouter,

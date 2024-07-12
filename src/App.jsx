@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { useDispatch } from 'react-redux';
-import { Link, Outlet, ScrollRestoration } from 'react-router-dom';
+import { ScrollRestoration, Outlet } from 'react-router-dom';
 
 import { actions as usersActions } from './users';
 
@@ -24,17 +24,15 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <>
+    <React.StrictMode>
       <Dashboard />
 
       <Notification />
 
-      <Link to="/media">Media</Link>
-
       <Outlet />
 
       <ScrollRestoration />
-    </>
+    </React.StrictMode>
   );
 };
 
