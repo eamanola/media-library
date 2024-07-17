@@ -13,6 +13,7 @@ import MediaItem from '../MediaItem';
 
 import { nextSelected } from './keyboard';
 import './styles.css';
+// import { pathById } from './video-path';
 
 const { togglePlayed, play } = actions;
 
@@ -68,6 +69,7 @@ const MediaList = () => {
 
   useEffect(() => {
     if (mediaLibrary.length) {
+      // could be optimimzed and create tree on load only
       setTree(createTree(mediaLibrary));
     }
     // console.log('mediaLibrary', mediaLibrary);
@@ -76,6 +78,13 @@ const MediaList = () => {
   // useEffect(() => {
   //   console.log(folder);
   // }, [folder]);
+
+  // useEffect(() => {
+  //   if (tree) {
+  //     console.log(pathById(tree, 'NieR_Automata_Ver1_1a.S1.E1'));
+  //   }
+  //   console.log(tree);
+  // }, [tree]);
 
   useEffect(() => {
     if (selected) {
