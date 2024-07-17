@@ -4,7 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { actions } from '../../reducers';
 
-import { createTree } from '../../tree';
+import { createTree } from './tree';
+
+import countUnplayeds from '../Folder/count-unplayeds';
 
 import Folder from '../Folder';
 import MediaItem from '../MediaItem';
@@ -47,6 +49,8 @@ const MediaList = () => {
     }
   };
 
+  const formatFolder = (aFolder) => countUnplayeds(aFolder);
+
   useEffect(() => {
     if (tree) {
       const path = pathname
@@ -57,7 +61,8 @@ const MediaList = () => {
 
       const firstLib = Object.keys(tree)[0];
       const target = path.reduce((acc, val) => acc[val], tree[firstLib]);
-      setFolder(target);
+
+      setFolder(formatFolder(target));
     }
   }, [tree, pathname]);
 
@@ -67,6 +72,10 @@ const MediaList = () => {
     }
     // console.log('mediaLibrary', mediaLibrary);
   }, [mediaLibrary]);
+
+  // useEffect(() => {
+  //   console.log(folder);
+  // }, [folder]);
 
   useEffect(() => {
     if (selected) {
@@ -93,7 +102,7 @@ const MediaList = () => {
             ? (
               <Folder
                 key={key}
-                label={key}
+                folder={folder[key]}
                 onClick={() => setSelected(key)}
                 onFocus={() => setSelected(key)}
                 path={join(pathname, key)}

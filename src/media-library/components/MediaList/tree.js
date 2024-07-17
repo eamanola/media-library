@@ -75,4 +75,5 @@ const toTree = (grouped) => grouped.reduce((tree, mediaLib) => ({
 const createTree = (videos) => toTree(group(videos));
 
 export { createTree };
+
 export default null;

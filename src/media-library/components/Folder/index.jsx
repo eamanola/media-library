@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import './styles.css';
 
 const Folder = ({
-  label,
+  folder,
   onClick,
   onFocus,
   path,
@@ -23,19 +23,22 @@ const Folder = ({
   return (
     <Link
       className="media-folder"
-      data-id={label}
+      data-id={folder.title}
       onClick={onClick}
       onFocus={onFocus}
       ref={linkRef}
       to={path}
     >
-      {label}
+      {`${folder.title}${folder.unplayed ? ` (${folder.unplayed})` : ''}`}
     </Link>
   );
 };
 
 Folder.propTypes = {
-  label: PropTypes.string.isRequired,
+  folder: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    unplayed: PropTypes.number,
+  }).isRequired,
   onClick: PropTypes.func.isRequired,
   onFocus: PropTypes.func.isRequired,
   path: PropTypes.string.isRequired,
