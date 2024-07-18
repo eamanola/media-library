@@ -22,11 +22,6 @@
   background: none;
 }
 
-.media-item.selected
-{
-  border-color: var(--accent-color);
-}
-
 /* .media-item:focus-within,  */
 .media-item-play-button:focus,
 .media-item-played-label:focus-within
@@ -46,6 +41,12 @@
 .media-item-played-label:hover
 {
   border-color: var(--active-color);
+}
+
+.media-item.selected
+{
+  /* dont let hover overwrite */
+  border-color: var(--accent-color) !important;
 }
 
 .media-item-play-button:hover,
