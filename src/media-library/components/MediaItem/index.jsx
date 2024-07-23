@@ -3,13 +3,17 @@ import PropTypes from 'prop-types';
 
 import config from '../../../config';
 
+import secondsToTimeStr from './seconds-to-timestr';
+
 import './styles.css';
 
 const { BACKEND_URL } = config;
 
 const printTitle = ({
   title, season = null, episode = null, extra = null,
-}) => [title, season ? `S${season}` : '', episode ? `${extra || 'E'}${episode}` : ''].join(' ');
+}) => [title, season ? `S${season}` : '', episode ? `${extra || 'E'}${episode}` : '']
+  .filter((element) => element !== '')
+  .join(' ');
 
 const MediaItem = ({
   onClick,
@@ -47,6 +51,10 @@ const MediaItem = ({
         {printTitle(video)}
       </div>
 
+      <div className="media-item-duration">
+        {video.duration ? secondsToTimeStr(video.duration) : '-'}
+      </div>
+
       <button
         ref={playRef}
         className="media-item-play-button"
@@ -82,14 +90,15 @@ MediaItem.propTypes = {
   onTogglePlayed: PropTypes.func.isRequired,
   selected: PropTypes.bool.isRequired,
   video: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    season: PropTypes.number,
+    duration: PropTypes.number,
     episode: PropTypes.number,
     extra: PropTypes.string,
+    id: PropTypes.string.isRequired,
     played: PropTypes.shape({
       isPlayed: PropTypes.bool.isRequired,
     }),
+    season: PropTypes.number,
+    title: PropTypes.string.isRequired,
   }).isRequired,
 };
 export default MediaItem;

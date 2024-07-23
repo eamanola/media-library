@@ -87,10 +87,13 @@
   opacity: 0.5;
 }
 
-.media-item-title {
-  max-width: calc(var(--min-width));
+.media-item-title, .media-item-duration {
+  max-width: var(--min-width);
   margin: 0 auto;
   font-size: 0.8em;
+}
+.media-item-duration {
+  text-align: right;
 }
 
 .media-item-play-button,
