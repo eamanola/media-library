@@ -8,18 +8,20 @@
   --button-margin: 0.5em 0.5em 0 0.5em;
   --button-padding: 0.5em 1em;
   --border-radius: 0.5em;
-  --min-width: 12em;
+  /* --min-width: 12em; */
   --active-scale: 0.95;
+  --max-width: 14em;
 }
 .media-item {
   display: inline-block;
   text-align: center;
   margin: var(--margin);
   padding: var(--padding);
-  min-width: var(--min-width);
+  /* min-width: var(--min-width); */
   border: var(--border);
   border-radius: var(--border-radius);
   background: none;
+  max-width: var(--max-width);
 }
 
 /* .media-item:focus-within,  */
@@ -65,7 +67,8 @@
 .media-item-image-container,
 .media-item-image-container img
 {
-  max-width: calc(var(--min-width) - 2em);
+  max-width: 95%;
+  /* calc(var(--min-width) - 2em); */
   border-radius: var(--border-radius);
   margin: 0 auto;
 }
@@ -75,20 +78,17 @@
   transform: scale(var(--active-scale));
 }
 
-.media-item-image-container:hover,
-.media-item.selected:focus-within .media-item-image-container
-{
+.media-item-image-container:hover {
   background: center / auto 80% no-repeat url(https://uxwing.com/wp-content/themes/uxwing/download/video-photography-multimedia/play-button-icon.svg);
   cursor: pointer;
 }
 
-.media-item .media-item-image-container:hover img,
-.media-item.selected:focus-within .media-item-image-container img {
+.media-item .media-item-image-container:hover img {
   opacity: 0.5;
 }
 
 .media-item-title, .media-item-duration {
-  max-width: var(--min-width);
+  max-width: 100%;
   margin: 0 auto;
   font-size: 0.8em;
 }

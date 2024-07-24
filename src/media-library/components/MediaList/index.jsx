@@ -60,6 +60,7 @@ const MediaList = () => {
         // .filter((subdir) => subdir !== PATH_PREFIX) // media
         .map((val) => decodeURIComponent(val));
 
+      console.log(path);
       const firstLib = Object.keys(tree)[0];
       const target = path.reduce((acc, val) => acc[val], tree[firstLib]);
 
