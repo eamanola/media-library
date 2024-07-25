@@ -52,7 +52,7 @@ const MediaItem = ({
       </div>
 
       <div className="media-item-duration">
-        {video.duration ? secondsToTimeStr(video.duration) : '-'}
+        {video.probe?.duration ? secondsToTimeStr(video.probe.duration) : '-'}
       </div>
 
       <button
@@ -90,7 +90,9 @@ MediaItem.propTypes = {
   onTogglePlayed: PropTypes.func.isRequired,
   selected: PropTypes.bool.isRequired,
   video: PropTypes.shape({
-    duration: PropTypes.number,
+    probe: PropTypes.shape({
+      duration: PropTypes.number.isRequired,
+    }),
     episode: PropTypes.number,
     extra: PropTypes.string,
     id: PropTypes.string.isRequired,

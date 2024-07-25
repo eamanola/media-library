@@ -1,7 +1,7 @@
 import { videos as fetchVideos } from '../../services/videos';
 import parseMediaInfo from './parse-media-info';
 import { getPlayed } from '../played';
-import getDurations from '../durations/get-durations';
+import getProbes from '../probes/get-probes';
 import createThumbnails from '../create-thumbnails';
 
 import testName from './test-names.json';
@@ -26,11 +26,11 @@ const reducer = (state, action) => {
       }));
       break;
 
-    case 'MEDIA_LIBS_SET_DURATIONS':
-      newState = state.map(({ path, duration, ...video }) => ({
+    case 'MEDIA_LIBS_SET_PROBES':
+      newState = state.map(({ path, probe, ...video }) => ({
         path,
         ...video,
-        duration: (payload.find(({ path: dPath }) => path === dPath).duration || 0),
+        probe: (payload.find(({ path: dPath }) => path === dPath).probe || null),
       }));
       break;
 
@@ -74,7 +74,7 @@ const getVideos = () => async (dispatch) => {
 
   dispatch(getPlayed(videos));
 
-  dispatch(getDurations(videos));
+  dispatch(getProbes(videos));
 
   createThumbnails(videos);
 };

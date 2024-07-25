@@ -3,9 +3,9 @@ import appConfig from '../../config';
 
 const { BACKEND_URL } = appConfig;
 
-const durations = async (/* list */) => {
+const probes = async (/* list */) => {
   try {
-    const response = await fetch(`${BACKEND_URL}/durations`);
+    const response = await fetch(`${BACKEND_URL}/probes`);
 
     return response.json();
   } catch (err) {
@@ -15,7 +15,7 @@ const durations = async (/* list */) => {
 };
 
 export {
-  durations,
+  probes,
 };
 
 export default null;

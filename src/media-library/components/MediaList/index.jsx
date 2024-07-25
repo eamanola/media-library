@@ -73,7 +73,7 @@ const MediaList = () => {
       // could be optimimzed and create tree on load only
       setTree(createTree(mediaLibrary));
     }
-    // console.log('mediaLibrary', mediaLibrary);
+    console.log('mediaLibrary', mediaLibrary);
   }, [mediaLibrary]);
 
   // useEffect(() => {
