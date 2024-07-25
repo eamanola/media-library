@@ -19,6 +19,7 @@ const MediaItem = ({
   onClick,
   onFocus,
   onPlay,
+  onPlayExp,
   onTogglePlayed,
   selected,
   video,
@@ -42,7 +43,7 @@ const MediaItem = ({
       <div
         className="media-item-image-container"
         role="presentation"
-        onClick={onPlay}
+        onClick={onPlayExp}
       >
         <img src={`${BACKEND_URL}/thumbnails/${video.id}.jpg`} alt={video.id} />
       </div>
@@ -87,6 +88,7 @@ MediaItem.propTypes = {
   onClick: PropTypes.func.isRequired,
   onFocus: PropTypes.func.isRequired,
   onPlay: PropTypes.func.isRequired,
+  onPlayExp: PropTypes.func.isRequired,
   onTogglePlayed: PropTypes.func.isRequired,
   selected: PropTypes.bool.isRequired,
   video: PropTypes.shape({

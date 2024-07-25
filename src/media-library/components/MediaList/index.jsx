@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions } from '../../reducers';
@@ -24,6 +24,8 @@ const join = (current, subdir) => {
 
 const MediaList = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const mediaLibrary = useSelector((state) => state.mediaLibrary);
 
   const [tree, setTree] = useState(null);
@@ -34,6 +36,11 @@ const MediaList = () => {
 
   const onPlay = (video) => () => {
     dispatch(play(video));
+  };
+
+  const onPlayExp = ({ id }) => () => {
+    navigate(`/player/${id}`);
+    // console.log(navigate, video);
   };
 
   const onTogglePlayed = (video) => () => {
@@ -125,6 +132,7 @@ const MediaList = () => {
                 onClick={() => setSelected(folder[key].id)}
                 onFocus={() => setSelected(folder[key].id)}
                 onPlay={onPlay(folder[key])}
+                onPlayExp={onPlayExp(folder[key])}
                 onTogglePlayed={onTogglePlayed(folder[key])}
                 selected={selected === folder[key].id}
                 video={folder[key]}
