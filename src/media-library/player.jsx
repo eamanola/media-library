@@ -97,9 +97,9 @@ const Player = () => {
         <track kind="captions" label="foo" />
         <source src={videoSrc()} type="video/mp4" />
       </video>
-      <audio ref={audioRef} onCanPlay={onCanPlay}>
+      <audio ref={audioRef} onCanPlay={onCanPlay} onError={onError}>
         <track kind="captions" label="foo" />
-        <source src={audioSrc()} type="video/mp4" />
+        <source src={audioSrc()} type="audio/mp4" />
       </audio>
     </>
   );
