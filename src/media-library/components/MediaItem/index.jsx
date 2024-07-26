@@ -43,7 +43,7 @@ const MediaItem = ({
       <div
         className="media-item-image-container"
         role="presentation"
-        onClick={onPlayExp}
+        onClick={video.probe ? onPlayExp : onPlay}
       >
         <img src={`${BACKEND_URL}/thumbnails/${video.id}.jpg`} alt={video.id} />
       </div>

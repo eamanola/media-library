@@ -9,98 +9,148 @@ const Player = () => {
   const { videoId } = useParams();
   const [transcodeVideo, setTranscodeVideo] = useState(false);
   const [transcodeAudio, setTranscodeAudio] = useState(false);
-  const [canPlay, setCanPlay] = useState([]);
+  const [videoStream, setVideoStream] = useState(-1);
+  const [audioStream, setAudioStream] = useState(-1);
+  const [canStart, setCanStart] = useState([]);
   const audioRef = useRef(null);
+  const videoRef = useRef(null);
+
+  const { probe, path } = (mediaLibrary || []).find(({ id }) => id === videoId) || {};
 
   useEffect(() => {
-    console.log(canPlay);
-    if (canPlay.length === 2) {
+    console.log(canStart);
+    if (canStart.length === 2) {
       console.log('Can start');
     }
-  }, [canPlay]);
+  }, [canStart]);
+
+  useEffect(() => {
+    if (probe) {
+      const { video: vidStream, audios } = probe;
+      if (vidStream) {
+        setVideoStream(vidStream.index);
+      }
+      if (audios.length) {
+        setAudioStream(audios[0].index);
+      }
+      console.log('11');
+    }
+  }, [probe]);
+
+  useEffect(() => {
+    videoRef.current?.load();
+  }, [videoStream, transcodeVideo]);
+
+  useEffect(() => {
+    audioRef.current?.load();
+
+    console.log(audioStream, transcodeAudio);
+  }, [audioStream, transcodeAudio]);
 
   if (!mediaLibrary.length) return null;
 
-  if (!videoId) return null;
-
-  const video = mediaLibrary.find(({ id }) => id === videoId);
+  if (!probe || !path) return null;
   // const video = mediaLibrary[1];
 
-  const { path } = video;
-
-  const videoSrc = () => [
+  const mediaSrc = (type, streamIndex, transcode, filepath) => [
     config.BACKEND_URL,
-    '/video',
-    '/0',
-    `/${encodeURIComponent(path)}`,
-    transcodeVideo ? '/transcode' : '',
+    `/${type}`,
+    `/${streamIndex}`,
+    `/${encodeURIComponent(filepath)}`,
+    transcode ? '/transcode' : '',
   ]
     .filter((element) => element !== '')
     .join('');
 
-  const audioSrc = () => [
-    config.BACKEND_URL,
-    '/audio',
-    '/1',
-    `/${encodeURIComponent(path)}`,
-    transcodeAudio ? '/transcode' : '',
-  ]
-    .filter((element) => element !== '')
-    .join('');
+  const videoSrc = () => mediaSrc('video', videoStream, transcodeVideo, path);
 
-  const onError = ({ target }) => {
-    const isVideoError = /video/iu.test(target.parentNode.tagName);
+  const audioSrc = () => mediaSrc('audio', audioStream, transcodeAudio, path);
 
-    if (isVideoError) {
-      if (transcodeVideo === false) {
-        setTranscodeVideo(true);
-        setTimeout(() => target.parentNode.load(), 0);
-      }
+  const onLanguageChange = ({ target }) => {
+    audioRef.current?.pause();
+
+    setTranscodeAudio(false);
+
+    setAudioStream(target.value);
+  };
+
+  const onVideoError = () => {
+    if (transcodeVideo === false) {
+      setTranscodeVideo(true);
     }
+  };
 
-    const isAudioError = /audio/iu.test(target.parentNode.tagName);
+  const onAudioError = () => {
+    if (transcodeAudio === false) {
+      setTranscodeAudio(true);
+    }
+  };
 
-    if (isAudioError) {
-      if (transcodeAudio === false) {
-        setTranscodeAudio(true);
-        setTimeout(() => target.parentNode.load(), 0);
+  const syncAV = () => {
+    if (audioRef.current && videoRef.current) {
+      if (Math.abs(audioRef.current.currentTime - videoRef.current.currentTime) > 1) {
+        audioRef.current.currentTime = videoRef.current.currentTime;
+      }
+
+      if (!videoRef.current.paused) {
+        audioRef.current.play();
+      } else {
+        audioRef.current.pause();
       }
     }
   };
 
   const onCanPlay = ({ target }) => {
-    setCanPlay((state) => [...state.filter((el) => el !== target.tagName), target.tagName]);
+    setCanStart((state) => [...state.filter((el) => el !== target.tagName), target.tagName]);
+
+    syncAV();
   };
+
   const onPlay = () => audioRef.current.play();
   const onPause = () => audioRef.current.pause();
   const onSeeked = ({ target }) => { audioRef.current.currentTime = target.currentTime; };
 
-  const canStart = () => canPlay.length === 2;
+  const ready = () => canStart.length === 2;
+
   return (
     <>
-      { !canStart() && (<div>Loading...</div>) }
+      { !ready() && (<div>Loading...</div>) }
       <video
+        ref={videoRef}
         style={{
-          visibility: canStart() ? 'visible' : 'hidden',
-          maxHeight: '90vh',
+          visibility: ready() ? 'visible' : 'hidden',
+          maxHeight: '80vh',
           maxWidth: '100vw',
           margin: '0 auto',
           display: 'block',
         }}
         controls
         onCanPlay={onCanPlay}
-        onError={onError}
+        onError={onVideoError}
         onPlay={onPlay}
         onPause={onPause}
         onSeeked={onSeeked}
       >
         <track kind="captions" label="foo" />
-        <source src={videoSrc()} type="video/mp4" />
+        <source src={videoSrc()} />
       </video>
-      <audio ref={audioRef} onCanPlay={onCanPlay} onError={onError}>
+      <audio ref={audioRef} onCanPlay={onCanPlay} onError={onAudioError}>
         <track kind="captions" label="foo" />
-        <source src={audioSrc()} type="audio/mp4" />
+        <source src={audioSrc()} />
       </audio>
+      {
+        probe.audios.length > 1
+          ? (
+            <select onChange={onLanguageChange} defaultValue={audioStream}>
+              {
+                probe.audios.map(({ index, language }) => (
+                  <option key={index} value={index}>{language}</option>
+                ))
+              }
+            </select>
+          )
+          : null
+      }
     </>
   );
 };
