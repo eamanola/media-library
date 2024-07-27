@@ -52,19 +52,19 @@ const Player = () => {
   if (!probe || !path) return null;
   // const video = mediaLibrary[1];
 
-  const mediaSrc = (type, streamIndex, transcode, filepath) => [
+  const mediaSrc = (type, filepath, streamIndex, transcode) => [
     config.BACKEND_URL,
     `/${type}`,
-    `/${streamIndex}`,
     `/${encodeURIComponent(filepath)}`,
+    `/${streamIndex}`,
     transcode ? '/transcode' : '',
   ]
     .filter((element) => element !== '')
     .join('');
 
-  const videoSrc = () => mediaSrc('video', videoStream, transcodeVideo, path);
+  const videoSrc = () => mediaSrc('video', path, videoStream, transcodeVideo);
 
-  const audioSrc = () => mediaSrc('audio', audioStream, transcodeAudio, path);
+  const audioSrc = () => mediaSrc('audio', path, audioStream, transcodeAudio);
 
   const onLanguageChange = ({ target }) => {
     audioRef.current?.pause();
