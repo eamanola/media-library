@@ -5,6 +5,7 @@
   "main": "src/index.jsx",
   "dependencies": {
     "axios": "^1.7.2",
+    "libass-wasm": "^4.1.0",
     "media-filename-parser": "^0.2.5",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
@@ -20,7 +21,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "postinstall": "cp -R node_modules/libass-wasm/dist public/libass-wasm"
   },
   "browserslist": {
     "production": [

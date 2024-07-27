@@ -1,6 +1,6 @@
 import React from 'react';
 import MediaList from './components/MediaList';
-import Player from './player';
+import Player from './components/Player';
 
 const router = [
   {

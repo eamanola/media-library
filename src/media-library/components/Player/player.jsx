@@ -2,7 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import config from '../config';
+import SubtitlesOctopus from 'libass-wasm';
+
+import config from '../../../config';
+
+// import subContent from './test.ass';
+
+import './libass-wasm-overrides.css';
 
 const Player = () => {
   const mediaLibrary = useSelector((state) => state.mediaLibrary);
@@ -11,46 +17,13 @@ const Player = () => {
   const [transcodeAudio, setTranscodeAudio] = useState(false);
   const [videoStream, setVideoStream] = useState(-1);
   const [audioStream, setAudioStream] = useState(-1);
+  const [subtitle, setSubtitle] = useState(null);
   const [canStart, setCanStart] = useState([]);
   const audioRef = useRef(null);
   const videoRef = useRef(null);
+  const octopus = useRef(null);
 
   const { probe, path } = (mediaLibrary || []).find(({ id }) => id === videoId) || {};
-
-  useEffect(() => {
-    console.log(canStart);
-    if (canStart.length === 2) {
-      console.log('Can start');
-    }
-  }, [canStart]);
-
-  useEffect(() => {
-    if (probe) {
-      const { video: vidStream, audios } = probe;
-      if (vidStream) {
-        setVideoStream(vidStream.index);
-      }
-      if (audios.length) {
-        setAudioStream(audios[0].index);
-      }
-      console.log('11');
-    }
-  }, [probe]);
-
-  useEffect(() => {
-    videoRef.current?.load();
-  }, [videoStream, transcodeVideo]);
-
-  useEffect(() => {
-    audioRef.current?.load();
-
-    console.log(audioStream, transcodeAudio);
-  }, [audioStream, transcodeAudio]);
-
-  if (!mediaLibrary.length) return null;
-
-  if (!probe || !path) return null;
-  // const video = mediaLibrary[1];
 
   const mediaSrc = (type, filepath, streamIndex, transcode) => [
     config.BACKEND_URL,
@@ -66,12 +39,91 @@ const Player = () => {
 
   const audioSrc = () => mediaSrc('audio', path, audioStream, transcodeAudio);
 
+  useEffect(() => {
+    console.log(canStart);
+    if (canStart.length === 2) {
+      console.log('Can start');
+    }
+  }, [canStart]);
+
+  useEffect(() => {
+    // console.log(probe);
+    if (probe) {
+      const { video: vidStream, audios } = probe;
+      if (vidStream) {
+        setVideoStream(vidStream.index);
+      }
+      if (audios.length) {
+        setAudioStream(audios[0].index);
+      }
+    }
+  }, [probe]);
+
+  useEffect(() => {
+    if (subtitle) {
+      const { index, codec } = subtitle;
+
+      const subUrl = mediaSrc('subtitle', path, index, codec !== 'ass');
+
+      if (codec === 'ass') {
+        if (!octopus.current) {
+          console.log('create');
+
+          const fonts = probe.fonts.map(({ filename }) => (
+            `${config.BACKEND_URL}/fonts/${encodeURIComponent(path)}/${filename}`
+          ));
+
+          octopus.current = new SubtitlesOctopus({
+            video: document.querySelector('video'),
+            workerUrl: '/libass-wasm/js/subtitles-octopus-worker.js',
+            legacyWorkerUrl: '/libass-wasm/js/libassjs-worker-legacy.js',
+            subUrl,
+            fonts,
+            onError: console.log,
+          });
+        }
+      } else {
+        console.log('todo sub', codec);
+      }
+    }
+
+    return () => {
+      console.log('dispose');
+      try {
+        octopus.current?.dispose();
+      } catch (err) {
+        console.log(err);
+      } finally {
+        [...document.querySelectorAll('.libassjs-canvas-parent')].forEach((el) => el.remove());
+      }
+
+      octopus.current = null;
+    };
+  }, [subtitle, path, probe]);
+
+  useEffect(() => {
+    videoRef.current?.load();
+  }, [videoStream, transcodeVideo]);
+
+  useEffect(() => {
+    audioRef.current?.load();
+  }, [audioStream, transcodeAudio]);
+
+  if (!mediaLibrary.length) return null;
+
+  if (!probe || !path) return null;
+  // const video = mediaLibrary[1];
+
   const onLanguageChange = ({ target }) => {
     audioRef.current?.pause();
 
     setTranscodeAudio(false);
 
-    setAudioStream(target.value);
+    setAudioStream(Number(target.value));
+  };
+
+  const onSubtitleChange = ({ target }) => {
+    setSubtitle(probe.subtitles.find(({ index }) => index === Number(target.value)));
   };
 
   const onVideoError = () => {
@@ -106,7 +158,7 @@ const Player = () => {
     syncAV();
   };
 
-  const onPlay = () => audioRef.current.play();
+  const onPlay = () => { audioRef.current.play(); };
   const onPause = () => audioRef.current.pause();
   const onSeeked = ({ target }) => { audioRef.current.currentTime = target.currentTime; };
 
@@ -145,6 +197,20 @@ const Player = () => {
               {
                 probe.audios.map(({ index, language }) => (
                   <option key={index} value={index}>{language}</option>
+                ))
+              }
+            </select>
+          )
+          : null
+      }
+      {
+        probe.subtitles.length > 1
+          ? (
+            <select onChange={onSubtitleChange} defaultValue={subtitle?.index}>
+              <option value={-1}>subs</option>
+              {
+                probe.subtitles.map(({ index, language, title }) => (
+                  <option key={index} value={index}>{`${title} (${language})`}</option>
                 ))
               }
             </select>
