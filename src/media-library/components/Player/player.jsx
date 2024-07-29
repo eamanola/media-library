@@ -9,6 +9,7 @@ import config from '../../../config';
 // import subContent from './test.ass';
 
 import './libass-wasm-overrides.css';
+import './styles.css';
 
 const Player = () => {
   const mediaLibrary = useSelector((state) => state.mediaLibrary);
@@ -22,6 +23,7 @@ const Player = () => {
   const audioRef = useRef(null);
   const videoRef = useRef(null);
   const octopus = useRef(null);
+  const containerRef = useRef(null);
 
   const { probe, path } = (mediaLibrary || []).find(({ id }) => id === videoId) || {};
 
@@ -167,29 +169,28 @@ const Player = () => {
   return (
     <>
       { !ready() && (<div>Loading...</div>) }
-      <video
-        ref={videoRef}
-        style={{
-          visibility: ready() ? 'visible' : 'hidden',
-          maxHeight: '80vh',
-          maxWidth: '100vw',
-          margin: '0 auto',
-          display: 'block',
-        }}
-        controls
-        onCanPlay={onCanPlay}
-        onError={onVideoError}
-        onPlay={onPlay}
-        onPause={onPause}
-        onSeeked={onSeeked}
+      <div
+        style={{ visibility: ready() ? 'visible' : 'hidden' }}
+        ref={containerRef}
+        className="content"
       >
-        <track kind="captions" label="foo" />
-        <source src={videoSrc()} />
-      </video>
-      <audio ref={audioRef} onCanPlay={onCanPlay} onError={onAudioError}>
-        <track kind="captions" label="foo" />
-        <source src={audioSrc()} />
-      </audio>
+        <video
+          ref={videoRef}
+          controls
+          onCanPlay={onCanPlay}
+          onError={onVideoError}
+          onPlay={onPlay}
+          onPause={onPause}
+          onSeeked={onSeeked}
+        >
+          <track kind="captions" label="foo" />
+          <source src={videoSrc()} />
+        </video>
+        <audio ref={audioRef} onCanPlay={onCanPlay} onError={onAudioError}>
+          <track kind="captions" label="foo" />
+          <source src={audioSrc()} />
+        </audio>
+      </div>
       {
         probe.audios.length > 1
           ? (
@@ -217,6 +218,7 @@ const Player = () => {
           )
           : null
       }
+      <button type="button" onClick={() => containerRef.current?.requestFullscreen()}>FS</button>
     </>
   );
 };
