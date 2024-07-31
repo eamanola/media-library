@@ -1,7 +1,6 @@
 import { videos as fetchVideos } from '../../services/videos';
 import parseMediaInfo from './parse-media-info';
 import { getPlayed } from '../played';
-import getProbes from '../probes/get-probes';
 
 import testName from './test-names.json';
 import addIds from './add-ids';
@@ -18,18 +17,18 @@ const reducer = (state, action) => {
       break;
 
     case 'MEDIA_LIBS_SET_PLAYED':
-      newState = state.map(({ id, played, ...video }) => ({
+      newState = state.map(({ id, played, ...rest }) => ({
         id,
-        ...video,
+        ...rest,
         played: payload.find(({ mediaId }) => id === mediaId) || played,
       }));
       break;
 
     case 'MEDIA_LIBS_SET_PROBES':
-      newState = state.map(({ path, probe, ...video }) => ({
+      newState = state.map(({ path, probe, ...rest }) => ({
         path,
-        ...video,
-        probe: (payload.find(({ path: dPath }) => path === dPath).probe || null),
+        ...rest,
+        probe: (payload.find(({ path: dPath }) => path === dPath)?.probe || probe),
       }));
       break;
 
@@ -80,8 +79,6 @@ const getVideos = () => async (dispatch) => {
   await dispatch({ type: 'MEDIA_LIBS_INIT', payload: videos });
 
   dispatch(getPlayed(videos));
-
-  dispatch(getProbes(videos));
 };
 
 export { getVideos };

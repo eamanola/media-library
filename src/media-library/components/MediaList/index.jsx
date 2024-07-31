@@ -13,10 +13,14 @@ import MediaItem from '../MediaItem';
 
 import { nextSelected } from './keyboard';
 import './styles.css';
-import createThumbnails from '../../reducers/create-thumbnails';
 // import { pathById } from './video-path';
 
-const { togglePlayed, play } = actions;
+const {
+  createThumbnails,
+  getProbes,
+  togglePlayed,
+  play,
+} = actions;
 
 const join = (current, subdir) => {
   if (current === '/') return `./${subdir}`;
@@ -87,12 +91,21 @@ const MediaList = () => {
   useEffect(() => {
     // console.log(folder);
     if (folder) {
-      const withoutThumbnail = Object.values(folder)
-        .filter(({ id }) => !!id)
+      const videos = Object.values(folder)
+        .filter(({ id }) => !!id);
+
+      const withoutThumbnail = videos
         .filter(({ thumbnail }) => !thumbnail);
 
       if (withoutThumbnail.length) {
         dispatch(createThumbnails(withoutThumbnail));
+      }
+
+      const withoutProbe = videos
+        .filter(({ probe }) => !probe);
+
+      if (withoutProbe.length) {
+        dispatch(getProbes(withoutProbe));
       }
     }
   }, [folder, dispatch]);
