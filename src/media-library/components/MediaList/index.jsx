@@ -13,6 +13,7 @@ import MediaItem from '../MediaItem';
 
 import { nextSelected } from './keyboard';
 import './styles.css';
+import createThumbnails from '../../reducers/create-thumbnails';
 // import { pathById } from './video-path';
 
 const { togglePlayed, play } = actions;
@@ -67,7 +68,7 @@ const MediaList = () => {
         // .filter((subdir) => subdir !== PATH_PREFIX) // media
         .map((val) => decodeURIComponent(val));
 
-      console.log(path);
+      // console.log(path);
       const firstLib = Object.keys(tree)[0];
       const target = path.reduce((acc, val) => acc[val], tree[firstLib]);
 
@@ -83,9 +84,18 @@ const MediaList = () => {
     console.log('mediaLibrary', mediaLibrary);
   }, [mediaLibrary]);
 
-  // useEffect(() => {
-  //   console.log(folder);
-  // }, [folder]);
+  useEffect(() => {
+    // console.log(folder);
+    if (folder) {
+      const withoutThumbnail = Object.values(folder)
+        .filter(({ id }) => !!id)
+        .filter(({ thumbnail }) => !thumbnail);
+
+      if (withoutThumbnail.length) {
+        dispatch(createThumbnails(withoutThumbnail));
+      }
+    }
+  }, [folder, dispatch]);
 
   // useEffect(() => {
   //   if (tree) {
