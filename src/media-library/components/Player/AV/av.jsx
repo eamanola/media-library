@@ -15,6 +15,19 @@ const AV = ({
   const [transcodeAudio, setTranscodeAudio] = useState(false);
   const [transcodeVideo, setTranscodeVideo] = useState(false);
 
+  const ready = () => canStart.length === 2;
+  const videoSrc = () => mediaSrc('video', path, videoStream.index, transcodeVideo);
+  const audioSrc = () => mediaSrc('audio', path, audioStream.index, transcodeAudio);
+  const syncAV = () => {
+    if (audioRef.current && videoRef.current) {
+      if (videoRef.current.paused) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+    }
+  };
+
   useEffect(() => {
     console.log(canStart);
     if (canStart.length === 2) {
@@ -36,40 +49,24 @@ const AV = ({
     setTranscodeAudio(false);
   }, [audioStream]);
 
-  const videoSrc = () => mediaSrc('video', path, videoStream.index, transcodeVideo);
-  const audioSrc = () => mediaSrc('audio', path, audioStream.index, transcodeAudio);
-
-  const onPlay = () => { audioRef.current.play(); };
-  const onPause = () => audioRef.current.pause();
-  const onSeeked = ({ target }) => { audioRef.current.currentTime = target.currentTime; };
-  const syncAV = () => {
-    if (audioRef.current && videoRef.current) {
-      if (Math.abs(audioRef.current.currentTime - videoRef.current.currentTime) > 1) {
-        audioRef.current.currentTime = videoRef.current.currentTime;
-      }
-
-      if (!videoRef.current.paused) {
-        audioRef.current.play();
-      } else {
-        audioRef.current.pause();
-      }
-    }
-  };
-
   const onCanPlay = ({ target }) => {
     setCanStart((state) => [...state.filter((el) => el !== target.tagName), target.tagName]);
 
     syncAV();
   };
-
-  const ready = () => canStart.length === 2;
-
+  const onPlay = () => { audioRef.current.play(); };
+  const onPause = () => { audioRef.current.pause(); };
+  const onSeeked = ({ target }) => { audioRef.current.currentTime = target.currentTime; };
+  const onTimeUpdate = ({ target }) => {
+    if (Math.abs(audioRef.current.currentTime - target.currentTime) > 1) {
+      audioRef.current.currentTime = target.currentTime;
+    }
+  };
   const onVideoError = () => {
     if (transcodeVideo === false) {
       setTranscodeVideo(true);
     }
   };
-
   const onAudioError = () => {
     if (transcodeAudio === false) {
       setTranscodeAudio(true);
@@ -78,7 +75,20 @@ const AV = ({
 
   return (
     <>
-      { !ready() && <div>Loading...</div> }
+      { !ready() && (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+          }}
+        >
+          <span>Loading...</span>
+        </div>
+      )}
       <video
         style={{ visibility: ready() ? 'visible' : 'hidden' }}
         ref={videoRef}
@@ -88,6 +98,7 @@ const AV = ({
         onPlay={onPlay}
         onPause={onPause}
         onSeeked={onSeeked}
+        onTimeUpdate={onTimeUpdate}
       >
         <track kind="captions" label="foo" />
         <source src={videoSrc()} />
