@@ -1,13 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-import config from '../../../config';
-
 import secondsToTimeStr from './seconds-to-timestr';
 
 import './styles.css';
-
-const { BACKEND_URL } = config;
 
 const printTitle = ({
   title, season = null, episode = null, extra = null,
@@ -45,7 +41,11 @@ const MediaItem = ({
         role="presentation"
         onClick={video.probe ? onPlayExp : onPlay}
       >
-        <img src={`${BACKEND_URL}/thumbnails/${video.id}.jpg`} alt={video.id} />
+        {
+          video.thumbnail
+            ? <img src={video.thumbnail} alt={video.id} />
+            : <div>{video.id}</div>
+        }
       </div>
 
       <div className="media-item-title">
@@ -102,6 +102,7 @@ MediaItem.propTypes = {
       isPlayed: PropTypes.bool.isRequired,
     }),
     season: PropTypes.number,
+    thumbnail: PropTypes.string,
     title: PropTypes.string.isRequired,
   }).isRequired,
 };

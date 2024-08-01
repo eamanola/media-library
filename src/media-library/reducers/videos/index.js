@@ -36,7 +36,7 @@ const reducer = (state, action) => {
       newState = state.map(({ id, thumbnail, ...rest }) => ({
         id,
         ...rest,
-        thumbnail: payload.some((videoId) => id === videoId) || thumbnail,
+        thumbnail: payload.find(({ id: aId }) => id === aId)?.thumbnail || thumbnail || null,
       }));
       break;
 

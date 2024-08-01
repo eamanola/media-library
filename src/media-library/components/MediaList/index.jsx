@@ -97,14 +97,13 @@ const MediaList = () => {
       const withoutThumbnail = videos
         .filter(({ thumbnail }) => !thumbnail);
 
-      if (withoutThumbnail.length) {
-        dispatch(createThumbnails(withoutThumbnail));
-      }
-
       const withoutProbe = videos
         .filter(({ probe }) => !probe);
 
-      if (withoutProbe.length) {
+      // affect the same reducer, do after each other
+      if (withoutThumbnail.length) {
+        dispatch(createThumbnails(withoutThumbnail));
+      } else if (withoutProbe.length) {
         dispatch(getProbes(withoutProbe));
       }
     }
