@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 // import subContent from './test.ass';
 import { actions } from '../../reducers';
@@ -87,6 +87,9 @@ const Player = () => {
     }
   };
 
+  const previous = mediaLibrary[mediaLibrary.indexOf(video) - 1];
+  const next = mediaLibrary[mediaLibrary.indexOf(video) + 1];
+
   return (
     <>
       <div
@@ -158,6 +161,8 @@ const Player = () => {
           : null
       }
       <button type="button" onClick={toFullscreen}>FS</button>
+      {previous && <Link to={`/player/${previous.id}`} reloadDocument>previous</Link>}
+      {next && <Link to={`/player/${next.id}`} reloadDocument>next</Link>}
     </>
   );
 };
