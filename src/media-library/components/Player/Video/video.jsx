@@ -14,6 +14,7 @@ const Video = ({
   audioTrack = null,
   subtitleTrack = null,
   onReady = null,
+  onTimeUpdate = null,
 }) => {
   const [transcodeAudio, setTranscodeAudio] = useState(false);
   const [transcodeVideo, setTranscodeVideo] = useState(false);
@@ -80,6 +81,7 @@ const Video = ({
       onAudioError={audioTrack ? onAudioError : null}
       onVideoError={onVideoError}
       onReady={onReady}
+      onTimeUpdate={onTimeUpdate}
     />
   );
 };
@@ -100,6 +102,7 @@ Video.propTypes = {
     index: PropTypes.number.isRequired,
   }),
   onReady: PropTypes.func,
+  onTimeUpdate: PropTypes.func,
 };
 
 export default Video;

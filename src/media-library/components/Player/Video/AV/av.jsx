@@ -9,6 +9,7 @@ const AV = ({
   onReady = null,
   onAudioError = null,
   onVideoError = null,
+  onTimeUpdate = null,
 }) => {
   const audioRef = useRef(null);
   const videoRef = useRef(null);
@@ -64,11 +65,16 @@ const AV = ({
       audioRef.current.currentTime = target.currentTime;
     }
   };
-  const onTimeUpdate = ({ target }) => {
+  const onVideoTimeUpdate = (e) => {
     if (hasAudio()) {
+      const { target } = e;
       if (Math.abs(audioRef.current.currentTime - target.currentTime) > 1) {
         audioRef.current.currentTime = target.currentTime;
       }
+    }
+
+    if (onTimeUpdate) {
+      onTimeUpdate(e);
     }
   };
 
@@ -82,7 +88,7 @@ const AV = ({
         onPlay={onPlay}
         onPause={onPause}
         onSeeked={onSeeked}
-        onTimeUpdate={onTimeUpdate}
+        onTimeUpdate={onVideoTimeUpdate}
       >
         <track kind="captions" label="foo" />
         <source src={videoSrc} />
@@ -105,6 +111,7 @@ AV.propTypes = {
   videoSrc: PropTypes.string.isRequired,
   onVideoError: PropTypes.func,
   onReady: PropTypes.func,
+  onTimeUpdate: PropTypes.func,
 };
 
 export default AV;

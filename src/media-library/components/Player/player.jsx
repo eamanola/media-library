@@ -9,7 +9,7 @@ import Video from './Video';
 
 import './styles.css';
 
-const { getProbes } = actions;
+const { getProbes, togglePlayed } = actions;
 
 const PREF_LANG = 'jpn';
 const PREF_SUBS = 'eng';
@@ -87,6 +87,21 @@ const Player = () => {
     }
   };
 
+  const onTimeUpdate = ({ target }) => {
+    const { played } = video;
+
+    if (played?.isPlayed !== true) {
+      const { currentTime } = target;
+      const { probe } = video;
+      const { duration } = probe;
+
+      if (currentTime >= duration * 0.95) {
+        dispatch(togglePlayed(video));
+        console.log('played');
+      }
+    }
+  };
+
   const previous = mediaLibrary[mediaLibrary.indexOf(video) - 1];
   const next = mediaLibrary[mediaLibrary.indexOf(video) + 1];
 
@@ -125,6 +140,7 @@ const Player = () => {
             audioTrack={audioStream}
             subtitleTrack={subtitleStream}
             onReady={onReady}
+            onTimeUpdate={onTimeUpdate}
           />
         </div>
       </div>
