@@ -31,20 +31,19 @@ const Player = () => {
   const video = (mediaLibrary || []).find(({ id }) => id === videoId);
 
   useEffect(() => {
-    // console.log(probe);
     if (video?.probe) {
       const { audios, video: vidStream } = video.probe;
-      if (audios.length) {
+      if (audioStream === null && audios.length) {
         const prefAudio = audios.find(({ language }) => language === PREF_LANG);
 
         setAudioStream(prefAudio || audios[0]);
       }
 
-      if (vidStream) {
+      if (videoStream === null && vidStream) {
         setVideoStream(vidStream);
       }
     }
-  }, [video]);
+  }, [video, videoStream, audioStream]);
 
   useEffect(() => {
     if (video && !video.probe) {
@@ -76,7 +75,7 @@ const Player = () => {
 
     if (isReady && subtitleStream === SUBS_UNSET) {
       const { subtitles } = video.probe;
-      if (subtitles) {
+      if (subtitles.length) {
         const prefSubtitle = subtitles.find(({ language, title }) => (
           language === PREF_SUBS && !/forced/ui.test(title)
         ));
@@ -95,7 +94,7 @@ const Player = () => {
       const { probe } = video;
       const { duration } = probe;
 
-      if (currentTime >= duration * 0.95) {
+      if (currentTime >= duration * 0.90) {
         dispatch(togglePlayed(video));
         console.log('played');
       }

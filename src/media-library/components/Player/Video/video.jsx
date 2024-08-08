@@ -23,11 +23,11 @@ const Video = ({
   const audioSrc = () => mediaSrc('audio', video.path, audioTrack.index, transcodeAudio);
 
   useEffect(() => {
-    if (video && subtitleTrack) {
+    if (subtitleTrack) {
       const { codec, index } = subtitleTrack;
-      const { path, probe } = video;
+      // const { path, probe } = video;
 
-      const subUrl = mediaSrc('subtitle', path, index, codec !== 'ass');
+      const subUrl = mediaSrc('subtitle', video.path, index, codec !== 'ass');
 
       if (codec === 'ass') {
         console.log('create', subtitleTrack);
@@ -37,7 +37,7 @@ const Video = ({
           workerUrl: '/libass-wasm/js/subtitles-octopus-worker.js',
           legacyWorkerUrl: '/libass-wasm/js/libassjs-worker-legacy.js',
           subUrl,
-          fonts: probe.fonts.map(({ filename }) => fontSrc(path, filename)),
+          fonts: video.probe.fonts.map(({ filename }) => fontSrc(video.path, filename)),
           onError: console.error,
         });
 
@@ -51,7 +51,7 @@ const Video = ({
     }
 
     return () => null;
-  }, [subtitleTrack, video]);
+  }, [subtitleTrack, video.path, video.probe]);
 
   useEffect(() => {
     setTranscodeAudio(false);
