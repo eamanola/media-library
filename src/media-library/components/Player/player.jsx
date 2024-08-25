@@ -25,6 +25,7 @@ const Player = () => {
   const [audioStream, setAudioStream] = useState(null);
   const [subtitleStream, setSubtitleStream] = useState(SUBS_UNSET);
   const [loading, setLoading] = useState(true);
+  const [showNext, setShowNext] = useState(false);
 
   const containerRef = useRef(null);
 
@@ -87,17 +88,27 @@ const Player = () => {
   };
 
   const onTimeUpdate = ({ target }) => {
-    const { played } = video;
+    const { currentTime } = target;
+    const { probe } = video;
+    const { duration } = probe;
 
-    if (played?.isPlayed !== true) {
-      const { currentTime } = target;
-      const { probe } = video;
-      const { duration } = probe;
+    if (currentTime >= duration * 0.90) {
+      const { played } = video;
 
-      if (currentTime >= duration * 0.90) {
+      if (played?.isPlayed !== true) {
         dispatch(togglePlayed(video));
         console.log('played');
       }
+
+      setShowNext(true);
+    } else {
+      setShowNext(false);
+    }
+  };
+
+  const onEnded = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
     }
   };
 
@@ -140,7 +151,27 @@ const Player = () => {
             subtitleTrack={subtitleStream}
             onReady={onReady}
             onTimeUpdate={onTimeUpdate}
+            onEnded={onEnded}
           />
+          {
+            next && (
+              <Link
+                to={`/player/${next.id}`}
+                reloadDocument
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  right: '10%',
+                  background: '#fffa',
+                  borderRadius: '10%',
+                  padding: '0.25em 0.5em',
+                  display: showNext ? 'unset' : 'none',
+                }}
+              >
+                next
+              </Link>
+            )
+          }
         </div>
       </div>
       {

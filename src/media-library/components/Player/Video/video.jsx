@@ -15,6 +15,7 @@ const Video = ({
   subtitleTrack = null,
   onReady = null,
   onTimeUpdate = null,
+  onEnded = null,
 }) => {
   const [transcodeAudio, setTranscodeAudio] = useState(false);
   const [transcodeVideo, setTranscodeVideo] = useState(false);
@@ -38,7 +39,10 @@ const Video = ({
           legacyWorkerUrl: '/libass-wasm/js/libassjs-worker-legacy.js',
           subUrl,
           fonts: video.probe.fonts.map(({ filename }) => fontSrc(video.path, filename)),
+          lazyFileLoading: true,
           onError: console.error,
+          // lossyRender: 'js-blend',
+          lossyRender: 'wasm-blend',
         });
 
         return () => {
@@ -62,15 +66,26 @@ const Video = ({
   //   setTranscodeVideo(false);
   // }, [videoTrack]);
 
-  const onAudioError = () => {
+  const onAudioError = (err) => {
     if (transcodeAudio === false) {
       setTranscodeAudio(true);
     }
+    console.log('audio', err);
   };
 
-  const onVideoError = () => {
+  const onVideoError = (err) => {
     if (transcodeVideo === false) {
       setTranscodeVideo(true);
+    }
+    console.log('video', err);
+  };
+
+  const onVideoEnded = (e) => {
+    setTranscodeAudio(false);
+    setTranscodeVideo(false);
+
+    if (onEnded) {
+      onEnded(e);
     }
   };
 
@@ -82,6 +97,7 @@ const Video = ({
       onVideoError={onVideoError}
       onReady={onReady}
       onTimeUpdate={onTimeUpdate}
+      onEnded={onVideoEnded}
     />
   );
 };
@@ -103,6 +119,7 @@ Video.propTypes = {
   }),
   onReady: PropTypes.func,
   onTimeUpdate: PropTypes.func,
+  onEnded: PropTypes.func,
 };
 
 export default Video;

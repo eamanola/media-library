@@ -24,25 +24,27 @@ const getValue = (item, key) => {
   return item[key];
 };
 
-const seasonTree = (groupedBySeason) => groupedBySeason.reduce((tree, video) => {
-  const { episode, extra } = video;
+const seasonTree = (groupedBySeason) => groupedBySeason
+  .sort(({ episode: episode1 }, { episode: episode2 }) => (episode1 || 0) - (episode2 || 0))
+  .reduce((tree, video) => {
+    const { episode, extra } = video;
 
-  if (extra) {
-    return { ...tree, extras: { ...(tree.extras || {}), [`${extra}${episode || ''}`]: video } };
-  }
+    if (extra) {
+      return { ...tree, extras: { ...(tree.extras || {}), [`${extra}${episode || ''}`]: video } };
+    }
 
-  if (episode) {
-    return { ...tree, [`E${episode}`]: video };
-  }
+    if (episode) {
+      return { ...tree, [`E${episode}`]: video };
+    }
 
-  // should be a movie
-  if (groupedBySeason.length === 1) {
-    return video;
-  }
+    // should be a movie
+    if (groupedBySeason.length === 1) {
+      return video;
+    }
 
-  console.warn('shouldn reach', video);
-  return tree;
-}, {});
+    console.warn('shouldn reach', video);
+    return tree;
+  }, {});
 
 const titleTree = (groupedByTitle) => {
   if (groupedByTitle.length === 1) {
@@ -51,22 +53,26 @@ const titleTree = (groupedByTitle) => {
     return seasonTree(season);
   }
 
-  return groupedByTitle.reduce((tree, season) => {
-    const seasonKey = getValue(season, 'season');
-    const seasonValue = seasonTree(season);
+  return groupedByTitle
+    .sort((a, b) => (getValue(a, 'season') || 0) - (getValue(b, 'season') || 0))
+    .reduce((tree, season) => {
+      const seasonKey = getValue(season, 'season');
+      const seasonValue = seasonTree(season);
 
-    if (seasonKey) {
-      return { ...tree, [`Season ${seasonKey}`]: seasonValue };
-    }
-    // items with no season info
-    // Sayonara Zetsubou Sensei Extra
-    return { ...tree, ...seasonValue };
-  }, {});
+      if (seasonKey) {
+        return { ...tree, [`Season ${seasonKey}`]: seasonValue };
+      }
+      // items with no season info
+      // Sayonara Zetsubou Sensei Extra
+      return { ...tree, ...seasonValue };
+    }, {});
 };
 
-const mediaLibTree = (groupedByMediaLib) => groupedByMediaLib.reduce((tree, title) => ({
-  ...tree, [getValue(title, 'title')]: titleTree(title),
-}), {});
+const mediaLibTree = (groupedByMediaLib) => groupedByMediaLib
+  .sort((a, b) => getValue(a, 'title').localeCompare(getValue(b, 'title')))
+  .reduce((tree, title) => ({
+    ...tree, [getValue(title, 'title')]: titleTree(title),
+  }), {});
 
 const toTree = (grouped) => grouped.reduce((tree, mediaLib) => ({
   ...tree, [getValue(mediaLib, 'mediaLib')]: mediaLibTree(mediaLib),

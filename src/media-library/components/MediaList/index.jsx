@@ -127,6 +127,10 @@ const MediaList = () => {
     // console.log('selected', selected);
   }, [selected]);
 
+  // const sortByKeys = (aFolder) => Object.keys(aFolder)
+  //   .sort()
+  //   .reduce((acc, val) => ({ ...acc, [val]: aFolder[val] }), {});
+
   return (
     <div
       className="media-list"
