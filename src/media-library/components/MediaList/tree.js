@@ -30,10 +30,10 @@ const seasonTree = (groupedBySeason) => groupedBySeason
     const { episode, extra } = video;
 
     if (extra) {
-      return { ...tree, extras: { ...(tree.extras || {}), [`${extra}${episode || ''}`]: video } };
+      return { ...tree, extras: { ...(tree.extras || {}), [`${extra}${(typeof episode === 'number') ? episode : ''}`]: video } };
     }
 
-    if (episode) {
+    if (typeof episode === 'number') {
       return { ...tree, [`E${episode}`]: video };
     }
 

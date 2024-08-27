@@ -7,7 +7,7 @@ import './styles.css';
 
 const printTitle = ({
   title, season = null, episode = null, extra = null,
-}) => [title, season ? `S${season}` : '', episode ? `${extra || 'E'}${episode}` : '']
+}) => [title, season ? `S${season}` : '', (typeof episode === 'number') ? `${extra || 'E'}${episode}` : '']
   .filter((element) => element !== '')
   .join(' ');
 

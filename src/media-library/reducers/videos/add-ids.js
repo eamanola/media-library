@@ -16,7 +16,7 @@ const addIds = ({
     title.replace(/\s/ug, '_'),
     year ? `(${year})` : '',
     season ? `S${season}` : '',
-    episode ? getEpisodeStr(episode, extra, version) : '',
+    (typeof episode === 'number') ? getEpisodeStr(episode, extra, version) : '',
   ]
     .filter((element) => element !== '')
     .join('.')
