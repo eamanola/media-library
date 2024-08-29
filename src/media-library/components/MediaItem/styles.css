@@ -10,7 +10,7 @@
   --border-radius: 0.5em;
   /* --min-width: 12em; */
   --active-scale: 0.95;
-  --max-width: 14em;
+  --max-width: 20em;
 }
 .media-item {
   display: inline-block;
