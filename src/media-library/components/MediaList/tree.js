@@ -42,8 +42,10 @@ const seasonTree = (groupedBySeason) => groupedBySeason
       return video;
     }
 
-    console.warn('shouldn reach', video);
-    return tree;
+    console.warn('shouldn reach. just a folder? experimental', video);
+    return { ...tree, [video.path]: { ...video, title: video.path } };
+    // console.warn('shouldn reach', video);
+    // return tree;
   }, {});
 
 const titleTree = (groupedByTitle) => {
