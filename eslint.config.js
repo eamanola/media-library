@@ -7,7 +7,12 @@ import globals from 'globals';
 
 export default [
   {
-    ignores: ['build/*', 'public/*'],
+    ignores: [
+      'build/*',
+      'public/*',
+      'dist/*',
+      'vite.config.js',
+    ],
   },
   importX['flat/recommended'],
   react.configs.flat.recommended,
