@@ -6,12 +6,12 @@ const { BACKEND_URL } = appConfig;
 const play = async ({ id, path }) => {
   try {
     const response = await fetch(`${BACKEND_URL}/play/${id}`, {
-      method: 'PUT',
+      body: JSON.stringify({ path }),
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ path }),
+      method: 'PUT',
     });
 
     return response.json();

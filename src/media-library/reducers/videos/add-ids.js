@@ -3,24 +3,24 @@ const getEpisodeStr = (episode, extra, version) => (
 );
 
 const addIds = ({
-  title, year, season, episode, extra, version, ...video
+  episode, extra, season, title, version, year, ...video
 }) => ({
   ...video,
-  title,
-  year,
-  season,
   episode,
   extra,
-  version,
   id: [
+    season ? `S${season}` : '',
     title.replace(/\s/ug, '_'),
     year ? `(${year})` : '',
-    season ? `S${season}` : '',
     (typeof episode === 'number') ? getEpisodeStr(episode, extra, version) : '',
   ]
     .filter((element) => element !== '')
     .join('.')
     .replace(/\s/ug, '.'),
+  season,
+  title,
+  version,
+  year,
 });
 
 export default addIds;

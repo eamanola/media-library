@@ -1,15 +1,15 @@
 import reducer, {
+  fromLocalStorage,
   login,
   logout,
-  fromLocalStorage,
   setEmailVerified,
 } from './reducers/user';
-import router from './router';
+import router from './router.jsx';
 
 const actions = {
+  fromLocalStorage,
   login,
   logout,
-  fromLocalStorage,
   setEmailVerified,
 };
 

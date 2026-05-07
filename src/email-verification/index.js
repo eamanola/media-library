@@ -1,13 +1,13 @@
 import reducer, { request, REQUEST_STATES } from './reducers/email-verification';
-import router from './router';
+import router from './router.jsx';
 
 const actions = { request };
 
 export {
   actions,
+  REQUEST_STATES,
   reducer,
   router,
-  REQUEST_STATES,
 };
 
 export default null;

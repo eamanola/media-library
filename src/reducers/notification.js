@@ -38,7 +38,7 @@ const startNotificationTimeout = (dispatch) => {
 const notification = (message) => async (dispatch) => {
   clearNotificationTimeout();
 
-  dispatch({ type: 'NOTIFICATION_SET', message });
+  dispatch({ message, type: 'NOTIFICATION_SET' });
 
   startNotificationTimeout(dispatch);
 };

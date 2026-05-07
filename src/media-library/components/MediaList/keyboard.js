@@ -1,7 +1,7 @@
 const getWidth = (element) => {
   const style = getComputedStyle(element);
-  const marginLeft = Number(style.getPropertyValue('margin-left').replace(/px$/, ''));
-  const marginRight = Number(style.getPropertyValue('margin-right').replace(/px$/, ''));
+  const marginLeft = Number(style.getPropertyValue('margin-left').replace(/px$/u, ''));
+  const marginRight = Number(style.getPropertyValue('margin-right').replace(/px$/u, ''));
 
   return element.offsetWidth + marginLeft + marginRight;
 };

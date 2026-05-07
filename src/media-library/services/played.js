@@ -16,12 +16,12 @@ const played = async (/* list */) => {
 const createPlayed = async (id, isPlayed) => {
   try {
     const response = await fetch(`${BACKEND_URL}/played`, {
-      method: 'POST',
+      body: JSON.stringify({ isPlayed, mediaId: id }),
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ isPlayed, mediaId: id }),
+      method: 'POST',
     });
 
     return response.json();
@@ -34,12 +34,12 @@ const createPlayed = async (id, isPlayed) => {
 const updatePlayed = async (playedObj) => {
   try {
     const response = await fetch(`${BACKEND_URL}/played/${playedObj.id}`, {
-      method: 'PUT',
+      body: JSON.stringify(playedObj),
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(playedObj),
+      method: 'PUT',
     });
 
     return response.json();

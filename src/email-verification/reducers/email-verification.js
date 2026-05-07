@@ -4,8 +4,8 @@ import { setEmailVerified } from '../../users/reducers/user';
 const reducer = () => null;
 
 const REQUEST_STATES = {
-  REQUESTED: 'REQUESTED',
   ALREADY_VERIFIED: 'ALREADY_VERIFIED',
+  REQUESTED: 'REQUESTED',
 };
 
 const request = (email) => async (dispatch) => {
@@ -31,8 +31,8 @@ const verifyByCode = (user, code) => async (dispatch) => {
 
 export {
   request,
-  verifyByCode,
   REQUEST_STATES,
+  verifyByCode,
 };
 
 export default reducer;

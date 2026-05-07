@@ -8,12 +8,12 @@ const probes = async (paths) => {
     const response = await fetch(
       `${BACKEND_URL}/probes`,
       {
-        method: 'POST',
+        body: JSON.stringify(paths),
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(paths),
+        method: 'POST',
       },
     );
 

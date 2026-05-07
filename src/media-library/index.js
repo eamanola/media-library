@@ -1,5 +1,5 @@
 import reducers, { actions } from './reducers';
-import router from './router';
+import router from './router.jsx';
 
 export {
   actions,

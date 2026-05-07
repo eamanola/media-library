@@ -1,3 +1,3 @@
-import AV from './av';
+import AV from './av.jsx';
 
 export default AV;

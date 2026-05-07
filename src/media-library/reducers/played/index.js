@@ -1,19 +1,25 @@
-import { createPlayed, updatePlayed, played as fetchPlayed } from '../../services/played';
+import { createPlayed, played as fetchPlayed, updatePlayed } from '../../services/played';
 
-const togglePlayed = ({ played: current, id }) => async (dispatch) => {
+const togglePlayed = ({ id, played: current }) => async (dispatch) => {
   const { played } = await (
     current
       ? updatePlayed({ ...current, isPlayed: !current.isPlayed })
       : createPlayed(id, true)
   );
 
-  dispatch({ type: 'MEDIA_LIBS_SET_PLAYED', payload: [played] });
+  dispatch({
+    payload: [played],
+    type: 'MEDIA_LIBS_SET_PLAYED',
+  });
 };
 
 const getPlayed = (/* videos */) => async (dispatch) => {
   const { playedList } = await fetchPlayed();
 
-  dispatch({ type: 'MEDIA_LIBS_SET_PLAYED', payload: playedList });
+  dispatch({
+    payload: playedList,
+    type: 'MEDIA_LIBS_SET_PLAYED',
+  });
 };
 
 export { getPlayed, togglePlayed };

@@ -6,12 +6,12 @@ const { BACKEND_URL } = appConfig;
 const createThumbnails = async (list) => {
   try {
     const response = await fetch(`${BACKEND_URL}/create-thumbnails`, {
-      method: 'POST',
+      body: JSON.stringify(list),
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(list),
+      method: 'POST',
     });
 
     return response.json();

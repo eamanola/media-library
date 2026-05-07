@@ -1,7 +1,6 @@
 import { videos as fetchVideos } from '../../services/videos';
 import parseMediaInfo from './parse-media-info';
 import { getPlayed } from '../played';
-
 import testName from './test-names.json';
 import addIds from './add-ids';
 
@@ -9,7 +8,7 @@ const initialState = [];
 
 const reducer = (state, action) => {
   let newState;
-  const { type, payload } = action;
+  const { payload, type } = action;
 
   switch (type) {
     case 'MEDIA_LIBS_INIT':
@@ -63,10 +62,10 @@ const formatMediaLibs = ({ mediaLib, videos }) => videos
 const getVideos = () => async (dispatch) => {
   if (USE_MOCK) {
     dispatch({
-      type: 'MEDIA_LIBS_INIT',
       payload: (getMock().map(formatMediaLibs).flat())
         .map(parseMediaInfo)
         .map(addIds),
+      type: 'MEDIA_LIBS_INIT',
     });
     return;
   }
@@ -76,7 +75,7 @@ const getVideos = () => async (dispatch) => {
     .map(parseMediaInfo)
     .map(addIds);
 
-  await dispatch({ type: 'MEDIA_LIBS_INIT', payload: videos });
+  await dispatch({ payload: videos, type: 'MEDIA_LIBS_INIT' });
 
   dispatch(getPlayed(videos));
 };

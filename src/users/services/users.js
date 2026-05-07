@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import GenericError from '../../services/generic-error';
-
 import config from '../../config';
 
 const { BACKEND_URL } = config;
@@ -27,7 +26,7 @@ const login = async ({ email, password }) => {
       )
     ).data;
 
-    return { token, emailVerified };
+    return { emailVerified, token };
   } catch (e) {
     const { message } = e?.response?.data || GenericError;
     throw new Error(message);

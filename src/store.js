@@ -6,9 +6,9 @@ import notificationReducer from './reducers/notification';
 import { reducers as mediaLibraryReducers } from './media-library';
 
 const reducers = combineReducers({
-  user: userReducer,
-  notification: notificationReducer,
   mediaLibrary: mediaLibraryReducers,
+  notification: notificationReducer,
+  user: userReducer,
 });
 
 const store = createStore(
