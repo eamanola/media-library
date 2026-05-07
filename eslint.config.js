@@ -21,8 +21,8 @@ export default [
   // recommended eslint-plugin-react-hooks
   airbnb.configs['flat/addon-react'],
   airbnb.configs['flat/addon-jsx'],
+  // eslint-stylistic-airbnb deprecated overrides
   {
-    // eslint-stylistic-airbnb deprecated overrides
     rules: {
       '@stylistic/line-comment-position': [
         'error',
@@ -36,8 +36,8 @@ export default [
       // '@stylistic/jsx-indent': ['error', 2],
     },
   },
+  // react
   {
-    // react
     languageOptions: {
       globals: {
         ...globals.browser,
