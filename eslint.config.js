@@ -7,12 +7,7 @@ import globals from 'globals';
 
 export default [
   {
-    ignores: [
-      'public/*',
-      'dist/*',
-      // TODO:
-      'vite.config.js',
-    ],
+    ignores: ['public/*', 'dist/*'],
   },
   importX['flat/recommended'],
   react.configs.flat.recommended,
@@ -100,6 +95,7 @@ export default [
             'eslint.config.js',
             'webpack.config.cjs',
             '**/*.test.js',
+            'vite.config.js',
           ],
         },
       ],
