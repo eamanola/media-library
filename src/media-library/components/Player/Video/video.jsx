@@ -41,6 +41,7 @@ const Video = ({
           fonts: video.probe.fonts.map(({ filename }) => fontSrc(video.path, filename)),
           lazyFileLoading: true,
           onError: console.error,
+          fallbackFont: '/fonts/default.woff2',
           // lossyRender: 'js-blend',
           lossyRender: 'wasm-blend',
         });
