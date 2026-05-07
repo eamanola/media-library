@@ -1,6 +1,6 @@
 {
   "name": "fullstack-demo-react",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": true,
   "main": "src/index.jsx",
   "dependencies": {
@@ -17,7 +17,7 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "vite build",
+    "build": "vite build && cp -R node_modules/libass-wasm/dist dist/libass-wasm",
     "serve": "vite preview",
     "lint": "eslint .",
     "postinstall": "cp -R node_modules/libass-wasm/dist public/libass-wasm",
