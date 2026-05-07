@@ -1,0 +1,3 @@
+allowBuilds:
+  media-filename-parser: true
+  unrs-resolver: true

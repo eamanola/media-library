@@ -23,18 +23,6 @@
     "postinstall": "cp -R node_modules/libass-wasm/dist public/libass-wasm",
     "prepare": "husky"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^5.10.0",
     "@vitejs/plugin-react": "^6.0.1",
