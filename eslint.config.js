@@ -8,7 +8,6 @@ import globals from 'globals';
 export default [
   {
     ignores: [
-      'build/*',
       'public/*',
       'dist/*',
       // TODO:
