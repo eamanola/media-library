@@ -3,6 +3,7 @@
   "version": "0.1.4",
   "private": true,
   "main": "src/index.jsx",
+  "type": "module",
   "dependencies": {
     "axios": "^1.16.0",
     "libass-wasm": "^4.1.0",
