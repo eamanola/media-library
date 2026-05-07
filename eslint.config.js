@@ -11,6 +11,7 @@ export default [
       'build/*',
       'public/*',
       'dist/*',
+      // TODO:
       'vite.config.js',
     ],
   },

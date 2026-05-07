@@ -1,6 +1,5 @@
 const {
   NODE_ENV,
-  REACT_APP_BACKEND_URL = 'http://localhost:3001',
 } = import.meta.env;
 
 const isDev = NODE_ENV === 'development';
@@ -8,7 +7,8 @@ const DEV_USER_EMAIL = isDev ? 'foo@example.com' : undefined;
 const DEV_USER_PASSWORD = isDev ? 'supersecure' : undefined;
 
 const config = {
-  BACKEND_URL: REACT_APP_BACKEND_URL,
+  // vite proxy, see vite config,
+  BACKEND_URL: '/api',
 };
 
 export {
