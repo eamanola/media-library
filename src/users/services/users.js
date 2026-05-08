@@ -11,9 +11,9 @@ const create = async ({ email, password }) => {
       `${BACKEND_URL}/signup`,
       { email, password },
     );
-  } catch (e) {
-    const { message } = e?.response?.data || GenericError;
-    throw new Error(message);
+  } catch (err) {
+    const { message } = err?.response?.data || GenericError;
+    throw new Error(message, { cause: err });
   }
 };
 
@@ -27,9 +27,9 @@ const login = async ({ email, password }) => {
     ).data;
 
     return { emailVerified, token };
-  } catch (e) {
-    const { message } = e?.response?.data || GenericError;
-    throw new Error(message);
+  } catch (err) {
+    const { message } = err?.response?.data || GenericError;
+    throw new Error(message, { cause: err });
   }
 };
 

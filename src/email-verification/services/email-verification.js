@@ -20,9 +20,9 @@ const request = async (email) => {
     );
 
     return status === 200;
-  } catch (e) {
-    const { message } = e?.response?.data || GenericError;
-    throw new Error(message);
+  } catch (err) {
+    const { message } = err?.response?.data || GenericError;
+    throw new Error(message, { cause: err });
   }
 };
 
@@ -35,9 +35,9 @@ const verifyByCode = async ({ token }, code) => {
     );
 
     return status === 200;
-  } catch (e) {
-    const { message } = e?.response?.data || GenericError;
-    throw new Error(message);
+  } catch (err) {
+    const { message } = err?.response?.data || GenericError;
+    throw new Error(message, { cause: err });
   }
 };
 

@@ -13,7 +13,7 @@ const countUnplayed = (subFolder) => Object.keys(subFolder).reduce(
   0,
 );
 
-const uplayedCounts = (folder) => Object.keys(folder).reduce(
+const unPlayedCount = (folder) => Object.keys(folder).reduce(
   (items, key) => {
     if (isFolder(folder[key])) {
       const unplayed = countUnplayed(folder[key]);
@@ -25,4 +25,4 @@ const uplayedCounts = (folder) => Object.keys(folder).reduce(
   {},
 );
 
-export default uplayedCounts;
+export default unPlayedCount;

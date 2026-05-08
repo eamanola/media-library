@@ -6,8 +6,16 @@ const Notification = () => {
 
   return (
     notification
-      ? <div>{notification}</div>
-      : <div>&nbsp;</div>
+      ? (
+        <div>
+          {notification}
+        </div>
+      )
+      : (
+        <div>
+          &nbsp;
+        </div>
+      )
   );
 };
 

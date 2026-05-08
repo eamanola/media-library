@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router';
+
 import { notification } from '../../reducers/notification';
 import { setEmailVerified } from '../../users/reducers/user';
 
@@ -18,7 +19,11 @@ const VerifiedByLink = () => {
     }
 
     navigate('/');
-  }, [status, dispatch, navigate]);
+  }, [
+    status,
+    dispatch,
+    navigate,
+  ]);
 
   return null;
 };

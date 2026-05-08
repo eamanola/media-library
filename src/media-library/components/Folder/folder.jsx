@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import './styles.css';
 
@@ -21,16 +20,17 @@ const Folder = ({
   }, [selected]);
 
   return (
-    <Link
-      className="media-folder"
-      data-id={folder.title}
-      onClick={onClick}
-      onFocus={onFocus}
-      ref={linkRef}
-      to={path}
-    >
-      {`${folder.title}${folder.unplayed ? ` (${folder.unplayed})` : ''}`}
-    </Link>
+    <div className="media-folder">
+      <Link
+        data-id={folder.title}
+        onClick={onClick}
+        onFocus={onFocus}
+        ref={linkRef}
+        to={path}
+      >
+        {`${folder.title}${folder.unplayed ? ` (${folder.unplayed})` : ''}`}
+      </Link>
+    </div>
   );
 };
 

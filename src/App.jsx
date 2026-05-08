@@ -1,13 +1,9 @@
 import React, { useEffect } from 'react';
-
 import { useDispatch } from 'react-redux';
-import { ScrollRestoration, Outlet } from 'react-router-dom';
+import { ScrollRestoration, Outlet } from 'react-router';
 
 import { actions as usersActions } from './users';
-
-import Dashboard from './components/Dashboard';
-import Notification from './components/Notification';
-
+import { Dashboard, Notification } from './components';
 import { actions } from './media-library';
 
 const { getVideos } = actions;

@@ -1,12 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router';
 
 // import subContent from './test.ass';
 import { actions } from '../../reducers';
-
 import Video from './Video';
-
 import './styles.css';
 
 const { getProbes, togglePlayed } = actions;
@@ -31,20 +29,20 @@ const Player = () => {
 
   const video = (mediaLibrary || []).find(({ id }) => id === videoId);
 
-  useEffect(() => {
-    if (video?.probe) {
-      const { audios, video: vidStream } = video.probe;
-      if (audioStream === null && audios.length) {
-        const prefAudio = audios.find(({ language }) => language === PREF_LANG);
+  // useEffect(() => {
+  if (video?.probe) {
+    const { audios, video: vidStream } = video.probe;
+    if (audioStream === null && audios.length) {
+      const prefAudio = audios.find(({ language }) => language === PREF_LANG);
 
-        setAudioStream(prefAudio || audios[0]);
-      }
-
-      if (videoStream === null && vidStream) {
-        setVideoStream(vidStream);
-      }
+      console.log('set audio');
+      setAudioStream(prefAudio || audios[0]);
     }
-  }, [video, videoStream, audioStream]);
+
+    if (videoStream === null && vidStream) {
+      setVideoStream(vidStream);
+    }
+  }
 
   useEffect(() => {
     if (video && !video.probe) {
@@ -52,6 +50,14 @@ const Player = () => {
       dispatch(getProbes([video]));
     }
   }, [video, dispatch]);
+
+  useEffect(() => {
+    console.log('set video');
+  }, [videoStream]);
+
+  useEffect(() => {
+    console.log('set audio');
+  }, [audioStream]);
 
   if (!videoStream) {
     return null;
@@ -124,91 +130,107 @@ const Player = () => {
           textAlign: 'center',
         }}
       >
-        { loading && (
+        {!!loading && (
           <div
             style={{
-              display: 'flex',
               alignItems: 'center',
+              display: 'flex',
+              height: '100%',
               justifyContent: 'center',
               position: 'absolute',
               width: '100%',
-              height: '100%',
             }}
           >
-            <span>Loading...</span>
+            <span>
+              Loading...
+            </span>
           </div>
         )}
+
         <div
           style={{
-            visibility: loading ? 'hidden' : 'visible',
             position: 'relative',
+            visibility: loading ? 'hidden' : 'visible',
           }}
         >
+          {/* eslint-disable-next-line react/jsx-max-depth */}
           <Video
-            video={video}
-            videoTrack={videoStream}
             audioTrack={audioStream}
-            subtitleTrack={subtitleStream}
+            onEnded={onEnded}
             onReady={onReady}
             onTimeUpdate={onTimeUpdate}
-            onEnded={onEnded}
+            subtitleTrack={subtitleStream}
+            video={video}
+            videoTrack={videoStream}
           />
-          {
-            next && (
-              <Link
-                to={`/player/${next.id}`}
-                reloadDocument
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  right: '10%',
-                  background: '#fffa',
-                  borderRadius: '10%',
-                  padding: '0.25em 0.5em',
-                  display: showNext ? 'unset' : 'none',
-                }}
-              >
+
+          {!!next && (
+            <span
+              style={{
+                background: '#fff7',
+                borderRadius: '10%',
+                display: showNext ? 'unset' : 'none',
+                padding: '0.25em 0.5em',
+                position: 'absolute',
+                right: '10%',
+                top: '50%',
+              }}
+            >
+              <Link reloadDocument to={`/player/${next.id}`}>
                 next
               </Link>
-            )
-          }
+            </span>
+          )}
+
         </div>
       </div>
-      {
-        video.probe?.audios.length > 1
-          ? (
-            <select onChange={onLanguageChange} value={audioStream.index}>
-              {
-                video.probe.audios.map(({ index, language }) => (
-                  <option
-                    key={index}
-                    value={index}
-                  >
-                    {language}
-                  </option>
-                ))
-              }
-            </select>
-          )
-          : null
-      }
-      {
-        video.probe?.subtitles.length > 1
-          ? (
-            <select onChange={onSubtitleChange} value={subtitleStream?.index}>
-              <option value={-1}>subs</option>
-              {
-                video.probe.subtitles.map(({ index, language, title }) => (
-                  <option key={index} value={index}>{`${title} (${language})`}</option>
-                ))
-              }
-            </select>
-          )
-          : null
-      }
-      <button type="button" onClick={toFullscreen}>FS</button>
-      {previous && <Link to={`/player/${previous.id}`} reloadDocument>previous</Link>}
-      {next && <Link to={`/player/${next.id}`} reloadDocument>next</Link>}
+
+      {video.probe?.audios.length > 1 && (
+        <select onChange={onLanguageChange} value={audioStream.index}>
+
+          {
+            video.probe.audios.map(({ index, language }) => (
+              <option key={index} value={index}>
+                {language}
+              </option>
+            ))
+          }
+
+        </select>
+      )}
+
+      {video.probe?.subtitles.length > 1 && (
+        <select onChange={onSubtitleChange} value={subtitleStream?.index}>
+          <option value={-1}>
+            no subs
+          </option>
+
+          {
+            video.probe.subtitles.map(({ index, language, title }) => (
+              <option key={index} value={index}>
+                {`${title} (${language})`}
+              </option>
+            ))
+          }
+
+        </select>
+      )}
+
+      <button onClick={toFullscreen} type="button">
+        FS
+      </button>
+
+      {!!previous && (
+        <Link reloadDocument to={`/player/${previous.id}`}>
+          previous
+        </Link>
+      )}
+
+      {!!next && (
+        <Link reloadDocument to={`/player/${next.id}`}>
+          next
+        </Link>
+      )}
     </>
   );
 };

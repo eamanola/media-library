@@ -1,19 +1,19 @@
 import React from 'react';
-import MediaList from './components/MediaList';
-import Player from './components/Player';
+
+import { MediaList, Player } from './components';
 
 const router = [
   {
-    path: 'player/:videoId',
     element: <Player />,
+    path: 'player/:videoId',
   },
   {
+    element: <MediaList />,
     path: '',
-    element: <MediaList />,
   },
   {
-    path: '*',
     element: <MediaList />,
+    path: '*',
   },
 ];
 

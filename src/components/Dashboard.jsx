@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions as usersActions } from '../users';
@@ -37,20 +37,36 @@ const Dashboard = () => {
 
   return (
     <div>
-      { user && (
+      {!!user && (
         <span>
           Hello&nbsp;
           {user.email}
         </span>
       )}
 
-      { user && <button type="button" onClick={logout}>logout</button> }
+      {!!user && (
+        <button onClick={logout} type="button">
+          logout
+        </button>
+      )}
 
-      { (user && !user?.emailVerified) && <button type="button" onClick={requestVerification}>verify</button> }
+      {(!!user && !user?.emailVerified) && (
+        <button onClick={requestVerification} type="button">
+          verify
+        </button>
+      )}
 
-      { (!user && pathname !== '/login') && <Link to="/login">Login</Link> }
+      {(!user && pathname !== '/login') && (
+        <Link to="/login">
+          Login
+        </Link>
+      )}
 
-      { (!user && pathname !== '/signup') && <Link to="/signup">Signup</Link> }
+      {(!user && pathname !== '/signup') && (
+        <Link to="/signup">
+          Signup
+        </Link>
+      )}
     </div>
   );
 };

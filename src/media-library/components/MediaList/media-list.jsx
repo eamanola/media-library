@@ -1,16 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions } from '../../reducers';
-
 import { createTree } from './tree';
-
-import countUnplayeds from '../Folder/count-unplayeds';
-
-import Folder from '../Folder';
+import Folder, { unPlayedCount } from '../Folder';
 import MediaItem from '../MediaItem';
-
 import { nextSelected } from './keyboard';
 import './styles.css';
 // import { pathById } from './video-path';
@@ -32,9 +27,6 @@ const MediaList = () => {
   const navigate = useNavigate();
 
   const mediaLibrary = useSelector((state) => state.mediaLibrary);
-
-  const [tree, setTree] = useState(null);
-  const [folder, setFolder] = useState([]);
   const [selected, setSelected] = useState(null);
 
   const { pathname } = useLocation();
@@ -62,10 +54,21 @@ const MediaList = () => {
     }
   };
 
-  const formatFolder = (aFolder) => countUnplayeds(aFolder);
+  const formatFolder = (aFolder) => unPlayedCount(aFolder);
 
-  useEffect(() => {
+  const tree = useMemo(() => {
+    if (mediaLibrary.length) {
+      console.log('create tree');
+
+      return createTree(mediaLibrary);
+    }
+    return null;
+  }, [mediaLibrary]);
+
+  const folder = useMemo(() => {
     if (tree) {
+      console.log('set folder');
+
       const path = pathname
         .split('/')
         .filter((subdir) => subdir !== '')
@@ -76,17 +79,12 @@ const MediaList = () => {
       const firstLib = Object.keys(tree)[0];
       const target = path.reduce((acc, val) => acc[val], tree[firstLib]);
 
-      setFolder(formatFolder(target));
+      return formatFolder(target);
     }
+    return [];
   }, [tree, pathname]);
 
-  useEffect(() => {
-    if (mediaLibrary.length) {
-      // could be optimimzed and create tree on load only
-      setTree(createTree(mediaLibrary));
-    }
-    console.log('mediaLibrary', mediaLibrary);
-  }, [mediaLibrary]);
+  console.log('render');
 
   useEffect(() => {
     // console.log(folder);
@@ -134,8 +132,8 @@ const MediaList = () => {
   return (
     <div
       className="media-list"
-      role="presentation"
       onKeyDown={onKeyDown}
+      role="presentation"
     >
       {
         Object.keys(folder).map((key) => {
@@ -144,8 +142,8 @@ const MediaList = () => {
           return isSubFolder
             ? (
               <Folder
-                key={key}
                 folder={folder[key]}
+                key={key}
                 onClick={() => setSelected(key)}
                 onFocus={() => setSelected(key)}
                 path={join(pathname, key)}

@@ -4,14 +4,21 @@ import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import { configs as importX } from 'eslint-plugin-import-x';
 import globals from 'globals';
+import js from '@eslint/js';
 
+const SHOW_WARNINGS = 'off';
 export default [
+  // artifacts
   {
     ignores: ['public/*', 'dist/*'],
   },
+  js.configs.recommended,
   importX['flat/recommended'],
-  react.configs.flat.recommended,
-  reactHooks.configs.flat.recommended,
+  importX['flat/react'],
+  react.configs.flat.all,
+  // with React 17+
+  react.configs.flat['jsx-runtime'],
+  reactHooks.configs.flat['recommended-latest'],
 
   // airbnb
   airbnb.configs['flat/strict'],
@@ -24,6 +31,8 @@ export default [
   // eslint-stylistic-airbnb deprecated overrides
   {
     rules: {
+      // known by maintainer
+      // '@stylistic/jsx-indent': ['error', 2],
       '@stylistic/line-comment-position': [
         'error',
         {
@@ -32,27 +41,39 @@ export default [
           position: 'above',
         },
       ],
-      // known by maintainer
-      // '@stylistic/jsx-indent': ['error', 2],
     },
   },
   // react
   {
+    files: ['**/*.jsx', '**/*.js'],
     languageOptions: {
       globals: {
         ...globals.browser,
       },
     },
     rules: {
+      // https://github.com/jsx-eslint/eslint-plugin-react/tree/master/docs/rules
       'react/function-component-definition': [2, { namedComponents: 'arrow-function' }],
-      'react/require-default-props': ['off'],
+      'react/jsx-indent': ['error', 2],
+      'react/jsx-indent-props': ['error', 2],
+      'react/jsx-max-props-per-line': [
+        'error',
+        {
+          maximum: { multi: 1, single: 3 },
+          // maximum: 1
+          // only work, if maximum is number
+          // when: 'multiline',
+        },
+      ],
+      'react/jsx-no-literals': ['off'],
     },
   },
+  // general
   {
     rules: {
       '@stylistic/multiline-ternary': ['error', 'always-multiline'],
       'no-console': [
-        'warn',
+        SHOW_WARNINGS,
         {
           allow: [
             'info',
@@ -66,6 +87,7 @@ export default [
       'sort-keys': ['warn'],
     },
   },
+  // test
   {
     files: ['**/*.test.js', 'jest/**'],
     languageOptions: {
@@ -74,13 +96,14 @@ export default [
       },
     },
   },
+  // commonjs
   {
     files: ['**/*.cjs'],
     rules: {
       'import/no-commonjs': ['off'],
     },
   },
-  // project specific
+  // dev files
   {
     languageOptions: {
       globals: {

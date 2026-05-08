@@ -42,7 +42,11 @@ const AV = ({
     if (onReady) {
       onReady(canPlay.length === (audioSrc !== null ? 2 : 1));
     }
-  }, [canPlay, audioSrc, onReady]);
+  }, [
+    canPlay,
+    audioSrc,
+    onReady,
+  ]);
 
   const onCanPlay = ({ target }) => {
     setCanPlay((state) => [...state.filter((el) => el !== target.tagName), target.tagName]);
@@ -82,23 +86,26 @@ const AV = ({
   return (
     <>
       <video
-        ref={videoRef}
         controls
         onCanPlay={onCanPlay}
+        onEnded={onEnded}
         onError={onVideoError}
-        onPlay={onPlay}
         onPause={onPause}
+        onPlay={onPlay}
         onSeeked={onSeeked}
         onTimeUpdate={onVideoTimeUpdate}
-        onEnded={onEnded}
+        ref={videoRef}
       >
         <track kind="captions" label="foo" />
+
         <source src={videoSrc} />
       </video>
+
       {
         hasAudio() && (
-          <audio ref={audioRef} onCanPlay={onCanPlay} onError={onAudioError}>
+          <audio onCanPlay={onCanPlay} onError={onAudioError} ref={audioRef}>
             <track kind="captions" label="foo" />
+
             <source src={audioSrc} />
           </audio>
         )
@@ -110,11 +117,20 @@ const AV = ({
 AV.propTypes = {
   audioSrc: PropTypes.string,
   onAudioError: PropTypes.func,
-  videoSrc: PropTypes.string.isRequired,
-  onVideoError: PropTypes.func,
+  onEnded: PropTypes.func,
   onReady: PropTypes.func,
   onTimeUpdate: PropTypes.func,
-  onEnded: PropTypes.func,
+  onVideoError: PropTypes.func,
+  videoSrc: PropTypes.string.isRequired,
+};
+
+AV.defaultProps = {
+  audioSrc: null,
+  onAudioError: null,
+  onEnded: null,
+  onReady: null,
+  onTimeUpdate: null,
+  onVideoError: null,
 };
 
 export default AV;

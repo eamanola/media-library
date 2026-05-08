@@ -1,15 +1,11 @@
 import React from 'react';
-
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import userService from '../services/users';
-
 import { login as loginAction } from '../reducers/user';
 import { notification as notificationAction } from '../../reducers/notification';
-
-import EmailPasswordForm from '../components/EmailPasswordForm';
-
+import { EmailPasswordForm } from '../components';
 import { DEV_USER_EMAIL, DEV_USER_PASSWORD } from '../../config';
 
 const SignupPage = () => {
@@ -18,7 +14,7 @@ const SignupPage = () => {
 
   const login = ({ email, password }) => dispatch(loginAction({ email, password }));
 
-  const signup = async ({ email, password, confirmPassword }) => {
+  const signup = async ({ confirmPassword, email, password }) => {
     try {
       if (confirmPassword !== password) {
         throw new Error('passwords dont match');
@@ -38,38 +34,40 @@ const SignupPage = () => {
     e.preventDefault();
 
     const {
+      confirmPassword: confirmPasswordInput,
       email: emailInput,
       password: passwordInput,
-      confirmPassword: confirmPasswordInput,
     } = e.target.elements;
 
     const email = emailInput.value;
     const password = passwordInput.value;
     const confirmPassword = confirmPasswordInput.value;
 
-    signup({ email, password, confirmPassword });
+    signup({ confirmPassword, email, password });
   };
 
   return (
     <EmailPasswordForm onSubmit={onSubmit}>
       <input
-        type="password"
+        name="confirmPassword"
         placeholder="confirm password"
         required
-        name="confirmPassword"
+        type="password"
       />
 
-      <button type="submit">signup</button>
+      <button type="submit">
+        signup
+      </button>
 
       {
-        DEV_USER_EMAIL && (
+        !!DEV_USER_EMAIL && (
           <button
-            type="button"
             onClick={() => signup({
+              confirmPassword: DEV_USER_PASSWORD,
               email: DEV_USER_EMAIL,
               password: DEV_USER_PASSWORD,
-              confirmPassword: DEV_USER_PASSWORD,
             })}
+            type="button"
           >
             dev user
           </button>

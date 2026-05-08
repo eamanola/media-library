@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SubtitlesOctopus from 'libass-wasm';
 
-import AV from './AV';
-
+import Av from './AV';
 import mediaSrc, { fontSrc } from './media-src';
-
 import './libass-wasm-overrides.css';
 
 const Video = ({
@@ -19,12 +17,14 @@ const Video = ({
 }) => {
   const [transcodeAudio, setTranscodeAudio] = useState(false);
   const [transcodeVideo, setTranscodeVideo] = useState(false);
+  const [currentAudio, setCurrentAudio] = useState(audioTrack);
 
   const videoSrc = () => mediaSrc('video', video.path, videoTrack.index, transcodeVideo);
   const audioSrc = () => mediaSrc('audio', video.path, audioTrack.index, transcodeAudio);
 
   useEffect(() => {
     if (subtitleTrack) {
+      console.log('onSubChanged', subtitleTrack);
       const { codec, index } = subtitleTrack;
       // const { path, probe } = video;
 
@@ -34,16 +34,16 @@ const Video = ({
         console.log('create', subtitleTrack);
 
         const octopus = new SubtitlesOctopus({
-          video: document.querySelector('video'),
-          workerUrl: '/libass-wasm/js/subtitles-octopus-worker.js',
-          legacyWorkerUrl: '/libass-wasm/js/libassjs-worker-legacy.js',
-          subUrl,
+          fallbackFont: '/fonts/default.woff2',
           fonts: video.probe.fonts.map(({ filename }) => fontSrc(video.path, filename)),
           lazyFileLoading: true,
-          onError: console.error,
-          fallbackFont: '/fonts/default.woff2',
+          legacyWorkerUrl: '/libass-wasm/js/libassjs-worker-legacy.js',
           // lossyRender: 'js-blend',
           lossyRender: 'wasm-blend',
+          onError: console.error,
+          subUrl,
+          video: document.querySelector('video'),
+          workerUrl: '/libass-wasm/js/subtitles-octopus-worker.js',
         });
 
         return () => {
@@ -56,16 +56,20 @@ const Video = ({
     }
 
     return () => null;
-  }, [subtitleTrack, video.path, video.probe]);
+  }, [
+    subtitleTrack,
+    video.path,
+    video.probe,
+  ]);
 
-  useEffect(() => {
+  // onAudioChanged
+  if (currentAudio !== audioTrack) {
+    console.log('onAudioChanged', audioTrack);
+    setCurrentAudio(audioTrack);
     setTranscodeAudio(false);
-  }, [audioTrack]);
+  }
 
-  // only 1 video track, cant change
-  // useEffect(() => {
-  //   setTranscodeVideo(false);
-  // }, [videoTrack]);
+  // video cannot change, only 1 video track
 
   const onAudioError = (err) => {
     if (transcodeAudio === false) {
@@ -91,19 +95,27 @@ const Video = ({
   };
 
   return (
-    <AV
+    <Av
       audioSrc={audioTrack ? audioSrc() : null}
-      videoSrc={videoSrc()}
       onAudioError={audioTrack ? onAudioError : null}
-      onVideoError={onVideoError}
+      onEnded={onVideoEnded}
       onReady={onReady}
       onTimeUpdate={onTimeUpdate}
-      onEnded={onVideoEnded}
+      onVideoError={onVideoError}
+      videoSrc={videoSrc()}
     />
   );
 };
 
 Video.propTypes = {
+  audioTrack: PropTypes.shape({ index: PropTypes.number.isRequired }),
+  onEnded: PropTypes.func,
+  onReady: PropTypes.func,
+  onTimeUpdate: PropTypes.func,
+  subtitleTrack: PropTypes.shape({
+    codec: PropTypes.string.isRequired,
+    index: PropTypes.number.isRequired,
+  }),
   video: PropTypes.shape({
     path: PropTypes.string.isRequired,
     probe: PropTypes.shape({
@@ -112,15 +124,15 @@ Video.propTypes = {
       })).isRequired,
     }).isRequired,
   }).isRequired,
-  audioTrack: PropTypes.shape({ index: PropTypes.number.isRequired }),
   videoTrack: PropTypes.shape({ index: PropTypes.number.isRequired }).isRequired,
-  subtitleTrack: PropTypes.shape({
-    codec: PropTypes.string.isRequired,
-    index: PropTypes.number.isRequired,
-  }),
-  onReady: PropTypes.func,
-  onTimeUpdate: PropTypes.func,
-  onEnded: PropTypes.func,
+};
+
+Video.defaultProps = {
+  audioTrack: null,
+  onEnded: null,
+  onReady: null,
+  onTimeUpdate: null,
+  subtitleTrack: null,
 };
 
 export default Video;

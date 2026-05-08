@@ -22,7 +22,10 @@ const VerifyByCode = () => {
   return (
     <form onSubmit={handleSubmit}>
       <input name="code" type="text" />
-      <button type="submit">verify</button>
+
+      <button type="submit">
+        verify
+      </button>
     </form>
   );
 };

@@ -1,15 +1,15 @@
 import React from 'react';
-import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
+
+import { LoginPage, SignupPage } from './pages';
 
 const router = [
   {
-    path: '/login',
     element: <LoginPage />,
+    path: '/login',
   },
   {
-    path: '/signup',
     element: <SignupPage />,
+    path: '/signup',
   },
 ];
 

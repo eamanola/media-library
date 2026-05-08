@@ -1,16 +1,15 @@
 import React from 'react';
 
-import VerifiedByLink from './pages/VerifiedByLink';
-import VerifyByCode from './pages/VerifyByCode';
+import { VerifiedByLink, VerifyByCode } from './pages';
 
 const router = [
   {
-    path: 'email/verify/by-link/:status',
     element: <VerifiedByLink />,
+    path: 'email/verify/by-link/:status',
   },
   {
-    path: 'email/verify/by-code',
     element: <VerifyByCode />,
+    path: 'email/verify/by-code',
   },
 ];
 

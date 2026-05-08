@@ -7,7 +7,11 @@ import './styles.css';
 
 const printTitle = ({
   title, season = null, episode = null, extra = null,
-}) => [title, season ? `S${season}` : '', (typeof episode === 'number') ? `${extra || 'E'}${episode}` : '']
+}) => [
+  title,
+  season ? `S${season}` : '',
+  (typeof episode === 'number') ? `${extra || 'E'}${episode}` : '',
+]
   .filter((element) => element !== '')
   .join(' ');
 
@@ -33,19 +37,24 @@ const MediaItem = ({
     <div
       className={`media-item ${selected ? 'selected' : ''}`}
       data-id={video.id}
-      role="presentation"
       onClick={onClick}
+      role="presentation"
     >
       <div
         className="media-item-image-container"
-        role="presentation"
         onClick={video.probe ? onPlayExp : onPlay}
+        role="presentation"
       >
         {
           video.thumbnail
-            ? <img src={video.thumbnail} alt={video.id} />
-            : <div>{video.id}</div>
+            ? <img alt={video.id} src={video.thumbnail} />
+            : (
+              <div>
+                {video.id}
+              </div>
+            )
         }
+
       </div>
 
       <div className="media-item-title">
@@ -57,28 +66,32 @@ const MediaItem = ({
       </div>
 
       <button
-        ref={playRef}
         className="media-item-play-button"
-        type="button"
         onClick={onPlay}
         onFocus={onFocus}
+        ref={playRef}
+        type="button"
       >
         Play
       </button>
 
       <label
-        htmlFor={`played-${video.id}`}
         className="media-item-played-label"
+        htmlFor={`played-${video.id}`}
       >
         <input
-          ref={playedRef}
-          id={`played-${video.id}`}
-          type="checkbox"
           checked={video.played?.isPlayed === true}
+          id={`played-${video.id}`}
           onChange={onTogglePlayed}
           onFocus={onFocus}
+          ref={playedRef}
+          type="checkbox"
         />
+
+        {' '}
+
         Played
+
       </label>
     </div>
   );
@@ -92,14 +105,14 @@ MediaItem.propTypes = {
   onTogglePlayed: PropTypes.func.isRequired,
   selected: PropTypes.bool.isRequired,
   video: PropTypes.shape({
-    probe: PropTypes.shape({
-      duration: PropTypes.number.isRequired,
-    }),
     episode: PropTypes.number,
     extra: PropTypes.string,
     id: PropTypes.string.isRequired,
     played: PropTypes.shape({
       isPlayed: PropTypes.bool.isRequired,
+    }),
+    probe: PropTypes.shape({
+      duration: PropTypes.number.isRequired,
     }),
     season: PropTypes.number,
     thumbnail: PropTypes.string,

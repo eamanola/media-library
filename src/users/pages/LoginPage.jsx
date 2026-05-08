@@ -1,14 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { login as loginAction } from '../reducers/user';
 import { notification as notificationAction } from '../../reducers/notification';
-
-import EmailPasswordForm from '../components/EmailPasswordForm';
-
+import { EmailPasswordForm } from '../components';
 import { DEV_USER_EMAIL, DEV_USER_PASSWORD } from '../../config';
 
 const LoginPage = ({ from = '/' }) => {
@@ -41,16 +38,18 @@ const LoginPage = ({ from = '/' }) => {
 
   return (
     <EmailPasswordForm onSubmit={onSubmit}>
-      <button type="submit">login</button>
+      <button type="submit">
+        login
+      </button>
 
       {
-        DEV_USER_EMAIL && (
+        !!DEV_USER_EMAIL && (
           <button
-            type="button"
             onClick={() => login({
               email: DEV_USER_EMAIL,
               password: DEV_USER_PASSWORD,
             })}
+            type="button"
           >
             dev user
           </button>
@@ -62,6 +61,10 @@ const LoginPage = ({ from = '/' }) => {
 
 LoginPage.propTypes = {
   from: PropTypes.string,
+};
+
+LoginPage.defaultProps = {
+  from: '/',
 };
 
 export default LoginPage;
