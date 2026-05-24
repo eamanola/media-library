@@ -99,6 +99,7 @@ const Video = ({
     <Av
       audioSrc={audioTrack ? audioSrc() : null}
       chapters={video?.probe?.chapters}
+      duration={video.probe.duration}
       onAudioError={audioTrack ? onAudioError : null}
       onEnded={onVideoEnded}
       onFullscreen={onFullscreen}
@@ -124,6 +125,7 @@ Video.propTypes = {
     path: PropTypes.string.isRequired,
     probe: PropTypes.shape({
       chapters: chaptersPropType,
+      duration: PropTypes.number,
       fonts: PropTypes.arrayOf(PropTypes.shape({
         filename: PropTypes.string.isRequired,
       })).isRequired,

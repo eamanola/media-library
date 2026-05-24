@@ -8,6 +8,7 @@ const AV = ({
   videoSrc,
   audioSrc = null,
   chapters = null,
+  duration = 0,
   onReady = null,
   onAudioError = null,
   onFullscreen = null,
@@ -18,6 +19,7 @@ const AV = ({
   const audioRef = useRef(null);
   const videoRef = useRef(null);
   const [canPlay, setCanPlay] = useState([]);
+  const [currentTime, setCurrentTime] = useState(0);
 
   const hasAudio = () => audioSrc !== null;
 
@@ -81,6 +83,8 @@ const AV = ({
       }
     }
 
+    setCurrentTime(e.target.currentTime);
+    console.log(currentTime);
     if (onTimeUpdate) {
       onTimeUpdate(e);
     }
@@ -144,8 +148,8 @@ const AV = ({
 
       <Controls
         chapters={chapters}
-        // eslint-disable-next-line react-hooks/refs
-        currentTime={videoRef.current?.currentTime || 0}
+        currentTime={currentTime}
+        duration={duration}
         onChapterSelected={toChapter}
         onFullscreen={onFullscreen}
       />
@@ -156,6 +160,7 @@ const AV = ({
 AV.propTypes = {
   audioSrc: PropTypes.string,
   chapters: chaptersPropType,
+  duration: PropTypes.number,
   onAudioError: PropTypes.func,
   onEnded: PropTypes.func,
   onFullscreen: PropTypes.func,
@@ -168,6 +173,7 @@ AV.propTypes = {
 AV.defaultProps = {
   audioSrc: null,
   chapters: null,
+  duration: PropTypes.number,
   onAudioError: null,
   onEnded: null,
   onFullscreen: null,
