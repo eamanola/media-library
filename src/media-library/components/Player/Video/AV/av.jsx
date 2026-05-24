@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
+import Controls, { chaptersPropType } from './Controls';
 import './av.css';
 
 const AV = ({
   videoSrc,
   audioSrc = null,
+  chapters = null,
   onReady = null,
   onAudioError = null,
   onVideoError = null,
@@ -83,6 +85,10 @@ const AV = ({
     }
   };
 
+  const toChapter = (chapter) => {
+    videoRef.current.currentTime = chapter.start;
+  };
+
   return (
     <>
       <video
@@ -110,12 +116,20 @@ const AV = ({
           </audio>
         )
       }
+
+      <Controls
+        chapters={chapters}
+        // eslint-disable-next-line react-hooks/refs
+        currentTime={videoRef.current?.currentTime || 0}
+        onChapterSelected={toChapter}
+      />
     </>
   );
 };
 
 AV.propTypes = {
   audioSrc: PropTypes.string,
+  chapters: chaptersPropType,
   onAudioError: PropTypes.func,
   onEnded: PropTypes.func,
   onReady: PropTypes.func,
@@ -126,11 +140,14 @@ AV.propTypes = {
 
 AV.defaultProps = {
   audioSrc: null,
+  chapters: null,
   onAudioError: null,
   onEnded: null,
   onReady: null,
   onTimeUpdate: null,
   onVideoError: null,
 };
+
+export { chaptersPropType };
 
 export default AV;

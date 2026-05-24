@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SubtitlesOctopus from 'libass-wasm';
 
-import Av from './AV';
+import Av, { chaptersPropType } from './AV';
 import mediaSrc, { fontSrc } from './media-src';
 import './libass-wasm-overrides.css';
 
@@ -97,6 +97,7 @@ const Video = ({
   return (
     <Av
       audioSrc={audioTrack ? audioSrc() : null}
+      chapters={video?.probe?.chapters}
       onAudioError={audioTrack ? onAudioError : null}
       onEnded={onVideoEnded}
       onReady={onReady}
@@ -119,6 +120,7 @@ Video.propTypes = {
   video: PropTypes.shape({
     path: PropTypes.string.isRequired,
     probe: PropTypes.shape({
+      chapters: chaptersPropType,
       fonts: PropTypes.arrayOf(PropTypes.shape({
         filename: PropTypes.string.isRequired,
       })).isRequired,
