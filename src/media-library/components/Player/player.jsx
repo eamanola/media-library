@@ -121,6 +121,10 @@ const Player = () => {
   const previous = mediaLibrary[mediaLibrary.indexOf(video) - 1];
   const next = mediaLibrary[mediaLibrary.indexOf(video) + 1];
 
+  let titleString = video.title;
+  titleString = `${titleString}${video.season ? ` S${video.season}` : ''}`;
+  titleString = `${titleString}${video.episode ? ` E${video.episode}` : ''}`;
+
   return (
     <>
       <div
@@ -231,6 +235,10 @@ const Player = () => {
           next
         </Link>
       )}
+
+      <span>
+        {titleString}
+      </span>
     </>
   );
 };
