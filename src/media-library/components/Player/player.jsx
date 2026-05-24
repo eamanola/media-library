@@ -75,8 +75,6 @@ const Player = () => {
     );
   };
 
-  const toFullscreen = () => containerRef.current?.requestFullscreen();
-
   const onReady = (isReady) => {
     setLoading(!isReady);
 
@@ -115,6 +113,15 @@ const Player = () => {
   const onEnded = () => {
     if (document.fullscreenElement) {
       document.exitFullscreen();
+    }
+  };
+
+  const toggleFullscreen = () => {
+    const el = containerRef.current;
+    if (document.fullscreenElement === el) {
+      document.exitFullscreen();
+    } else {
+      el.requestFullscreen();
     }
   };
 
@@ -161,6 +168,7 @@ const Player = () => {
           <Video
             audioTrack={audioStream}
             onEnded={onEnded}
+            onFullscreen={toggleFullscreen}
             onReady={onReady}
             onTimeUpdate={onTimeUpdate}
             subtitleTrack={subtitleStream}
@@ -219,10 +227,6 @@ const Player = () => {
 
         </select>
       )}
-
-      <button onClick={toFullscreen} type="button">
-        FS
-      </button>
 
       {!!previous && (
         <Link reloadDocument to={`/player/${previous.id}`}>

@@ -10,6 +10,7 @@ const AV = ({
   chapters = null,
   onReady = null,
   onAudioError = null,
+  onFullscreen = null,
   onVideoError = null,
   onTimeUpdate = null,
   onEnded = null,
@@ -89,11 +90,35 @@ const AV = ({
     videoRef.current.currentTime = chapter.start;
   };
 
+  // TODO: remove <video controls>
+  const onDoubleClick = (e) => {
+    if (onFullscreen) {
+      e.preventDefault();
+      e.stopPropagation();
+      onFullscreen();
+    }
+  };
+
+  // TODO: remove <video controls>
+  const onClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const { target } = e;
+    if (target.paused) {
+      target.play();
+    } else {
+      target.pause();
+    }
+  };
+
   return (
     <>
       <video
         controls
         onCanPlay={onCanPlay}
+        onClick={onClick}
+        onDoubleClick={onDoubleClick}
         onEnded={onEnded}
         onError={onVideoError}
         onPause={onPause}
@@ -122,6 +147,7 @@ const AV = ({
         // eslint-disable-next-line react-hooks/refs
         currentTime={videoRef.current?.currentTime || 0}
         onChapterSelected={toChapter}
+        onFullscreen={onFullscreen}
       />
     </>
   );
@@ -132,6 +158,7 @@ AV.propTypes = {
   chapters: chaptersPropType,
   onAudioError: PropTypes.func,
   onEnded: PropTypes.func,
+  onFullscreen: PropTypes.func,
   onReady: PropTypes.func,
   onTimeUpdate: PropTypes.func,
   onVideoError: PropTypes.func,
@@ -143,6 +170,7 @@ AV.defaultProps = {
   chapters: null,
   onAudioError: null,
   onEnded: null,
+  onFullscreen: null,
   onReady: null,
   onTimeUpdate: null,
   onVideoError: null,
