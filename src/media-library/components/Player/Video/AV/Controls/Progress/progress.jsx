@@ -23,7 +23,7 @@ const Progress = ({
     <div className="progress" onClick={onSeekTo ? onClick : null}>
       <div className="available" />
 
-      <div className="played" style={{ width: `calc(${Math.floor((currentTime / availableDuration) * 100)}% - 1em)` }} />
+      <div className="played" style={{ width: `${Math.floor((currentTime / availableDuration) * 100)}%` }} />
     </div>
   );
 };

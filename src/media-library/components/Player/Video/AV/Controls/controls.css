@@ -1,5 +1,6 @@
 .controls-container {
   display: flex;
+  gap: 0.5em;
 }
 
 .controls-container .progress {
