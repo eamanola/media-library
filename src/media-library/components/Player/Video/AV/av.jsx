@@ -20,6 +20,7 @@ const AV = ({
   const videoRef = useRef(null);
   const [canPlay, setCanPlay] = useState([]);
   const [currentTime, setCurrentTime] = useState(0);
+  const [availableDuration, setAvailableDuration] = useState(0);
 
   const hasAudio = () => audioSrc !== null;
 
@@ -84,7 +85,7 @@ const AV = ({
     }
 
     setCurrentTime(e.target.currentTime);
-    console.log(currentTime);
+
     if (onTimeUpdate) {
       onTimeUpdate(e);
     }
@@ -116,6 +117,10 @@ const AV = ({
     }
   };
 
+  const onDurationChanged = ({ target }) => {
+    setAvailableDuration(target.duration);
+  };
+
   return (
     <>
       <video
@@ -123,6 +128,7 @@ const AV = ({
         onCanPlay={onCanPlay}
         onClick={onClick}
         onDoubleClick={onDoubleClick}
+        onDurationChange={onDurationChanged}
         onEnded={onEnded}
         onError={onVideoError}
         onPause={onPause}
@@ -147,6 +153,7 @@ const AV = ({
       }
 
       <Controls
+        availableDuration={availableDuration}
         chapters={chapters}
         currentTime={currentTime}
         duration={duration}

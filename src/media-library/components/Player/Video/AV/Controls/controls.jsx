@@ -5,6 +5,7 @@ import Chapters, { chaptersPropType } from './Chapters';
 import formatTime from './format-time';
 
 const Controls = ({
+  availableDuration = 0,
   chapters = null,
   currentTime = 0,
   duration = 0,
@@ -21,12 +22,13 @@ const Controls = ({
     )}
 
     <span>
-      {`${formatTime(currentTime)}${duration ? ` / ${formatTime(duration)}` : ''}`}
+      {formatTime(currentTime, availableDuration, duration)}
     </span>
   </div>
 );
 
 Controls.propTypes = {
+  availableDuration: PropTypes.number,
   chapters: chaptersPropType,
   currentTime: PropTypes.number,
   duration: PropTypes.number,
@@ -35,6 +37,7 @@ Controls.propTypes = {
 };
 
 Controls.defaultProps = {
+  availableDuration: 0,
   chapters: null,
   currentTime: 0,
   duration: 0,

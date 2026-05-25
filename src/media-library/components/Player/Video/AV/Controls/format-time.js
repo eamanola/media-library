@@ -1,4 +1,4 @@
-const formatTime = (secs) => {
+const secsToTime = (secs) => {
   let time = Math.floor(secs);
 
   const hours = Math.floor(time / 60 / 60);
@@ -24,6 +24,23 @@ const formatTime = (secs) => {
     timeStr = `${timeStr}0`;
   }
   timeStr = `${timeStr}${seconds}`;
+
+  return timeStr;
+};
+
+const formatTime = (currentTime, availableDuration, duration) => {
+  let timeStr = secsToTime(currentTime);
+
+  if (availableDuration) {
+    timeStr = `${timeStr} / ${secsToTime(availableDuration)}`;
+  }
+
+  const fAvailableDuration = Math.floor(availableDuration);
+  const fDuration = Math.floor(duration);
+  if (fAvailableDuration !== fDuration) {
+    const available = Math.round((fAvailableDuration / fDuration) * 100);
+    timeStr = `${timeStr} (${available}% / ${secsToTime(duration)})`;
+  }
 
   return timeStr;
 };
