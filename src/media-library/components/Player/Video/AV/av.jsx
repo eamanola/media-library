@@ -9,6 +9,7 @@ const AV = ({
   audioSrc = null,
   chapters = null,
   duration = 0,
+  nativeControls = false,
   onReady = null,
   onAudioError = null,
   onFullscreen = null,
@@ -19,8 +20,11 @@ const AV = ({
   const audioRef = useRef(null);
   const videoRef = useRef(null);
   const [canPlay, setCanPlay] = useState([]);
+
+  // for controls
   const [currentTime, setCurrentTime] = useState(0);
   const [availableDuration, setAvailableDuration] = useState(0);
+  // for controls
 
   const hasAudio = () => audioSrc !== null;
 
@@ -60,22 +64,31 @@ const AV = ({
     if (hasAudio()) {
       syncAV();
     }
+
+    // for controls
+    setCurrentTime(target.currentTime);
+    setAvailableDuration(target.duration);
+    // for controls
   };
+
   const onPlay = () => {
     if (hasAudio()) {
       audioRef.current.play();
     }
   };
+
   const onPause = () => {
     if (hasAudio()) {
       audioRef.current.pause();
     }
   };
+
   const onSeeked = ({ target }) => {
     if (hasAudio()) {
       audioRef.current.currentTime = target.currentTime;
     }
   };
+
   const onVideoTimeUpdate = (e) => {
     if (hasAudio()) {
       const { target } = e;
@@ -84,13 +97,16 @@ const AV = ({
       }
     }
 
-    setCurrentTime(e.target.currentTime);
+    if (nativeControls === false) {
+      setCurrentTime(e.target.currentTime);
+    }
 
     if (onTimeUpdate) {
       onTimeUpdate(e);
     }
   };
 
+  // for controls
   const toChapter = (chapter) => {
     videoRef.current.currentTime = chapter.start;
   };
@@ -120,15 +136,18 @@ const AV = ({
   const onDurationChanged = ({ target }) => {
     setAvailableDuration(target.duration);
   };
+  // for controls
+
+  const DEBUG = true;
 
   return (
     <>
       <video
-        controls
+        controls={nativeControls}
         onCanPlay={onCanPlay}
-        onClick={onClick}
-        onDoubleClick={onDoubleClick}
-        onDurationChange={onDurationChanged}
+        onClick={nativeControls === false ? onClick : null}
+        onDoubleClick={nativeControls === false ? onDoubleClick : null}
+        onDurationChange={nativeControls === false ? onDurationChanged : null}
         onEnded={onEnded}
         onError={onVideoError}
         onPause={onPause}
@@ -152,14 +171,16 @@ const AV = ({
         )
       }
 
-      <Controls
-        availableDuration={availableDuration}
-        chapters={chapters}
-        currentTime={currentTime}
-        duration={duration}
-        onChapterSelected={toChapter}
-        onFullscreen={onFullscreen}
-      />
+      {(!nativeControls || DEBUG === true) && (
+        <Controls
+          availableDuration={availableDuration}
+          chapters={chapters}
+          currentTime={currentTime}
+          duration={duration}
+          onChapterSelected={toChapter}
+          onFullscreen={onFullscreen}
+        />
+      )}
     </>
   );
 };
@@ -168,6 +189,7 @@ AV.propTypes = {
   audioSrc: PropTypes.string,
   chapters: chaptersPropType,
   duration: PropTypes.number,
+  nativeControls: PropTypes.bool,
   onAudioError: PropTypes.func,
   onEnded: PropTypes.func,
   onFullscreen: PropTypes.func,
@@ -181,6 +203,7 @@ AV.defaultProps = {
   audioSrc: null,
   chapters: null,
   duration: PropTypes.number,
+  nativeControls: false,
   onAudioError: null,
   onEnded: null,
   onFullscreen: null,

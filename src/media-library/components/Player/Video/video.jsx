@@ -10,6 +10,7 @@ const Video = ({
   video,
   videoTrack,
   audioTrack = null,
+  nativeControls = false,
   subtitleTrack = null,
   onFullscreen = null,
   onReady = null,
@@ -100,6 +101,7 @@ const Video = ({
       audioSrc={audioTrack ? audioSrc() : null}
       chapters={video?.probe?.chapters}
       duration={video.probe.duration}
+      nativeControls={nativeControls}
       onAudioError={audioTrack ? onAudioError : null}
       onEnded={onVideoEnded}
       onFullscreen={onFullscreen}
@@ -113,6 +115,7 @@ const Video = ({
 
 Video.propTypes = {
   audioTrack: PropTypes.shape({ index: PropTypes.number.isRequired }),
+  nativeControls: PropTypes.bool,
   onEnded: PropTypes.func,
   onFullscreen: PropTypes.func,
   onReady: PropTypes.func,
@@ -136,6 +139,7 @@ Video.propTypes = {
 
 Video.defaultProps = {
   audioTrack: null,
+  nativeControls: false,
   onEnded: null,
   onFullscreen: null,
   onReady: null,

@@ -24,6 +24,7 @@ const Player = () => {
   const [subtitleStream, setSubtitleStream] = useState(SUBS_UNSET);
   const [loading, setLoading] = useState(true);
   const [showNext, setShowNext] = useState(false);
+  const [nativeControls, setNativeControls] = useState(true);
 
   const containerRef = useRef(null);
 
@@ -167,6 +168,7 @@ const Player = () => {
           {/* eslint-disable-next-line react/jsx-max-depth */}
           <Video
             audioTrack={audioStream}
+            nativeControls={nativeControls}
             onEnded={onEnded}
             onFullscreen={toggleFullscreen}
             onReady={onReady}
@@ -239,6 +241,10 @@ const Player = () => {
           next
         </Link>
       )}
+
+      <button onClick={() => setNativeControls(!nativeControls)} type='button'>
+        toggle controls
+      </button>
 
       <span>
         {titleString}
