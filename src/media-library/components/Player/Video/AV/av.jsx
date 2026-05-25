@@ -9,7 +9,7 @@ const AV = ({
   audioSrc = null,
   chapters = null,
   duration = 0,
-  nativeControls = true,
+  nativeControls = false,
   onReady = null,
   onAudioError = null,
   onFullscreen = null,
@@ -65,12 +65,6 @@ const AV = ({
     if (hasAudio()) {
       syncAV();
     }
-
-    // for controls
-    setAvailableDuration(target.duration);
-    setCurrentTime(target.currentTime);
-    setIsPaused(target.paused);
-    // for controls
   };
 
   const onPlay = () => {
@@ -108,8 +102,10 @@ const AV = ({
     }
 
     // for controls
-    setAvailableDuration(e.target.duration);
-    setCurrentTime(e.target.currentTime);
+    if (nativeControls === false) {
+      setAvailableDuration(e.target.duration);
+      setCurrentTime(e.target.currentTime);
+    }
     // for controls
 
     if (onTimeUpdate) {
@@ -134,7 +130,6 @@ const AV = ({
     }
   };
 
-  // TODO: remove <video controls>
   const onDoubleClick = (e) => {
     if (onFullscreen) {
       e.preventDefault();
@@ -143,7 +138,6 @@ const AV = ({
     }
   };
 
-  // TODO: remove <video controls>
   const onClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -165,7 +159,7 @@ const AV = ({
   return (
     <>
       <video
-        controls={nativeControls}
+        controls={nativeControls || DEBUG}
         onCanPlay={onCanPlay}
         onClick={nativeControls === false ? onClick : null}
         onDoubleClick={nativeControls === false ? onDoubleClick : null}
@@ -192,7 +186,7 @@ const AV = ({
         )
       }
 
-      {(!nativeControls || DEBUG === true) && (
+      {(nativeControls === false) && (
         <Controls
           availableDuration={availableDuration}
           chapters={chapters}
