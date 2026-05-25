@@ -1,0 +1,7 @@
+.controls-container {
+  display: flex;
+}
+
+.controls-container .progress {
+  flex: 1;
+}

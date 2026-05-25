@@ -1,12 +1,24 @@
 video {
   max-height: 80vh;
-  max-width: 90vw;
-  width: 100%;
   height: 100%;
-  display: inline-block;
 }
 
 :fullscreen video {
   max-height: unset;
+}
+
+video,
+.controls {
+  display: inline-block;
+}
+
+video,
+.controls {
+  max-width: 90vw;
+  width: 100%;
+}
+
+:fullscreen video,
+:fullscreen .controls {
   max-width: unset;
 }

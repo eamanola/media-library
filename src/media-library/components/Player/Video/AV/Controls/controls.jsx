@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import Chapters, { chaptersPropType } from './Chapters';
 import formatTime from './format-time';
+import Progress from './Progress';
+import './controls.css';
 
 const Controls = ({
   availableDuration = 0,
@@ -14,24 +16,35 @@ const Controls = ({
   onFullscreen = null,
   onTogglePlay = null,
 }) => (
-  <div>
-    {typeof onTogglePlay === 'function' && (
-      <button onClick={onTogglePlay} type="button">
-        {isPaused ? 'play' : 'pause'}
-      </button>
-    )}
+  <div className="controls">
+    <div className="controls-container">
+      {typeof onTogglePlay === 'function' && (
+        <button onClick={onTogglePlay} type="button">
+          {isPaused ? 'play' : 'pause'}
+        </button>
+      )}
 
-    <Chapters chapters={chapters} currentTime={currentTime} onChapterSelected={onChapterSelected} />
+      <Chapters
+        chapters={chapters}
+        currentTime={currentTime}
+        onChapterSelected={onChapterSelected}
+      />
 
-    {typeof onFullscreen === 'function' && (
-      <button onClick={onFullscreen} type="button">
-        FS
-      </button>
-    )}
+      <Progress
+        availableDuration={availableDuration}
+        currentTime={currentTime}
+      />
 
-    <span>
-      {formatTime(currentTime, availableDuration, duration)}
-    </span>
+      {typeof onFullscreen === 'function' && (
+        <button onClick={onFullscreen} type="button">
+          FS
+        </button>
+      )}
+
+      <span>
+        {formatTime(currentTime, availableDuration, duration)}
+      </span>
+    </div>
   </div>
 );
 

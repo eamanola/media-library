@@ -1,0 +1,19 @@
+.progress>.available {
+  /* var(--border); */
+  border: 1px solid grey;
+  width: 100%;
+}
+
+.progress>.played {
+  /* var(--accent-color); */
+  background-color: red;
+}
+
+.progress {
+  position: relative;
+}
+
+.progress>* {
+  position: absolute;
+  height: 100%;
+}

@@ -9,7 +9,7 @@ const AV = ({
   audioSrc = null,
   chapters = null,
   duration = 0,
-  nativeControls = false,
+  nativeControls = true,
   onReady = null,
   onAudioError = null,
   onFullscreen = null,
@@ -107,9 +107,10 @@ const AV = ({
       }
     }
 
-    if (nativeControls === false) {
-      setCurrentTime(e.target.currentTime);
-    }
+    // for controls
+    setAvailableDuration(e.target.duration);
+    setCurrentTime(e.target.currentTime);
+    // for controls
 
     if (onTimeUpdate) {
       onTimeUpdate(e);
@@ -146,10 +147,6 @@ const AV = ({
     togglePlay(e.target);
   };
 
-  const onDurationChanged = ({ target }) => {
-    setAvailableDuration(target.duration);
-  };
-
   const onTogglePlay = () => {
     togglePlay(videoRef.current);
   };
@@ -164,7 +161,6 @@ const AV = ({
         onCanPlay={onCanPlay}
         onClick={nativeControls === false ? onClick : null}
         onDoubleClick={nativeControls === false ? onDoubleClick : null}
-        onDurationChange={nativeControls === false ? onDurationChanged : null}
         onEnded={onEnded}
         onError={onVideoError}
         onPause={onPause}
