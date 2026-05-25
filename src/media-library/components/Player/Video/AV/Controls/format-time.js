@@ -31,15 +31,19 @@ const secsToTime = (secs) => {
 const formatTime = (currentTime, availableDuration, duration) => {
   let timeStr = secsToTime(currentTime);
 
-  if (availableDuration) {
-    timeStr = `${timeStr} / ${secsToTime(availableDuration)}`;
-  }
+  if (Number.isFinite(availableDuration)) {
+    if (availableDuration) {
+      timeStr = `${timeStr} / ${secsToTime(availableDuration)}`;
+    }
 
-  const fAvailableDuration = Math.floor(availableDuration);
-  const fDuration = Math.floor(duration);
-  if (fDuration > 0 && fAvailableDuration !== fDuration) {
-    const available = Math.round((fAvailableDuration / fDuration) * 100);
-    timeStr = `${timeStr} (${available}% / ${secsToTime(duration)})`;
+    const fAvailableDuration = Math.floor(availableDuration);
+    const fDuration = Math.floor(duration);
+    if (fDuration > 0 && fAvailableDuration !== fDuration) {
+      const available = Math.round((fAvailableDuration / fDuration) * 100);
+      timeStr = `${timeStr} (${available}% / ${secsToTime(duration)})`;
+    }
+  } else if (duration > 0) {
+    timeStr = `${timeStr} / ${secsToTime(duration)}`;
   }
 
   return timeStr;
