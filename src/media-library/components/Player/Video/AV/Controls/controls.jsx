@@ -14,6 +14,7 @@ const Controls = ({
   isPaused = true,
   onChapterSelected = null,
   onFullscreen = null,
+  onSeekTo = null,
   onTogglePlay = null,
 }) => (
   <div className="controls">
@@ -33,6 +34,7 @@ const Controls = ({
       <Progress
         availableDuration={availableDuration}
         currentTime={currentTime}
+        onSeekTo={onSeekTo}
       />
 
       {typeof onFullscreen === 'function' && (
@@ -56,6 +58,7 @@ Controls.propTypes = {
   isPaused: PropTypes.bool,
   onChapterSelected: PropTypes.func,
   onFullscreen: PropTypes.func,
+  onSeekTo: PropTypes.func,
   onTogglePlay: PropTypes.func,
 };
 
@@ -67,6 +70,7 @@ Controls.defaultProps = {
   isPaused: true,
   onChapterSelected: null,
   onFullscreen: null,
+  onSeekTo: null,
   onTogglePlay: null,
 };
 

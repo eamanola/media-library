@@ -118,8 +118,12 @@ const AV = ({
   };
 
   // for controls
+  const seekTo = (secs) => {
+    videoRef.current.currentTime = secs;
+  };
+
   const toChapter = (chapter) => {
-    videoRef.current.currentTime = chapter.start;
+    seekTo(chapter.start);
   };
 
   const togglePlay = (videoEl) => {
@@ -149,6 +153,10 @@ const AV = ({
 
   const onTogglePlay = () => {
     togglePlay(videoRef.current);
+  };
+
+  const onSeekTo = (secs) => {
+    seekTo(secs);
   };
   // for controls
 
@@ -193,6 +201,7 @@ const AV = ({
           isPaused={isPaused}
           onChapterSelected={toChapter}
           onFullscreen={onFullscreen}
+          onSeekTo={onSeekTo}
           onTogglePlay={onTogglePlay}
         />
       )}
