@@ -9,10 +9,18 @@ const Controls = ({
   chapters = null,
   currentTime = 0,
   duration = 0,
+  isPaused = true,
   onChapterSelected = null,
   onFullscreen = null,
+  onTogglePlay = null,
 }) => (
   <div>
+    {typeof onTogglePlay === 'function' && (
+      <button onClick={onTogglePlay} type="button">
+        {isPaused ? 'play' : 'pause'}
+      </button>
+    )}
+
     <Chapters chapters={chapters} currentTime={currentTime} onChapterSelected={onChapterSelected} />
 
     {typeof onFullscreen === 'function' && (
@@ -32,8 +40,10 @@ Controls.propTypes = {
   chapters: chaptersPropType,
   currentTime: PropTypes.number,
   duration: PropTypes.number,
+  isPaused: PropTypes.bool,
   onChapterSelected: PropTypes.func,
   onFullscreen: PropTypes.func,
+  onTogglePlay: PropTypes.func,
 };
 
 Controls.defaultProps = {
@@ -41,8 +51,10 @@ Controls.defaultProps = {
   chapters: null,
   currentTime: 0,
   duration: 0,
+  isPaused: true,
   onChapterSelected: null,
   onFullscreen: null,
+  onTogglePlay: null,
 };
 
 export {

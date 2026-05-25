@@ -22,8 +22,9 @@ const AV = ({
   const [canPlay, setCanPlay] = useState([]);
 
   // for controls
-  const [currentTime, setCurrentTime] = useState(0);
   const [availableDuration, setAvailableDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [isPaused, setIsPaused] = useState(true);
   // for controls
 
   const hasAudio = () => audioSrc !== null;
@@ -66,8 +67,9 @@ const AV = ({
     }
 
     // for controls
-    setCurrentTime(target.currentTime);
     setAvailableDuration(target.duration);
+    setCurrentTime(target.currentTime);
+    setIsPaused(target.paused);
     // for controls
   };
 
@@ -75,12 +77,20 @@ const AV = ({
     if (hasAudio()) {
       audioRef.current.play();
     }
+
+    // for controls
+    setIsPaused(false);
+    // for controls
   };
 
   const onPause = () => {
     if (hasAudio()) {
       audioRef.current.pause();
     }
+
+    // for controls
+    setIsPaused(true);
+    // for controls
   };
 
   const onSeeked = ({ target }) => {
@@ -111,6 +121,14 @@ const AV = ({
     videoRef.current.currentTime = chapter.start;
   };
 
+  const togglePlay = (videoEl) => {
+    if (videoEl.paused) {
+      videoEl.play();
+    } else {
+      videoEl.pause();
+    }
+  };
+
   // TODO: remove <video controls>
   const onDoubleClick = (e) => {
     if (onFullscreen) {
@@ -125,16 +143,15 @@ const AV = ({
     e.preventDefault();
     e.stopPropagation();
 
-    const { target } = e;
-    if (target.paused) {
-      target.play();
-    } else {
-      target.pause();
-    }
+    togglePlay(e.target);
   };
 
   const onDurationChanged = ({ target }) => {
     setAvailableDuration(target.duration);
+  };
+
+  const onTogglePlay = () => {
+    togglePlay(videoRef.current);
   };
   // for controls
 
@@ -177,8 +194,10 @@ const AV = ({
           chapters={chapters}
           currentTime={currentTime}
           duration={duration}
+          isPaused={isPaused}
           onChapterSelected={toChapter}
           onFullscreen={onFullscreen}
+          onTogglePlay={onTogglePlay}
         />
       )}
     </>
