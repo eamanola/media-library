@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 
 import Chapters, { chaptersPropType } from './Chapters';
 import formatTime from './format-time';
-import Progress from './Progress';
+import Progress, { timeRangeArrayPropType } from './Progress';
 import './controls.css';
 
 const Controls = ({
   availableDuration = 0,
+  buffered = null,
   chapters = null,
   currentTime = 0,
   duration = 0,
@@ -32,8 +33,9 @@ const Controls = ({
       />
 
       <Progress
-        availableDuration={availableDuration}
+        buffered={buffered}
         currentTime={currentTime}
+        duration={duration}
         onSeekTo={onSeekTo}
       />
 
@@ -52,6 +54,7 @@ const Controls = ({
 
 Controls.propTypes = {
   availableDuration: PropTypes.number,
+  buffered: timeRangeArrayPropType,
   chapters: chaptersPropType,
   currentTime: PropTypes.number,
   duration: PropTypes.number,
@@ -64,6 +67,7 @@ Controls.propTypes = {
 
 Controls.defaultProps = {
   availableDuration: 0,
+  buffered: null,
   chapters: null,
   currentTime: 0,
   duration: 0,

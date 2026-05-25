@@ -23,6 +23,7 @@ const AV = ({
 
   // for controls
   const [availableDuration, setAvailableDuration] = useState(0);
+  const [buffered, setBuffered] = useState(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [isPaused, setIsPaused] = useState(true);
   // for controls
@@ -104,6 +105,7 @@ const AV = ({
     // for controls
     if (nativeControls === false) {
       setAvailableDuration(e.target.duration);
+      setBuffered(e.target.buffered);
       setCurrentTime(e.target.currentTime);
     }
     // for controls
@@ -189,6 +191,7 @@ const AV = ({
       {(nativeControls === false) && (
         <Controls
           availableDuration={availableDuration}
+          buffered={buffered}
           chapters={chapters}
           currentTime={currentTime}
           duration={duration}
