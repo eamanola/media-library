@@ -37,7 +37,7 @@ const formatTime = (currentTime, availableDuration, duration) => {
 
   const fAvailableDuration = Math.floor(availableDuration);
   const fDuration = Math.floor(duration);
-  if (fAvailableDuration !== fDuration) {
+  if (fDuration > 0 && fAvailableDuration !== fDuration) {
     const available = Math.round((fAvailableDuration / fDuration) * 100);
     timeStr = `${timeStr} (${available}% / ${secsToTime(duration)})`;
   }
