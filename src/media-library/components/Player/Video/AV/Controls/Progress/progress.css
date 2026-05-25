@@ -1,9 +1,9 @@
 .progress>.available {
   border: var(--border);
-  width: 100%;
 }
 
 .progress>.played {
+  min-width: 1em;
   background-color: var(--accent-color);
 }
 
@@ -13,5 +13,9 @@
 
 .progress>* {
   position: absolute;
-  height: 100%;
+  border-radius: 0.5em;
+  top: 0.25em;
+  left: 0.5em;
+  bottom: 0.25em;
+  right: 0.5em;
 }
