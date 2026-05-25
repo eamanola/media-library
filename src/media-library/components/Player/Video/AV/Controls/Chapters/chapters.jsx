@@ -29,7 +29,7 @@ const Chapters = ({
       )}
 
       <span>
-        {currentChapter.title}
+        {currentChapter?.title}
       </span>
 
       {typeof onChapterSelected === 'function' && (

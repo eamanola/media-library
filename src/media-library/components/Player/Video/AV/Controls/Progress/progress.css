@@ -3,7 +3,6 @@
 }
 
 .progress>.played {
-  min-width: 1em;
   background-color: var(--accent-color);
 }
 
@@ -18,4 +17,6 @@
   left: 0.5em;
   bottom: 0.25em;
   right: 0.5em;
+
+  min-width: 1em;
 }

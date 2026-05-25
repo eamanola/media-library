@@ -99,7 +99,7 @@ const Video = ({
     <Av
       audioSrc={audioTrack ? audioSrc() : null}
       chapters={video?.probe?.chapters}
-      duration={video.probe.duration}
+      duration={video?.probe.duration}
       onAudioError={audioTrack ? onAudioError : null}
       onEnded={onVideoEnded}
       onFullscreen={onFullscreen}
