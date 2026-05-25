@@ -26,6 +26,8 @@ const AV = ({
   const [buffered, setBuffered] = useState(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [isPaused, setIsPaused] = useState(true);
+  // any integer, to fake an active timeout
+  const [showControlsTimeout, setShowControlsTimeout] = useState(1);
   // for controls
 
   const hasAudio = () => audioSrc !== null;
@@ -154,12 +156,24 @@ const AV = ({
   const onSeekTo = (secs) => {
     seekTo(secs);
   };
+
+  const showControls = () => {
+    if (showControlsTimeout) {
+      clearTimeout(showControlsTimeout);
+    }
+
+    const timeout = setTimeout(() => {
+      setShowControlsTimeout(0);
+    }, 4000);
+
+    setShowControlsTimeout(timeout);
+  };
   // for controls
 
   const DEBUG = false;
 
   return (
-    <div className="av">
+    <div className="av" onMouseMove={showControls}>
       <video
         controls={nativeControls || DEBUG}
         onCanPlay={onCanPlay}
@@ -195,6 +209,7 @@ const AV = ({
           chapters={chapters}
           currentTime={currentTime}
           duration={duration}
+          hide={showControlsTimeout === 0}
           isPaused={isPaused}
           onChapterSelected={toChapter}
           onFullscreen={onFullscreen}

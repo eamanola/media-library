@@ -12,16 +12,18 @@ const Controls = ({
   chapters = null,
   currentTime = 0,
   duration = 0,
+  hide = false,
   isPaused = true,
   onChapterSelected = null,
   onFullscreen = null,
   onSeekTo = null,
   onTogglePlay = null,
 }) => (
-  <div className="controls">
+  <div className={`controls ${hide ? ' hide' : ''}`}>
     <div className="controls-container">
       {typeof onTogglePlay === 'function' && (
         <button onClick={onTogglePlay} type="button">
+          {/* {isPaused ? '\u23F5' : '\u23F8'} */}
           {isPaused ? 'play' : 'pause'}
         </button>
       )}
@@ -58,6 +60,7 @@ Controls.propTypes = {
   chapters: chaptersPropType,
   currentTime: PropTypes.number,
   duration: PropTypes.number,
+  hide: PropTypes.bool,
   isPaused: PropTypes.bool,
   onChapterSelected: PropTypes.func,
   onFullscreen: PropTypes.func,
@@ -71,6 +74,7 @@ Controls.defaultProps = {
   chapters: null,
   currentTime: 0,
   duration: 0,
+  hide: false,
   isPaused: true,
   onChapterSelected: null,
   onFullscreen: null,

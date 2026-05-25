@@ -37,7 +37,7 @@ const Progress = ({
       <div className="available" />
 
       {
-        buffers.map(({ left, width }) => (
+        buffers.filter(({ width }) => width !== '0%').map(({ left, width }) => (
           <div className="buffered" key={`key-${left}-${width}`} style={{ left, width }} />
         ))
       }

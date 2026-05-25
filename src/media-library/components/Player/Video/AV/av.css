@@ -19,10 +19,3 @@ video {
   height: 100%;
   background-color: black;
 }
-
-.av>.controls {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
