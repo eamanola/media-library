@@ -159,7 +159,7 @@ const AV = ({
   const DEBUG = false;
 
   return (
-    <>
+    <div className="av">
       <video
         controls={nativeControls || DEBUG}
         onCanPlay={onCanPlay}
@@ -202,7 +202,7 @@ const AV = ({
           onTogglePlay={onTogglePlay}
         />
       )}
-    </>
+    </div>
   );
 };
 

@@ -1,24 +1,28 @@
-video {
+.av {
+  position: relative;
   max-height: 80vh;
   height: 100%;
-}
-
-:fullscreen video {
-  max-height: unset;
-}
-
-video,
-.controls {
+  max-width: 90vw;
+  width: 100%;
   display: inline-block;
 }
 
-video,
-.controls {
-  max-width: 90vw;
-  width: 100%;
+:fullscreen .av {
+  max-height: unset;
+  max-width: unset;
 }
 
-:fullscreen video,
-:fullscreen .controls {
-  max-width: unset;
+video {
+  max-width: inherit;
+  max-height: inherit;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}
+
+.av>.controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }

@@ -1,3 +1,9 @@
+.controls {
+  padding: 0.5em;
+  background-color: #000000aa;
+  color: var(--default-color);
+}
+
 .controls-container {
   display: flex;
   gap: 0.5em;
@@ -5,4 +11,21 @@
 
 .controls-container .progress {
   flex: 1;
+}
+
+.controls button {
+  background-color: inherit;
+  color: inherit;
+  border-radius: 0.25em;
+  border: var(--border);
+}
+
+.controls button:hover {
+  background-color: var(--accent-color);
+  color: var(--active-color);
+}
+
+.controls button:active {
+  background-color: var(--active-color);
+  color: var(--accent-color);
 }
