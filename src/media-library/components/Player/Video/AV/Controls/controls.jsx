@@ -37,15 +37,15 @@ const Controls = ({
         onSeekTo={onSeekTo}
       />
 
+      <span>
+        {formatTime(currentTime, availableDuration, duration)}
+      </span>
+
       {typeof onFullscreen === 'function' && (
         <button onClick={onFullscreen} type="button">
           FS
         </button>
       )}
-
-      <span>
-        {formatTime(currentTime, availableDuration, duration)}
-      </span>
     </div>
   </div>
 );
