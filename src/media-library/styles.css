@@ -1,0 +1,6 @@
+:root {
+  --active-color: #ddd;
+  --accent-color: coral;
+  --default-color: #eee;
+  --border: 1px solid var(--default-color);
+}

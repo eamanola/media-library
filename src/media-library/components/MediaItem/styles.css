@@ -1,8 +1,4 @@
 .media-item {
-  --active-color: #ddd;
-  --accent-color: coral;
-  --default-color: #eee;
-  --border: 1px solid var(--default-color);
   --margin: 0.5em;
   --padding: 1em 0.5em;
   --button-margin: 0.5em 0.5em 0 0.5em;
@@ -12,6 +8,7 @@
   --active-scale: 0.95;
   --max-width: 20em;
 }
+
 .media-item {
   display: inline-block;
   text-align: center;
@@ -26,39 +23,33 @@
 
 /* .media-item:focus-within,  */
 .media-item-play-button:focus,
-.media-item-played-label:focus-within
-{
+.media-item-played-label:focus-within {
   /* border-color: coral; */
   outline: thin groove var(--accent-color);
 }
 
 .media-item-play-button:active,
-.media-item-played-label:active
-{
+.media-item-played-label:active {
   transform: scale(var(--active-scale));
 }
 
 .media-item:hover,
 .media-item-play-button:hover,
-.media-item-played-label:hover
-{
+.media-item-played-label:hover {
   border-color: var(--active-color);
 }
 
-.media-item.selected
-{
+.media-item.selected {
   /* dont let hover overwrite */
   border-color: var(--accent-color) !important;
 }
 
 .media-item-play-button:hover,
-.media-item-played-label:hover
-{
+.media-item-played-label:hover {
   cursor: pointer;
 }
 
-.media-item-image-container
-{
+.media-item-image-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -66,16 +57,14 @@
 }
 
 .media-item-image-container,
-.media-item-image-container img
-{
+.media-item-image-container img {
   max-width: 95%;
   /* calc(var(--min-width) - 2em); */
   border-radius: var(--border-radius);
   margin: 0 auto;
 }
 
-.media-item-image-container:active
-{
+.media-item-image-container:active {
   transform: scale(var(--active-scale));
 }
 
@@ -88,18 +77,19 @@
   opacity: 0.5;
 }
 
-.media-item-title, .media-item-duration {
+.media-item-title,
+.media-item-duration {
   max-width: 100%;
   margin: 0 auto;
   font-size: 0.8em;
 }
+
 .media-item-duration {
   text-align: right;
 }
 
 .media-item-play-button,
-.media-item-played-label
-{
+.media-item-played-label {
   padding: var(--button-padding);
   margin: var(--button-margin);
   border-radius: var(--border-radius);
@@ -114,6 +104,7 @@
   accent-color: var(--accent-color);
   color: white;
 }
+
 /* .media-item-played-label input[type="checkbox"]:checked {
   background-color: #eee;
 } */
