@@ -156,7 +156,7 @@ const AV = ({
   };
   // for controls
 
-  const DEBUG = true;
+  const DEBUG = false;
 
   return (
     <>
