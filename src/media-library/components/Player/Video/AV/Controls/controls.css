@@ -42,3 +42,8 @@
   background-color: var(--active-color);
   color: var(--accent-color);
 }
+
+.controls button:disabled {
+  background-color: var(--disabled-color);
+  color: var(--disabled-color);
+}

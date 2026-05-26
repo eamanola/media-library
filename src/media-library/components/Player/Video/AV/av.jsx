@@ -15,6 +15,7 @@ const AV = ({
   onFullscreen = null,
   onVideoError = null,
   onTimeUpdate = null,
+  onVideoElChanged = null,
   onEnded = null,
 }) => {
   const audioRef = useRef(null);
@@ -22,10 +23,6 @@ const AV = ({
   const [canPlay, setCanPlay] = useState([]);
 
   // for controls
-  const [availableDuration, setAvailableDuration] = useState(0);
-  const [buffered, setBuffered] = useState(null);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [isPaused, setIsPaused] = useState(true);
   // any integer, to fake an active timeout
   const [showControlsTimeout, setShowControlsTimeout] = useState(1);
   // for controls
@@ -62,6 +59,12 @@ const AV = ({
     onReady,
   ]);
 
+  useEffect(() => {
+    onVideoElChanged(videoRef?.current);
+
+    return () => onVideoElChanged(null);
+  }, [videoRef, onVideoElChanged]);
+
   const onCanPlay = ({ target }) => {
     setCanPlay((state) => [...state.filter((el) => el !== target.tagName), target.tagName]);
 
@@ -74,20 +77,12 @@ const AV = ({
     if (hasAudio()) {
       audioRef.current.play();
     }
-
-    // for controls
-    setIsPaused(false);
-    // for controls
   };
 
   const onPause = () => {
     if (hasAudio()) {
       audioRef.current.pause();
     }
-
-    // for controls
-    setIsPaused(true);
-    // for controls
   };
 
   const onSeeked = ({ target }) => {
@@ -104,59 +99,12 @@ const AV = ({
       }
     }
 
-    // for controls
-    if (nativeControls === false) {
-      setAvailableDuration(e.target.duration);
-      setBuffered(e.target.buffered);
-      setCurrentTime(e.target.currentTime);
-    }
-    // for controls
-
     if (onTimeUpdate) {
       onTimeUpdate(e);
     }
   };
 
   // for controls
-  const seekTo = (secs) => {
-    videoRef.current.currentTime = secs;
-  };
-
-  const toChapter = (chapter) => {
-    seekTo(chapter.start);
-  };
-
-  const togglePlay = (videoEl) => {
-    if (videoEl.paused) {
-      videoEl.play();
-    } else {
-      videoEl.pause();
-    }
-  };
-
-  const onDoubleClick = (e) => {
-    if (onFullscreen) {
-      e.preventDefault();
-      e.stopPropagation();
-      onFullscreen();
-    }
-  };
-
-  const onClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    togglePlay(e.target);
-  };
-
-  const onTogglePlay = () => {
-    togglePlay(videoRef.current);
-  };
-
-  const onSeekTo = (secs) => {
-    seekTo(secs);
-  };
-
   const showControls = () => {
     if (showControlsTimeout) {
       clearTimeout(showControlsTimeout);
@@ -177,8 +125,6 @@ const AV = ({
       <video
         controls={nativeControls || DEBUG}
         onCanPlay={onCanPlay}
-        onClick={nativeControls === false ? onClick : null}
-        onDoubleClick={nativeControls === false ? onDoubleClick : null}
         onEnded={onEnded}
         onError={onVideoError}
         onPause={onPause}
@@ -204,17 +150,12 @@ const AV = ({
 
       {(nativeControls === false) && (
         <Controls
-          availableDuration={availableDuration}
-          buffered={buffered}
           chapters={chapters}
-          currentTime={currentTime}
           duration={duration}
           hide={showControlsTimeout === 0}
-          isPaused={isPaused}
-          onChapterSelected={toChapter}
           onFullscreen={onFullscreen}
-          onSeekTo={onSeekTo}
-          onTogglePlay={onTogglePlay}
+          // eslint-disable-next-line react-hooks/refs
+          videoEl={videoRef?.current}
         />
       )}
     </div>
@@ -231,6 +172,7 @@ AV.propTypes = {
   onFullscreen: PropTypes.func,
   onReady: PropTypes.func,
   onTimeUpdate: PropTypes.func,
+  onVideoElChanged: PropTypes.func,
   onVideoError: PropTypes.func,
   videoSrc: PropTypes.string.isRequired,
 };
@@ -245,6 +187,7 @@ AV.defaultProps = {
   onFullscreen: null,
   onReady: null,
   onTimeUpdate: null,
+  onVideoElChanged: null,
   onVideoError: null,
 };
 

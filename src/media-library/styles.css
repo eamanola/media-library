@@ -2,5 +2,6 @@
   --active-color: #ddd;
   --accent-color: coral;
   --default-color: #eee;
+  --disabled-color: #aaa;
   --border: 1px solid var(--default-color);
 }

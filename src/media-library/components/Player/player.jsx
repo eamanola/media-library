@@ -24,6 +24,7 @@ const Player = () => {
   const [subtitleStream, setSubtitleStream] = useState(SUBS_UNSET);
   const [loading, setLoading] = useState(true);
   const [showNext, setShowNext] = useState(false);
+  const [videoEl, setVideoEl] = useState(null);
 
   const containerRef = useRef(null);
 
@@ -132,6 +133,10 @@ const Player = () => {
   titleString = `${titleString}${video.season ? ` S${video.season}` : ''}`;
   titleString = `${titleString}${video.episode ? ` E${video.episode}` : ''}`;
 
+  const onVideoElChanged = (videoElement) => {
+    setVideoEl(videoElement);
+    console.log('video element', videoEl);
+  };
   return (
     <>
       <div
@@ -171,6 +176,7 @@ const Player = () => {
             onFullscreen={toggleFullscreen}
             onReady={onReady}
             onTimeUpdate={onTimeUpdate}
+            onVideoElChanged={onVideoElChanged}
             subtitleTrack={subtitleStream}
             video={video}
             videoTrack={videoStream}
