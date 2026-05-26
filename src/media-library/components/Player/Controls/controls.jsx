@@ -42,9 +42,9 @@ const Controls = ({
   };
 
   useEffect(() => {
-    console.log('video elemnt', videoEl);
+    // console.log('video changed', videoEl);
     if (videoEl) {
-      console.log('setup', videoEl);
+      // console.log('setup', videoEl);
       const onClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -85,7 +85,7 @@ const Controls = ({
       videoEl.addEventListener('timeupdate', onTimeUpdate, false);
 
       return () => {
-        console.log('destroy', videoEl);
+        // console.log('destroy', videoEl);
         videoEl.removeEventListener('click', onClick, false);
         videoEl.removeEventListener('dblclick', onDoubleClick, false);
         videoEl.removeEventListener('play', onPlay, false);

@@ -14,7 +14,11 @@ const PREF_LANG = 'jpn';
 const PREF_SUBS = 'eng';
 const SUBS_UNSET = undefined;
 const SUBS_REMOV = null;
+
+// for controls
 const CUSTOM_CONTROLS = true;
+let hideControlsTimeout = 0;
+// for controls
 
 const Player = () => {
   const mediaLibrary = useSelector((state) => state.mediaLibrary);
@@ -28,7 +32,7 @@ const Player = () => {
   const [showNext, setShowNext] = useState(false);
   // for controls
   // any integer, to fake an active timeout
-  const [showControlsTimeout, setShowControlsTimeout] = useState(1);
+  const [hideControls, setHideControls] = useState(1);
   const [videoEl, setVideoEl] = useState(null);
   // for controls
 
@@ -140,21 +144,23 @@ const Player = () => {
   titleString = `${titleString}${video.episode ? ` E${video.episode}` : ''}`;
 
   const onVideoElChanged = (videoElement) => {
-    console.log('video changed', videoElement);
     setVideoEl(videoElement);
   };
 
   // for controls
   const showControls = () => {
-    if (showControlsTimeout) {
-      clearTimeout(showControlsTimeout);
+    if (hideControlsTimeout) {
+      clearTimeout(hideControlsTimeout);
     }
 
-    const timeout = setTimeout(() => {
-      setShowControlsTimeout(0);
+    hideControlsTimeout = setTimeout(() => {
+      setHideControls(true);
+      hideControlsTimeout = 0;
     }, 4000);
 
-    setShowControlsTimeout(timeout);
+    if (hideControls) {
+      setHideControls(false);
+    }
   };
   // for controls
 
@@ -212,7 +218,7 @@ const Player = () => {
             <Controls
               chapters={video.probe?.chapters}
               duration={video.probe?.duration}
-              hide={showControlsTimeout === 0}
+              hide={hideControls}
               onFullscreen={toggleFullscreen}
               videoEl={videoEl}
             />
