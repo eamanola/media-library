@@ -32,8 +32,7 @@ const Player = () => {
   const [showNext, setShowNext] = useState(false);
   // for controls
   // any integer, to fake an active timeout
-  const [hideControls, setHideControls] = useState(1);
-  const [videoEl, setVideoEl] = useState(null);
+  const [hideControls, setHideControls] = useState(false);
   // for controls
 
   const containerRef = useRef(null);
@@ -143,10 +142,6 @@ const Player = () => {
   titleString = `${titleString}${video.season ? ` S${video.season}` : ''}`;
   titleString = `${titleString}${video.episode ? ` E${video.episode}` : ''}`;
 
-  const onVideoElChanged = (videoElement) => {
-    setVideoEl(videoElement);
-  };
-
   // for controls
   const showControls = () => {
     if (hideControlsTimeout) {
@@ -190,7 +185,6 @@ const Player = () => {
             onEnded={onEnded}
             onReady={onReady}
             onTimeUpdate={onTimeUpdate}
-            onVideoElChanged={onVideoElChanged}
             subtitleTrack={subtitleStream}
             video={video}
             videoTrack={videoStream}
@@ -220,7 +214,6 @@ const Player = () => {
               duration={video.probe?.duration}
               hide={hideControls}
               onFullscreen={toggleFullscreen}
-              videoEl={videoEl}
             />
           )}
         </div>

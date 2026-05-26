@@ -13,7 +13,6 @@ const Video = ({
   subtitleTrack = null,
   onReady = null,
   onTimeUpdate = null,
-  onVideoElChanged = null,
   onEnded = null,
 }) => {
   const [transcodeAudio, setTranscodeAudio] = useState(false);
@@ -102,7 +101,6 @@ const Video = ({
       onEnded={onVideoEnded}
       onReady={onReady}
       onTimeUpdate={onTimeUpdate}
-      onVideoElChanged={onVideoElChanged}
       onVideoError={onVideoError}
       videoSrc={videoSrc()}
     />
@@ -114,7 +112,6 @@ Video.propTypes = {
   onEnded: PropTypes.func,
   onReady: PropTypes.func,
   onTimeUpdate: PropTypes.func,
-  onVideoElChanged: PropTypes.func,
   subtitleTrack: PropTypes.shape({
     codec: PropTypes.string.isRequired,
     index: PropTypes.number.isRequired,
@@ -135,7 +132,6 @@ Video.defaultProps = {
   onEnded: null,
   onReady: null,
   onTimeUpdate: null,
-  onVideoElChanged: null,
   subtitleTrack: null,
 };
 

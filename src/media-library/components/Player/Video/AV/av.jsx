@@ -11,7 +11,6 @@ const AV = ({
   onAudioError = null,
   onVideoError = null,
   onTimeUpdate = null,
-  onVideoElChanged = null,
   onEnded = null,
 }) => {
   const audioRef = useRef(null);
@@ -49,12 +48,6 @@ const AV = ({
     audioSrc,
     onReady,
   ]);
-
-  useEffect(() => {
-    onVideoElChanged(videoRef?.current);
-
-    return () => onVideoElChanged(null);
-  }, [videoRef, onVideoElChanged]);
 
   const onCanPlay = ({ target }) => {
     setCanPlay((state) => [...state.filter((el) => el !== target.tagName), target.tagName]);
@@ -135,7 +128,6 @@ AV.propTypes = {
   onEnded: PropTypes.func,
   onReady: PropTypes.func,
   onTimeUpdate: PropTypes.func,
-  onVideoElChanged: PropTypes.func,
   onVideoError: PropTypes.func,
   videoSrc: PropTypes.string.isRequired,
 };
@@ -147,7 +139,6 @@ AV.defaultProps = {
   onEnded: null,
   onReady: null,
   onTimeUpdate: null,
-  onVideoElChanged: null,
   onVideoError: null,
 };
 

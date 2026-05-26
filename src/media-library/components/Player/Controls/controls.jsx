@@ -6,11 +6,12 @@ import formatTime from './format-time';
 import Progress from './Progress';
 import './controls.css';
 
-const togglePlay = (video) => {
-  if (video.paused) {
-    video.play();
+const togglePlay = () => {
+  const videoEl = document.querySelector('video');
+  if (videoEl.paused) {
+    videoEl.play();
   } else {
-    video.pause();
+    videoEl.pause();
   }
 };
 
@@ -19,19 +20,14 @@ const Controls = ({
   duration = 0,
   hide = false,
   onFullscreen = null,
-  videoEl = null,
 }) => {
   const [isPaused, setIsPaused] = useState(true);
   const [availableDuration, setAvailableDuration] = useState(0);
   const [buffered, setBuffered] = useState(null);
   const [currentTime, setCurrentTime] = useState(0);
 
-  const onTogglePlay = () => {
-    togglePlay(videoEl);
-  };
-
   const seekTo = (secs) => {
-    // eslint-disable-next-line react-hooks/immutability, no-param-reassign
+    const videoEl = document.querySelector('video');
     videoEl.currentTime = secs;
   };
   const onSeekTo = (secs) => {
@@ -42,7 +38,8 @@ const Controls = ({
   };
 
   useEffect(() => {
-    // console.log('video changed', videoEl);
+    const videoEl = document.querySelector('video');
+    console.log('video changed', videoEl);
     if (videoEl) {
       // console.log('setup', videoEl);
       const onClick = (e) => {
@@ -95,14 +92,14 @@ const Controls = ({
     }
 
     return () => null;
-  }, [videoEl, onFullscreen]);
+  }, [onFullscreen]);
 
-  if (!videoEl) return null;
+  if (!document.querySelector('video')) return null;
 
   return (
     <div className={`controls ${hide ? ' hide' : ''}`}>
       <div className="controls-container">
-        <button onClick={onTogglePlay} type="button">
+        <button onClick={togglePlay} type="button">
           {/* {isPaused ? '\u23F5' : '\u23F8'} */}
           {isPaused ? 'play' : 'pause'}
         </button>
@@ -139,7 +136,6 @@ Controls.propTypes = {
   duration: PropTypes.number,
   hide: PropTypes.bool,
   onFullscreen: PropTypes.func,
-  videoEl: PropTypes.node,
 };
 
 Controls.defaultProps = {
@@ -147,7 +143,6 @@ Controls.defaultProps = {
   duration: 0,
   hide: false,
   onFullscreen: null,
-  videoEl: null,
 };
 
 export {
