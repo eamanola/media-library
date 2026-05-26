@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SubtitlesOctopus from 'libass-wasm';
 
-import Av, { chaptersPropType } from './AV';
+import Av from './AV';
 import mediaSrc, { fontSrc } from './media-src';
 import './libass-wasm-overrides.css';
 
@@ -11,7 +11,6 @@ const Video = ({
   videoTrack,
   audioTrack = null,
   subtitleTrack = null,
-  onFullscreen = null,
   onReady = null,
   onTimeUpdate = null,
   onVideoElChanged = null,
@@ -99,11 +98,8 @@ const Video = ({
   return (
     <Av
       audioSrc={audioTrack ? audioSrc() : null}
-      chapters={video?.probe?.chapters}
-      duration={video?.probe.duration}
       onAudioError={audioTrack ? onAudioError : null}
       onEnded={onVideoEnded}
-      onFullscreen={onFullscreen}
       onReady={onReady}
       onTimeUpdate={onTimeUpdate}
       onVideoElChanged={onVideoElChanged}
@@ -116,7 +112,6 @@ const Video = ({
 Video.propTypes = {
   audioTrack: PropTypes.shape({ index: PropTypes.number.isRequired }),
   onEnded: PropTypes.func,
-  onFullscreen: PropTypes.func,
   onReady: PropTypes.func,
   onTimeUpdate: PropTypes.func,
   onVideoElChanged: PropTypes.func,
@@ -127,8 +122,6 @@ Video.propTypes = {
   video: PropTypes.shape({
     path: PropTypes.string.isRequired,
     probe: PropTypes.shape({
-      chapters: chaptersPropType,
-      duration: PropTypes.number,
       fonts: PropTypes.arrayOf(PropTypes.shape({
         filename: PropTypes.string.isRequired,
       })).isRequired,
@@ -140,7 +133,6 @@ Video.propTypes = {
 Video.defaultProps = {
   audioTrack: null,
   onEnded: null,
-  onFullscreen: null,
   onReady: null,
   onTimeUpdate: null,
   onVideoElChanged: null,

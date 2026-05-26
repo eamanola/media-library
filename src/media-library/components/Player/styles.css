@@ -1,0 +1,30 @@
+.video {
+  max-height: 80vh;
+  height: 100%;
+  max-width: 90vw;
+  width: 100%;
+  position: relative;
+
+  /* to center */
+  display: inline-block;
+}
+
+:fullscreen .video {
+  max-height: unset;
+  max-width: unset;
+}
+
+.video-container {
+  position: relative;
+  text-align: center;
+}
+
+.video-container .loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}

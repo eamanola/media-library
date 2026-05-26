@@ -1,5 +1,3 @@
-import AV, { chaptersPropType } from './av.jsx';
-
-export { chaptersPropType };
+import AV from './av.jsx';
 
 export default AV;

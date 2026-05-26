@@ -6,6 +6,7 @@ import { useParams, Link } from 'react-router';
 import { actions } from '../../reducers';
 import Video from './Video';
 import './styles.css';
+import Controls from './Controls';
 
 const { getProbes, togglePlayed } = actions;
 
@@ -13,6 +14,7 @@ const PREF_LANG = 'jpn';
 const PREF_SUBS = 'eng';
 const SUBS_UNSET = undefined;
 const SUBS_REMOV = null;
+const CUSTOM_CONTROLS = true;
 
 const Player = () => {
   const mediaLibrary = useSelector((state) => state.mediaLibrary);
@@ -24,7 +26,11 @@ const Player = () => {
   const [subtitleStream, setSubtitleStream] = useState(SUBS_UNSET);
   const [loading, setLoading] = useState(true);
   const [showNext, setShowNext] = useState(false);
+  // for controls
+  // any integer, to fake an active timeout
+  const [showControlsTimeout, setShowControlsTimeout] = useState(1);
   const [videoEl, setVideoEl] = useState(null);
+  // for controls
 
   const containerRef = useRef(null);
 
@@ -134,29 +140,33 @@ const Player = () => {
   titleString = `${titleString}${video.episode ? ` E${video.episode}` : ''}`;
 
   const onVideoElChanged = (videoElement) => {
+    console.log('video changed', videoElement);
     setVideoEl(videoElement);
-    console.log('video element', videoEl);
   };
+
+  // for controls
+  const showControls = () => {
+    if (showControlsTimeout) {
+      clearTimeout(showControlsTimeout);
+    }
+
+    const timeout = setTimeout(() => {
+      setShowControlsTimeout(0);
+    }, 4000);
+
+    setShowControlsTimeout(timeout);
+  };
+  // for controls
+
   return (
     <>
       <div
+        className="video-container"
+        onMouseMove={showControls}
         ref={containerRef}
-        style={{
-          position: 'relative',
-          textAlign: 'center',
-        }}
       >
         {!!loading && (
-          <div
-            style={{
-              alignItems: 'center',
-              display: 'flex',
-              height: '100%',
-              justifyContent: 'center',
-              position: 'absolute',
-              width: '100%',
-            }}
-          >
+          <div className="loading">
             <span>
               Loading...
             </span>
@@ -164,16 +174,14 @@ const Player = () => {
         )}
 
         <div
-          style={{
-            position: 'relative',
-            visibility: loading ? 'hidden' : 'visible',
-          }}
+          className="video"
+          style={{ visibility: loading ? 'hidden' : 'visible' }}
         >
           {/* eslint-disable-next-line react/jsx-max-depth */}
           <Video
             audioTrack={audioStream}
+            controls={!CUSTOM_CONTROLS}
             onEnded={onEnded}
-            onFullscreen={toggleFullscreen}
             onReady={onReady}
             onTimeUpdate={onTimeUpdate}
             onVideoElChanged={onVideoElChanged}
@@ -200,55 +208,71 @@ const Player = () => {
             </span>
           )}
 
+          {(CUSTOM_CONTROLS === true) && (
+            <Controls
+              chapters={video.probe?.chapters}
+              duration={video.probe?.duration}
+              hide={showControlsTimeout === 0}
+              onFullscreen={toggleFullscreen}
+              videoEl={videoEl}
+            />
+          )}
         </div>
       </div>
 
-      {video.probe?.audios.length > 1 && (
-        <select onChange={onLanguageChange} value={audioStream.index}>
+      <div
+        style={{
+          position: 'relative',
+          textAlign: 'center',
+        }}
+      >
+        {video.probe?.audios.length > 1 && (
+          <select onChange={onLanguageChange} value={audioStream.index}>
 
-          {
-            video.probe.audios.map(({ index, language }) => (
-              <option key={index} value={index}>
-                {language}
-              </option>
-            ))
-          }
+            {
+              video.probe.audios.map(({ index, language }) => (
+                <option key={index} value={index}>
+                  {language}
+                </option>
+              ))
+            }
 
-        </select>
-      )}
+          </select>
+        )}
 
-      {video.probe?.subtitles.length > 1 && (
-        <select onChange={onSubtitleChange} value={subtitleStream?.index}>
-          <option value={-1}>
-            no subs
-          </option>
+        {video.probe?.subtitles.length > 1 && (
+          <select onChange={onSubtitleChange} value={subtitleStream?.index}>
+            <option value={-1}>
+              no subs
+            </option>
 
-          {
-            video.probe.subtitles.map(({ index, language, title }) => (
-              <option key={index} value={index}>
-                {`${title} (${language})`}
-              </option>
-            ))
-          }
+            {
+              video.probe.subtitles.map(({ index, language, title }) => (
+                <option key={index} value={index}>
+                  {`${title} (${language})`}
+                </option>
+              ))
+            }
 
-        </select>
-      )}
+          </select>
+        )}
 
-      {!!previous && (
-        <Link reloadDocument to={`/player/${previous.id}`}>
-          previous
-        </Link>
-      )}
+        {!!previous && (
+          <Link reloadDocument to={`/player/${previous.id}`}>
+            previous
+          </Link>
+        )}
 
-      {!!next && (
-        <Link reloadDocument to={`/player/${next.id}`}>
-          next
-        </Link>
-      )}
+        {!!next && (
+          <Link reloadDocument to={`/player/${next.id}`}>
+            next
+          </Link>
+        )}
 
-      <span>
-        {titleString}
-      </span>
+        <span>
+          {titleString}
+        </span>
+      </div>
     </>
   );
 };

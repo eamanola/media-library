@@ -1,18 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Controls, { chaptersPropType } from './Controls';
 import './av.css';
 
 const AV = ({
   videoSrc,
   audioSrc = null,
-  chapters = null,
-  duration = 0,
-  nativeControls = false,
+  controls = false,
   onReady = null,
   onAudioError = null,
-  onFullscreen = null,
   onVideoError = null,
   onTimeUpdate = null,
   onVideoElChanged = null,
@@ -21,11 +17,6 @@ const AV = ({
   const audioRef = useRef(null);
   const videoRef = useRef(null);
   const [canPlay, setCanPlay] = useState([]);
-
-  // for controls
-  // any integer, to fake an active timeout
-  const [showControlsTimeout, setShowControlsTimeout] = useState(1);
-  // for controls
 
   const hasAudio = () => audioSrc !== null;
 
@@ -104,26 +95,12 @@ const AV = ({
     }
   };
 
-  // for controls
-  const showControls = () => {
-    if (showControlsTimeout) {
-      clearTimeout(showControlsTimeout);
-    }
-
-    const timeout = setTimeout(() => {
-      setShowControlsTimeout(0);
-    }, 4000);
-
-    setShowControlsTimeout(timeout);
-  };
-  // for controls
-
   const DEBUG = false;
 
   return (
-    <div className="av" onMouseMove={showControls}>
+    <>
       <video
-        controls={nativeControls || DEBUG}
+        controls={controls || DEBUG}
         onCanPlay={onCanPlay}
         onEnded={onEnded}
         onError={onVideoError}
@@ -147,29 +124,15 @@ const AV = ({
           </audio>
         )
       }
-
-      {(nativeControls === false) && (
-        <Controls
-          chapters={chapters}
-          duration={duration}
-          hide={showControlsTimeout === 0}
-          onFullscreen={onFullscreen}
-          // eslint-disable-next-line react-hooks/refs
-          videoEl={videoRef?.current}
-        />
-      )}
-    </div>
+    </>
   );
 };
 
 AV.propTypes = {
   audioSrc: PropTypes.string,
-  chapters: chaptersPropType,
-  duration: PropTypes.number,
-  nativeControls: PropTypes.bool,
+  controls: PropTypes.bool,
   onAudioError: PropTypes.func,
   onEnded: PropTypes.func,
-  onFullscreen: PropTypes.func,
   onReady: PropTypes.func,
   onTimeUpdate: PropTypes.func,
   onVideoElChanged: PropTypes.func,
@@ -179,18 +142,13 @@ AV.propTypes = {
 
 AV.defaultProps = {
   audioSrc: null,
-  chapters: null,
-  duration: PropTypes.number,
-  nativeControls: false,
+  controls: false,
   onAudioError: null,
   onEnded: null,
-  onFullscreen: null,
   onReady: null,
   onTimeUpdate: null,
   onVideoElChanged: null,
   onVideoError: null,
 };
-
-export { chaptersPropType };
 
 export default AV;
