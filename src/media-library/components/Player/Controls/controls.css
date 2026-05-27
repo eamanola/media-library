@@ -5,7 +5,8 @@
   transition: opacity 0.5s ease-in-out, visibility 0.5s;
 }
 
-.controls.hide {
+.controls.hide,
+.hide-ui .controls {
   opacity: 0;
   visibility: hidden;
 }

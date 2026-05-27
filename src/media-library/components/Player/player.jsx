@@ -15,10 +15,8 @@ const PREF_SUBS = 'eng';
 const SUBS_UNSET = undefined;
 const SUBS_REMOV = null;
 
-// for controls
 const CUSTOM_CONTROLS = true;
-let hideControlsTimeout = 0;
-// for controls
+let hideUITimeout = 0;
 
 const Player = () => {
   const mediaLibrary = useSelector((state) => state.mediaLibrary);
@@ -30,10 +28,7 @@ const Player = () => {
   const [subtitleStream, setSubtitleStream] = useState(SUBS_UNSET);
   const [loading, setLoading] = useState(true);
   const [showNext, setShowNext] = useState(false);
-  // for controls
-  // any integer, to fake an active timeout
-  const [hideControls, setHideControls] = useState(false);
-  // for controls
+  const [hideUI, setHideUI] = useState(false);
 
   const video = (mediaLibrary || []).find(({ id }) => id === videoId);
 
@@ -130,31 +125,33 @@ const Player = () => {
   titleString = `${titleString}${video.season ? ` S${video.season}` : ''}`;
   titleString = `${titleString}${video.episode ? ` E${video.episode}` : ''}`;
 
-  // for controls
-  const showControls = () => {
-    if (hideControlsTimeout) {
-      clearTimeout(hideControlsTimeout);
+  const showUI = () => {
+    if (hideUITimeout) {
+      clearTimeout(hideUITimeout);
     }
 
-    hideControlsTimeout = setTimeout(() => {
-      setHideControls(true);
-      hideControlsTimeout = 0;
+    hideUITimeout = setTimeout(() => {
+      setHideUI(true);
+      hideUITimeout = 0;
     }, 4000);
 
-    if (hideControls) {
-      setHideControls(false);
+    if (hideUI) {
+      setHideUI(false);
     }
   };
-  // for controls
+
+  const classNames = ['video-container'];
+  if (loading) classNames.push('loading');
+  if (hideUI) classNames.push('hide-ui');
 
   return (
     <>
       <div
-        className="video-container"
-        onMouseMove={showControls}
+        className={classNames.join(' ')}
+        onMouseMove={showUI}
       >
         {!!loading && (
-          <div className="loading">
+          <div className="loading-screen">
             <span>
               Loading...
             </span>
@@ -196,7 +193,7 @@ const Player = () => {
           )}
 
           {(CUSTOM_CONTROLS === true) && (
-            <Controls hide={hideControls} />
+            <Controls hide={hideUI} />
           )}
         </div>
       </div>

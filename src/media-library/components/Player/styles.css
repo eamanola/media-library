@@ -19,7 +19,15 @@
   text-align: center;
 }
 
-.video-container .loading {
+.video-container:fullscreen.hide-ui {
+  cursor: none;
+}
+
+.video-container.loading {
+  cursor: wait;
+}
+
+.video-container .loading-screen {
   display: flex;
   align-items: center;
   justify-content: center;
