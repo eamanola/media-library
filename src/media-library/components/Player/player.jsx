@@ -18,6 +18,51 @@ const SUBS_REMOV = null;
 const CUSTOM_CONTROLS = true;
 let hideUITimeout = 0;
 
+const toggleFullscreen = () => {
+  const wrapper = document.querySelector('.video-container');
+
+  if (document.fullscreenElement === wrapper) {
+    document.exitFullscreen();
+  } else {
+    wrapper.requestFullscreen();
+  }
+};
+
+const onDoubleClick = (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  toggleFullscreen();
+};
+
+const togglePlay = () => {
+  const videoEl = document.querySelector('.video-container video');
+  if (videoEl.paused) {
+    videoEl.play();
+  } else {
+    videoEl.pause();
+  }
+};
+
+const onClick = (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  togglePlay(e.target);
+};
+
+const onKeyUp = (e) => {
+  if (e.key === ' ') {
+    e.preventDefault();
+    e.stopPropagation();
+    togglePlay(e.target);
+  }
+};
+
+const onEnded = () => {
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+  }
+};
+
 const Player = () => {
   const mediaLibrary = useSelector((state) => state.mediaLibrary);
   const dispatch = useDispatch();
@@ -112,12 +157,6 @@ const Player = () => {
     }
   };
 
-  const onEnded = () => {
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
-    }
-  };
-
   const previous = mediaLibrary[mediaLibrary.indexOf(video) - 1];
   const next = mediaLibrary[mediaLibrary.indexOf(video) + 1];
 
@@ -148,7 +187,10 @@ const Player = () => {
     <>
       <div
         className={classNames.join(' ')}
-        onMouseMove={showUI}
+        onClick={CUSTOM_CONTROLS === true ? onClick : null}
+        onDoubleClick={CUSTOM_CONTROLS === true ? onDoubleClick : null}
+        onKeyUp={CUSTOM_CONTROLS === true ? onKeyUp : null}
+        onMouseMove={CUSTOM_CONTROLS === true ? showUI : null}
       >
         {!!loading && (
           <div className="loading-screen">
@@ -193,7 +235,7 @@ const Player = () => {
           )}
 
           {(CUSTOM_CONTROLS === true) && (
-            <Controls hide={hideUI} />
+            <Controls hide={hideUI} onFullscreen={toggleFullscreen} />
           )}
         </div>
       </div>

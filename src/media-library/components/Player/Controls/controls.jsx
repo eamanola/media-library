@@ -19,15 +19,6 @@ const onPause = () => {
   videoEl.pause();
 };
 
-const togglePlay = () => {
-  const videoEl = document.querySelector('video');
-  if (videoEl.paused) {
-    videoEl.play();
-  } else {
-    videoEl.pause();
-  }
-};
-
 const seekTo = (secs) => {
   const videoEl = document.querySelector('video');
   videoEl.currentTime = secs;
@@ -39,17 +30,7 @@ const toChapter = (chapter) => {
   seekTo(chapter.start);
 };
 
-const toggleFullscreen = () => {
-  const wrapper = document.querySelector('.video-container');
-
-  if (document.fullscreenElement === wrapper) {
-    document.exitFullscreen();
-  } else {
-    wrapper.requestFullscreen();
-  }
-};
-
-const Controls = ({ hide = false }) => {
+const Controls = ({ hide = false, onFullscreen = null }) => {
   // tigger render every sec for sub components
   const [currentTime, setCurrentTime] = useState(0);
 
@@ -64,43 +45,16 @@ const Controls = ({ hide = false }) => {
     console.log('video changed', videoElement);
     if (videoElement) {
       // console.log('setup', videoEl);
-      const onClick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        togglePlay(e.target);
-      };
-
-      const onDoubleClick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        toggleFullscreen();
-      };
 
       const onTimeUpdate = ({ target }) => {
         setCurrentTime(target.currentTime);
       };
 
-      const onKeyup = (e) => {
-        if (e.key === ' ') {
-          e.preventDefault();
-          e.stopPropagation();
-          togglePlay(e.target);
-        }
-      };
-
-      // keep click and dblclick in controls
-      // they will only fire, when video.controls is disabled
-      videoElement.addEventListener('click', onClick, false);
-      videoElement.addEventListener('dblclick', onDoubleClick, false);
       videoElement.addEventListener('timeupdate', onTimeUpdate, false);
-      videoElement.addEventListener('keyup', onKeyup, false);
 
       return () => {
         // console.log('destroy', videoEl);
-        videoElement.removeEventListener('click', onClick, false);
-        videoElement.removeEventListener('dblclick', onDoubleClick, false);
         videoElement.removeEventListener('timeupdate', onTimeUpdate, false);
-        videoElement.removeEventListener('keyup', onKeyup, false);
       };
     }
 
@@ -138,9 +92,11 @@ const Controls = ({ hide = false }) => {
           videoDuration={videoEl.duration}
         />
 
-        <button onClick={toggleFullscreen} type="button">
-          FS
-        </button>
+        {typeof onFullscreen === 'function' && (
+          <button onClick={onFullscreen} type="button">
+            FS
+          </button>
+        )}
       </div>
     </div>
   );
@@ -148,10 +104,12 @@ const Controls = ({ hide = false }) => {
 
 Controls.propTypes = {
   hide: PropTypes.bool,
+  onFullscreen: PropTypes.func,
 };
 
 Controls.defaultProps = {
   hide: false,
+  onFullscreen: null,
 };
 
 export default Controls;
