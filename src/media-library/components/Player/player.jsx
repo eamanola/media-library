@@ -44,9 +44,13 @@ const togglePlay = () => {
 };
 
 const onClick = (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-  togglePlay(e.target);
+  const videoEl = document.querySelector('.video-container video');
+  // let controls events through
+  if (e.target === videoEl) {
+    e.preventDefault();
+    e.stopPropagation();
+    togglePlay(e.target);
+  }
 };
 
 const onKeyUp = (e) => {
