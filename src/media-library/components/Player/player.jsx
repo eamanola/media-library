@@ -39,7 +39,6 @@ const Player = () => {
 
   const video = (mediaLibrary || []).find(({ id }) => id === videoId);
 
-  // useEffect(() => {
   if (video?.probe) {
     const { audios, video: vidStream } = video.probe;
     if (audioStream === null && audios.length) {
@@ -210,8 +209,6 @@ const Player = () => {
 
           {(CUSTOM_CONTROLS === true) && (
             <Controls
-              chapters={video.probe?.chapters}
-              duration={video.probe?.duration}
               hide={hideControls}
               onFullscreen={toggleFullscreen}
             />

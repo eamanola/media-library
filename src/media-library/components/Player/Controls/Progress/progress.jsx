@@ -1,16 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router';
 
 import './progress.css';
 
 const secToWidth = (sec, max) => `${Math.round((sec / max) * 100)}%`;
 
-const Progress = ({
-  buffered = null,
-  currentTime = 0,
-  duration = 0,
-  onSeekTo = null,
-}) => {
+const Progress = ({ onSeekTo = null }) => {
+  const { videoId } = useParams();
+
+  const video = useSelector(
+    ({ mediaLibrary }) => (mediaLibrary || []).find(({ id }) => id === videoId),
+  );
+
+  const videoEl = document.querySelector('video');
+
+  const { duration } = video.probe;
+  const { currentTime } = videoEl;
+  const { buffered } = videoEl;
+
+  const buffers = [];
+  if (buffered?.length > 0) {
+    for (let i = 0; i < buffered.length; i += 1) {
+      const start = buffered.start(i);
+      const end = buffered.end(i);
+      if (end > start) {
+        buffers.push({
+          left: secToWidth(start, duration),
+          width: secToWidth(end - start, duration),
+        });
+      }
+    }
+  }
+
   const onClick = (e) => {
     const { nativeEvent } = e;
 
@@ -22,22 +45,12 @@ const Progress = ({
     onSeekTo((x / maxWidth) * duration);
   };
 
-  const buffers = [];
-  if (buffered?.length > 0) {
-    for (let i = 0; i < buffered.length; i += 1) {
-      buffers.push({
-        left: secToWidth(buffered.start(i), duration),
-        width: secToWidth(buffered.end(i) - buffered.start(i), duration),
-      });
-    }
-  }
-
   return (
     <div className="progress" onClick={onSeekTo ? onClick : null}>
       <div className="available" />
 
       {
-        buffers.filter(({ width }) => width !== '0%').map(({ left, width }) => (
+        buffers.map(({ left, width }) => (
           <div className="buffered" key={`key-${left}-${width}`} style={{ left, width }} />
         ))
       }
@@ -53,16 +66,10 @@ const timeRangeArrayPropType = PropTypes.arrayOf(PropTypes.shape({
 }));
 
 Progress.propTypes = {
-  buffered: timeRangeArrayPropType,
-  currentTime: PropTypes.number,
-  duration: PropTypes.number,
   onSeekTo: PropTypes.func,
 };
 
 Progress.defaultProps = {
-  buffered: null,
-  currentTime: 0,
-  duration: 0,
   onSeekTo: null,
 };
 

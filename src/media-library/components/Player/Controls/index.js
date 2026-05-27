@@ -1,5 +1,3 @@
-import Controls, { chaptersPropType } from './controls.jsx';
-
-export { chaptersPropType };
+import Controls from './controls.jsx';
 
 export default Controls;

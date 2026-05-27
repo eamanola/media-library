@@ -1,10 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Chapters, { chaptersPropType } from './Chapters';
-import formatTime from './format-time';
+import Chapters from './Chapters';
 import Progress from './Progress';
+import Time from './Time';
 import './controls.css';
+import PlayToggle from './PlayToggle';
+
+const onPlay = () => {
+  const videoEl = document.querySelector('video');
+  videoEl.play();
+};
+
+const onPause = () => {
+  const videoEl = document.querySelector('video');
+  videoEl.pause();
+};
 
 const togglePlay = () => {
   const videoEl = document.querySelector('video');
@@ -15,27 +26,24 @@ const togglePlay = () => {
   }
 };
 
+const seekTo = (secs) => {
+  const videoEl = document.querySelector('video');
+  videoEl.currentTime = secs;
+};
+const onSeekTo = (secs) => {
+  seekTo(secs);
+};
+const toChapter = (chapter) => {
+  seekTo(chapter.start);
+};
+
 const Controls = ({
-  chapters = null,
-  duration = 0,
   hide = false,
   onFullscreen = null,
 }) => {
-  const [isPaused, setIsPaused] = useState(true);
-  const [availableDuration, setAvailableDuration] = useState(0);
-  const [buffered, setBuffered] = useState(null);
-  const [currentTime, setCurrentTime] = useState(0);
-
-  const seekTo = (secs) => {
-    const videoEl = document.querySelector('video');
-    videoEl.currentTime = secs;
-  };
-  const onSeekTo = (secs) => {
-    seekTo(secs);
-  };
-  const toChapter = (chapter) => {
-    seekTo(chapter.start);
-  };
+  // tigger render every sec for sub components
+  // eslint-disable-next-line react/hook-use-state
+  const [, setCurrentTime] = useState(0);
 
   useEffect(() => {
     const videoEl = document.querySelector('video');
@@ -57,19 +65,7 @@ const Controls = ({
         }
       };
 
-      const onPlay = () => {
-        setIsPaused(false);
-      };
-
-      const onPause = () => {
-        setIsPaused(true);
-      };
-
-      const onTimeUpdate = (e) => {
-        const { target } = e;
-
-        setAvailableDuration(target.duration);
-        setBuffered(target.buffered);
+      const onTimeUpdate = ({ target }) => {
         setCurrentTime(target.currentTime);
       };
 
@@ -77,16 +73,12 @@ const Controls = ({
       // they will only fire, when video.controls is disabled
       videoEl.addEventListener('click', onClick, false);
       videoEl.addEventListener('dblclick', onDoubleClick, false);
-      videoEl.addEventListener('play', onPlay, false);
-      videoEl.addEventListener('pause', onPause, false);
       videoEl.addEventListener('timeupdate', onTimeUpdate, false);
 
       return () => {
         // console.log('destroy', videoEl);
         videoEl.removeEventListener('click', onClick, false);
         videoEl.removeEventListener('dblclick', onDoubleClick, false);
-        videoEl.removeEventListener('play', onPlay, false);
-        videoEl.removeEventListener('pause', onPause, false);
         videoEl.removeEventListener('timeupdate', onTimeUpdate, false);
       };
     }
@@ -99,27 +91,13 @@ const Controls = ({
   return (
     <div className={`controls ${hide ? ' hide' : ''}`}>
       <div className="controls-container">
-        <button onClick={togglePlay} type="button">
-          {/* {isPaused ? '\u23F5' : '\u23F8'} */}
-          {isPaused ? 'play' : 'pause'}
-        </button>
+        <PlayToggle onPause={onPause} onPlay={onPlay} />
 
-        <Chapters
-          chapters={chapters}
-          currentTime={currentTime}
-          onChapterSelected={toChapter}
-        />
+        <Chapters onChapterSelected={toChapter} />
 
-        <Progress
-          buffered={buffered}
-          currentTime={currentTime}
-          duration={duration}
-          onSeekTo={onSeekTo}
-        />
+        <Progress onSeekTo={onSeekTo} />
 
-        <span>
-          {formatTime(currentTime, availableDuration, duration)}
-        </span>
+        <Time />
 
         {typeof onFullscreen === 'function' && (
           <button onClick={onFullscreen} type="button">
@@ -132,21 +110,13 @@ const Controls = ({
 };
 
 Controls.propTypes = {
-  chapters: chaptersPropType,
-  duration: PropTypes.number,
   hide: PropTypes.bool,
   onFullscreen: PropTypes.func,
 };
 
 Controls.defaultProps = {
-  chapters: null,
-  duration: 0,
   hide: false,
   onFullscreen: null,
-};
-
-export {
-  chaptersPropType,
 };
 
 export default Controls;
