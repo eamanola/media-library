@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router';
 
 import Chapters from './Chapters';
 import Progress from './Progress';
@@ -37,73 +39,108 @@ const toChapter = (chapter) => {
   seekTo(chapter.start);
 };
 
-const Controls = ({
-  hide = false,
-  onFullscreen = null,
-}) => {
+const toggleFullscreen = () => {
+  const wrapper = document.querySelector('.video-container');
+
+  if (document.fullscreenElement === wrapper) {
+    document.exitFullscreen();
+  } else {
+    wrapper.requestFullscreen();
+  }
+};
+
+const Controls = ({ hide = false }) => {
   // tigger render every sec for sub components
-  // eslint-disable-next-line react/hook-use-state
-  const [, setCurrentTime] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+
+  const { videoId } = useParams();
+
+  const video = useSelector(
+    ({ mediaLibrary }) => (mediaLibrary || []).find(({ id }) => id === videoId),
+  );
 
   useEffect(() => {
-    const videoEl = document.querySelector('video');
-    console.log('video changed', videoEl);
-    if (videoEl) {
+    const videoElement = document.querySelector('video');
+    console.log('video changed', videoElement);
+    if (videoElement) {
       // console.log('setup', videoEl);
       const onClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
-
         togglePlay(e.target);
       };
 
       const onDoubleClick = (e) => {
-        if (onFullscreen) {
-          e.preventDefault();
-          e.stopPropagation();
-          onFullscreen();
-        }
+        e.preventDefault();
+        e.stopPropagation();
+        toggleFullscreen();
       };
 
       const onTimeUpdate = ({ target }) => {
         setCurrentTime(target.currentTime);
       };
 
+      const onKeyup = (e) => {
+        if (e.key === ' ') {
+          e.preventDefault();
+          e.stopPropagation();
+          togglePlay(e.target);
+        }
+      };
+
       // keep click and dblclick in controls
       // they will only fire, when video.controls is disabled
-      videoEl.addEventListener('click', onClick, false);
-      videoEl.addEventListener('dblclick', onDoubleClick, false);
-      videoEl.addEventListener('timeupdate', onTimeUpdate, false);
+      videoElement.addEventListener('click', onClick, false);
+      videoElement.addEventListener('dblclick', onDoubleClick, false);
+      videoElement.addEventListener('timeupdate', onTimeUpdate, false);
+      videoElement.addEventListener('keyup', onKeyup, false);
 
       return () => {
         // console.log('destroy', videoEl);
-        videoEl.removeEventListener('click', onClick, false);
-        videoEl.removeEventListener('dblclick', onDoubleClick, false);
-        videoEl.removeEventListener('timeupdate', onTimeUpdate, false);
+        videoElement.removeEventListener('click', onClick, false);
+        videoElement.removeEventListener('dblclick', onDoubleClick, false);
+        videoElement.removeEventListener('timeupdate', onTimeUpdate, false);
+        videoElement.removeEventListener('keyup', onKeyup, false);
       };
     }
 
     return () => null;
-  }, [onFullscreen]);
+  }, []);
 
-  if (!document.querySelector('video')) return null;
+  const videoEl = document.querySelector('video');
+  if (!videoEl) return null;
 
   return (
     <div className={`controls ${hide ? ' hide' : ''}`}>
       <div className="controls-container">
-        <PlayToggle onPause={onPause} onPlay={onPlay} />
+        <PlayToggle
+          isPaused={videoEl.paused}
+          onPause={onPause}
+          onPlay={onPlay}
+        />
 
-        <Chapters onChapterSelected={toChapter} />
+        <Chapters
+          chapters={video.probe?.chapters}
+          currentTime={currentTime}
+          onChapterSelected={toChapter}
+        />
 
-        <Progress onSeekTo={onSeekTo} />
+        <Progress
+          buffered={videoEl.buffered}
+          currentTime={currentTime}
+          duration={video.probe?.duration}
+          onSeekTo={onSeekTo}
+        />
 
-        <Time />
+        <Time
+          currentTime={currentTime}
+          duration={video.probe?.duration}
+          videoDuration={videoEl.duration}
+        />
 
-        {typeof onFullscreen === 'function' && (
-          <button onClick={onFullscreen} type="button">
-            FS
-          </button>
-        )}
+        <button onClick={toggleFullscreen} type="button">
+          FS
+        </button>
       </div>
     </div>
   );
@@ -111,12 +148,10 @@ const Controls = ({
 
 Controls.propTypes = {
   hide: PropTypes.bool,
-  onFullscreen: PropTypes.func,
 };
 
 Controls.defaultProps = {
   hide: false,
-  onFullscreen: null,
 };
 
 export default Controls;

@@ -1,23 +1,28 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import PropTypes from 'prop-types';
 
 import formatTime from './format-time';
 
-const Time = () => {
-  const { videoId } = useParams();
+const Time = ({
+  currentTime = 0,
+  duration = 0,
+  videoDuration = 0,
+}) => (
+  <span>
+    {formatTime(currentTime, videoDuration, duration)}
+  </span>
+);
 
-  const video = useSelector(
-    ({ mediaLibrary }) => (mediaLibrary || []).find(({ id }) => id === videoId),
-  );
+Time.propTypes = {
+  currentTime: PropTypes.number,
+  duration: PropTypes.number,
+  videoDuration: PropTypes.number,
+};
 
-  const videoEl = document.querySelector('video');
-
-  return (
-    <span>
-      {formatTime(videoEl.currentTime, videoEl.duration, video.probe?.duration)}
-    </span>
-  );
+Time.defaultProps = {
+  currentTime: 0,
+  duration: 0,
+  videoDuration: 0,
 };
 
 export default Time;

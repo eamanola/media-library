@@ -1,19 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router';
 
-const Chapters = ({ onChapterSelected = null }) => {
-  const { videoId } = useParams();
-  const video = useSelector(
-    ({ mediaLibrary }) => (mediaLibrary || []).find(({ id }) => id === videoId),
-  );
-
-  const videoEl = document.querySelector('video');
-
-  const { chapters } = video.probe;
-  const { currentTime } = videoEl;
-
+const Chapters = ({
+  chapters = null,
+  currentTime = 0,
+  onChapterSelected = null,
+}) => {
   if (!chapters?.length) {
     return null;
   }
@@ -60,10 +52,14 @@ const chaptersPropType = PropTypes.arrayOf(PropTypes.shape({
 }));
 
 Chapters.propTypes = {
+  chapters: chaptersPropType,
+  currentTime: PropTypes.number,
   onChapterSelected: PropTypes.func,
 };
 
 Chapters.defaultProps = {
+  chapters: null,
+  currentTime: 0,
   onChapterSelected: null,
 };
 

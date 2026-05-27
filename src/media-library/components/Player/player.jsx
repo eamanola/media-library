@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, Link } from 'react-router';
 
@@ -34,8 +34,6 @@ const Player = () => {
   // any integer, to fake an active timeout
   const [hideControls, setHideControls] = useState(false);
   // for controls
-
-  const containerRef = useRef(null);
 
   const video = (mediaLibrary || []).find(({ id }) => id === videoId);
 
@@ -125,15 +123,6 @@ const Player = () => {
     }
   };
 
-  const toggleFullscreen = () => {
-    const el = containerRef.current;
-    if (document.fullscreenElement === el) {
-      document.exitFullscreen();
-    } else {
-      el.requestFullscreen();
-    }
-  };
-
   const previous = mediaLibrary[mediaLibrary.indexOf(video) - 1];
   const next = mediaLibrary[mediaLibrary.indexOf(video) + 1];
 
@@ -163,7 +152,6 @@ const Player = () => {
       <div
         className="video-container"
         onMouseMove={showControls}
-        ref={containerRef}
       >
         {!!loading && (
           <div className="loading">
@@ -208,10 +196,7 @@ const Player = () => {
           )}
 
           {(CUSTOM_CONTROLS === true) && (
-            <Controls
-              hide={hideControls}
-              onFullscreen={toggleFullscreen}
-            />
+            <Controls hide={hideControls} />
           )}
         </div>
       </div>
