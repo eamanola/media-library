@@ -28,19 +28,24 @@ const secsToTime = (secs) => {
   return timeStr;
 };
 
+const playerHasDuration = (availableDuration) => Number.isFinite(availableDuration);
+const stillLoading = (availableDuration, duration) => duration > 0 && availableDuration < duration;
+const lessThanRoundingError = (available) => available < 100;
+
 const formatTime = (currentTime, availableDuration, duration) => {
   let timeStr = secsToTime(currentTime);
 
-  if (Number.isFinite(availableDuration)) {
+  if (playerHasDuration(availableDuration)) {
     if (availableDuration) {
       timeStr = `${timeStr} / ${secsToTime(availableDuration)}`;
     }
 
-    const fAvailableDuration = Math.floor(availableDuration);
-    const fDuration = Math.floor(duration);
-    if (fDuration > 0 && fAvailableDuration !== fDuration) {
-      const available = Math.round((fAvailableDuration / fDuration) * 100);
-      timeStr = `${timeStr} (${available}% / ${secsToTime(duration)})`;
+    if (stillLoading(availableDuration < duration)) {
+      const available = Math.round((availableDuration / duration) * 100);
+
+      if (lessThanRoundingError(available)) {
+        timeStr = `${timeStr} (${available}% / ${secsToTime(duration)})`;
+      }
     }
   } else if (duration > 0) {
     timeStr = `${timeStr} / ${secsToTime(duration)}`;

@@ -16,11 +16,11 @@ const Progress = ({
     for (let i = 0; i < buffered.length; i += 1) {
       const start = buffered.start(i);
       const end = buffered.end(i);
-      if (end > start) {
-        buffers.push({
-          left: secToWidth(start, duration),
-          width: secToWidth(end - start, duration),
-        });
+      const left = secToWidth(start, duration);
+      const width = secToWidth(end - start, duration);
+
+      if (width !== '0%') {
+        buffers.push({ left, width });
       }
     }
   }
