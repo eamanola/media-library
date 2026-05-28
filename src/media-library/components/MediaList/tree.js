@@ -30,14 +30,24 @@ const seasonTree = (groupedBySeason) => groupedBySeason
     const { episode, extra } = video;
 
     if (extra) {
-      console.error('// TODO: seasonTree/extra', groupedBySeason);
-      return {
-        ...tree,
-        extras: {
-          ...(tree.extras || {}),
-          [`${extra}${(typeof episode === 'number') ? episode : ''}`]: video,
+      const EXTRAS_TITLE = 'extras';
+
+      const extras = tree.find(({ title }) => title === EXTRAS_TITLE)
+        || { children: [], title: EXTRAS_TITLE };
+
+      return [
+        ...tree.filter(({ title }) => title !== EXTRAS_TITLE),
+        {
+          ...extras,
+          children: [
+            ...extras.children,
+            {
+              title: `${extra}${(typeof episode === 'number') ? episode : ''}`,
+              video,
+            },
+          ],
         },
-      };
+      ];
     }
 
     if (typeof episode === 'number') {

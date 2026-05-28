@@ -60,17 +60,7 @@ const formatMediaLibs = ({ mediaLib, videos }) => videos
   .map((path) => ({ mediaLib, path }));
 
 const getVideos = () => async (dispatch) => {
-  if (USE_MOCK) {
-    dispatch({
-      payload: (getMock().map(formatMediaLibs).flat())
-        .map(parseMediaInfo)
-        .map(addIds),
-      type: 'MEDIA_LIBS_INIT',
-    });
-    return;
-  }
-
-  const videos = (await fetchVideos())
+  const videos = (USE_MOCK ? getMock() : await fetchVideos())
     .map(formatMediaLibs).flat()
     .map(parseMediaInfo)
     .map(addIds);
