@@ -10,9 +10,7 @@ const SHOW_WARNINGS = 'off';
 
 export default [
   // artifacts
-  {
-    ignores: ['public/*', 'dist/*'],
-  },
+  { ignores: ['public/*', 'dist/*'] },
 
   // base
   js.configs.recommended,
@@ -104,18 +102,7 @@ export default [
   {
     files: ['**/*.test.js', 'jest/**'],
     languageOptions: {
-      globals: {
-        ...globals.jest,
-        // ...globals.node,
-      },
-    },
-  },
-
-  // commonjs
-  {
-    files: ['**/*.cjs'],
-    rules: {
-      'import/no-commonjs': ['off'],
+      globals: { ...globals.jest },
     },
   },
 
@@ -123,9 +110,7 @@ export default [
   {
     files: ['eslint.config.js', 'vite.config.js'],
     languageOptions: {
-      globals: {
-        ...globals.node,
-      },
+      globals: { ...globals.node },
     },
     rules: {
       'import-x/no-extraneous-dependencies': ['error', { devDependencies: true }],
