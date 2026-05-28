@@ -70,7 +70,7 @@ const titleTree = (groupedByTitle) => groupedByTitle
       return [
         ...tree,
         children.length === 1
-          ? { ...children[0], title: `${title}/${children[0].title}` }
+          ? { ...children[0], title: `${title} - ${children[0].title}` }
           : { children, title },
       ];
     }
@@ -90,7 +90,7 @@ const mediaLibTree = (groupedByMediaLib) => groupedByMediaLib
       children.length === 1
         ? {
           ...children[0],
-          title: `${aTitle !== children[0].title ? `${aTitle}/` : ''}${children[0].title}`,
+          title: `${aTitle !== children[0].title ? `${aTitle} - ` : ''}${children[0].title}`,
         }
         : { children, title: aTitle },
     ];
