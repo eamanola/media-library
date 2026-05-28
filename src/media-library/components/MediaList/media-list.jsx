@@ -22,6 +22,8 @@ const join = (current, subdir) => {
   return `${current}/${subdir}`;
 };
 
+const formatFolder = (aFolder) => unPlayedCount(aFolder);
+
 const MediaList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -54,20 +56,20 @@ const MediaList = () => {
     }
   };
 
-  const formatFolder = (aFolder) => unPlayedCount(aFolder);
-
   const tree = useMemo(() => {
     if (mediaLibrary.length) {
-      console.log('create tree');
+      console.log('create tree', mediaLibrary);
 
-      return createTree(mediaLibrary);
+      const thetree = createTree(mediaLibrary);
+
+      return thetree;
     }
     return null;
   }, [mediaLibrary]);
 
   const folder = useMemo(() => {
     if (tree) {
-      console.log('set folder');
+      console.log('set folder', tree);
 
       const path = pathname
         .split('/')
@@ -76,8 +78,15 @@ const MediaList = () => {
         .map((val) => decodeURIComponent(val));
 
       // console.log(path);
-      const firstLib = Object.keys(tree)[0];
-      const target = path.reduce((acc, val) => acc[val], tree[firstLib]);
+      // const firstLib = Object.keys(tree)[0];
+      // const target = path.reduce((acc, val) => acc[val], tree[firstLib]);
+      const firstLib = tree[0];
+      const target = path.reduce(
+        (currentFolder, subFolder) => currentFolder.children.find(
+          ({ title }) => title === subFolder,
+        ),
+        firstLib,
+      );
 
       return formatFolder(target);
     }
@@ -87,10 +96,10 @@ const MediaList = () => {
   console.log('render');
 
   useEffect(() => {
-    // console.log(folder);
     if (folder) {
-      const videos = Object.values(folder)
-        .filter(({ id }) => !!id);
+      // const videos = Object.values(folder)
+      //   .filter(({ id }) => !!id);
+      const videos = folder.filter(({ video }) => !!video).map(({ video }) => video);
 
       const withoutThumbnail = videos
         .filter(({ thumbnail }) => !thumbnail);
@@ -136,30 +145,32 @@ const MediaList = () => {
       role="presentation"
     >
       {
-        Object.keys(folder).map((key) => {
-          const isSubFolder = !folder[key].id;
+        folder.map((item) => {
+          const { children, title, video } = item;
+
+          const isSubFolder = !!children;
 
           return isSubFolder
             ? (
               <Folder
-                folder={folder[key]}
-                key={key}
-                onClick={() => setSelected(key)}
-                onFocus={() => setSelected(key)}
-                path={join(pathname, key)}
-                selected={selected === key}
+                folder={item}
+                key={title}
+                onClick={() => setSelected(title)}
+                onFocus={() => setSelected(title)}
+                path={join(pathname, title)}
+                selected={selected === title}
               />
             )
             : (
               <MediaItem
-                key={key}
-                onClick={() => setSelected(folder[key].id)}
-                onFocus={() => setSelected(folder[key].id)}
-                onPlay={onPlay(folder[key])}
-                onPlayExp={onPlayExp(folder[key])}
-                onTogglePlayed={onTogglePlayed(folder[key])}
-                selected={selected === folder[key].id}
-                video={folder[key]}
+                key={title}
+                onClick={() => setSelected(video.id)}
+                onFocus={() => setSelected(video.id)}
+                onPlay={onPlay(video)}
+                onPlayExp={onPlayExp(video)}
+                onTogglePlayed={onTogglePlayed(video)}
+                selected={selected === video.id}
+                video={video}
               />
             );
         })

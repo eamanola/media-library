@@ -30,55 +30,78 @@ const seasonTree = (groupedBySeason) => groupedBySeason
     const { episode, extra } = video;
 
     if (extra) {
-      return { ...tree, extras: { ...(tree.extras || {}), [`${extra}${(typeof episode === 'number') ? episode : ''}`]: video } };
+      console.error('// TODO: seasonTree/extra', groupedBySeason);
+      return {
+        ...tree,
+        extras: {
+          ...(tree.extras || {}),
+          [`${extra}${(typeof episode === 'number') ? episode : ''}`]: video,
+        },
+      };
     }
 
     if (typeof episode === 'number') {
-      return { ...tree, [`E${episode}`]: video };
+      return [...tree, { title: `E${episode}`, video }];
     }
 
     // should be a movie
     if (groupedBySeason.length === 1) {
-      return video;
+      return [{ title: video.title, video }];
     }
 
-    console.warn('shouldn reach. just a folder? experimental', video);
-    return { ...tree, [video.path]: { ...video, title: video.path } };
-    // console.warn('shouldn reach', video);
-    // return tree;
-  }, {});
+    console.warn('shouldn reach. just a folder without season info? experimental', video);
+    return [...tree, { title: video.path, video: { ...video, title: video.path } }];
+  }, []);
 
-const titleTree = (groupedByTitle) => {
-  if (groupedByTitle.length === 1) {
-    // one item season folder, skip
-    const [season] = groupedByTitle;
-    return seasonTree(season);
-  }
+// if (groupedByTitle.length === 1) {
+//   // one item season folder, skip
+//   const [season] = groupedByTitle;
+//   return seasonTree(season);
+// }
+const titleTree = (groupedByTitle) => groupedByTitle
+  .sort((a, b) => (getValue(a, 'season') || 0) - (getValue(b, 'season') || 0))
+  .reduce((tree, season) => {
+    const seasonKey = getValue(season, 'season');
+    const seasonValue = seasonTree(season);
 
-  return groupedByTitle
-    .sort((a, b) => (getValue(a, 'season') || 0) - (getValue(b, 'season') || 0))
-    .reduce((tree, season) => {
-      const seasonKey = getValue(season, 'season');
-      const seasonValue = seasonTree(season);
+    if (seasonKey) {
+      const children = seasonValue;
+      const title = `Season ${seasonKey}`;
+      return [
+        ...tree,
+        children.length === 1
+          ? { ...children[0], title: `${title}/${children[0].title}` }
+          : { children, title },
+      ];
+    }
 
-      if (seasonKey) {
-        return { ...tree, [`Season ${seasonKey}`]: seasonValue };
-      }
-      // items with no season info
-      // Sayonara Zetsubou Sensei Extra
-      return { ...tree, ...seasonValue };
-    }, {});
-};
+    console.warn('experimental: titleTree, no season info', seasonValue, groupedByTitle);
+    return [...tree, ...seasonValue];
+  }, []);
 
 const mediaLibTree = (groupedByMediaLib) => groupedByMediaLib
   .sort((a, b) => getValue(a, 'title').localeCompare(getValue(b, 'title')))
-  .reduce((tree, title) => ({
-    ...tree, [getValue(title, 'title')]: titleTree(title),
-  }), {});
+  .reduce((tree, title) => {
+    const children = titleTree(title);
+    const aTitle = getValue(title, 'title');
 
-const toTree = (grouped) => grouped.reduce((tree, mediaLib) => ({
-  ...tree, [getValue(mediaLib, 'mediaLib')]: mediaLibTree(mediaLib),
-}), {});
+    return [
+      ...tree,
+      children.length === 1
+        ? {
+          ...children[0],
+          title: `${aTitle !== children[0].title ? `${aTitle}/` : ''}${children[0].title}`,
+        }
+        : { children, title: aTitle },
+    ];
+  }, []);
+
+const toTree = (grouped) => grouped.reduce((tree, mediaLib) => {
+  const children = mediaLibTree(mediaLib);
+  const title = getValue(mediaLib, 'mediaLib');
+
+  return [...tree, children.length === 1 ? children[0] : { children, title }];
+}, []);
 
 const createTree = (videos) => toTree(group(videos));
 
