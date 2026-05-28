@@ -22,7 +22,7 @@ const Chapters = ({
         <button
           disabled={currentChapterIndex === 0}
           onClick={() => onChapterSelected({ ...chapters[currentChapterIndex - 1] })}
-          type='button'
+          type="button"
         >
           &lt;
         </button>
@@ -36,7 +36,7 @@ const Chapters = ({
         <button
           disabled={currentChapterIndex === chapters.length - 1}
           onClick={() => onChapterSelected({ ...chapters[currentChapterIndex + 1] })}
-          type='button'
+          type="button"
         >
           &gt;
         </button>

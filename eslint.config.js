@@ -18,6 +18,11 @@ export default [
   js.configs.recommended,
   importConfigs['flat/recommended'],
 
+  // airbnb
+  airbnb.configs['flat/strict'],
+  // requires import-x
+  airbnb.configs['flat/addon-import'],
+
   // react
   {
     // languageOptions and plugins should be identical?
@@ -74,11 +79,6 @@ export default [
       },
     },
   },
-
-  // airbnb
-  airbnb.configs['flat/strict'],
-  // requires import-x
-  airbnb.configs['flat/addon-import'],
 
   // general
   {
