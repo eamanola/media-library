@@ -106,6 +106,7 @@ export default [
     languageOptions: {
       globals: {
         ...globals.jest,
+        // ...globals.node,
       },
     },
   },
@@ -120,23 +121,14 @@ export default [
 
   // dev files
   {
+    files: ['eslint.config.js', 'vite.config.js'],
     languageOptions: {
       globals: {
         ...globals.node,
       },
     },
     rules: {
-      'import-x/no-extraneous-dependencies': [
-        'error',
-        {
-          devDependencies: [
-            'eslint.config.js',
-            'webpack.config.cjs',
-            '**/*.test.js',
-            'vite.config.js',
-          ],
-        },
-      ],
+      'import-x/no-extraneous-dependencies': ['error', { devDependencies: true }],
     },
   },
 ];
