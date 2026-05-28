@@ -16,7 +16,7 @@ const addIds = (video) => {
   if (season) { id.push(`S${season}`); }
   if (typeof episode === 'number') { id.push(getEpisodeStr(episode, extra, version)); }
 
-  if (!season) {
+  if (!season && !episode) {
     // not a recognizeed show
     // case folder, but not a season
     // takes in movies (not show, and not folder), but it is what it is
