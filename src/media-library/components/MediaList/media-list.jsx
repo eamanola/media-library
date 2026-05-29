@@ -8,7 +8,6 @@ import Folder, { unPlayedCount } from '../Folder';
 import MediaItem from '../MediaItem';
 import { nextSelected } from './keyboard';
 import './styles.css';
-// import { pathById } from './video-path';
 
 const {
   createThumbnails,
@@ -74,12 +73,8 @@ const MediaList = () => {
       const path = pathname
         .split('/')
         .filter((subdir) => subdir !== '')
-        // .filter((subdir) => subdir !== PATH_PREFIX) // media
         .map((val) => decodeURIComponent(val));
 
-      // console.log(path);
-      // const firstLib = Object.keys(tree)[0];
-      // const target = path.reduce((acc, val) => acc[val], tree[firstLib]);
       const firstLib = tree[0];
       const target = path.reduce(
         (currentFolder, subFolder) => currentFolder.children.find(
@@ -97,8 +92,6 @@ const MediaList = () => {
 
   useEffect(() => {
     if (folder) {
-      // const videos = Object.values(folder)
-      //   .filter(({ id }) => !!id);
       const videos = folder.filter(({ video }) => !!video).map(({ video }) => video);
 
       const withoutThumbnail = videos
@@ -116,13 +109,6 @@ const MediaList = () => {
     }
   }, [folder, dispatch]);
 
-  // useEffect(() => {
-  //   if (tree) {
-  //     console.log(pathById(tree, 'NieR_Automata_Ver1_1a.S1.E1'));
-  //   }
-  //   console.log(tree);
-  // }, [tree]);
-
   useEffect(() => {
     if (selected) {
       document.querySelector(`[data-id="${selected}"]`).scrollIntoView(
@@ -133,10 +119,6 @@ const MediaList = () => {
     // console.log(`[data-id="${selected}"]`);
     // console.log('selected', selected);
   }, [selected]);
-
-  // const sortByKeys = (aFolder) => Object.keys(aFolder)
-  //   .sort()
-  //   .reduce((acc, val) => ({ ...acc, [val]: aFolder[val] }), {});
 
   return (
     <div
