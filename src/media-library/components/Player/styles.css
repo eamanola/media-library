@@ -27,8 +27,16 @@
   cursor: wait;
 }
 
-.video-container .loading-screen {
+.video-container.loading .video {
+  visibility: hidden;
+}
+
+.video-container.loading .loading-screen {
   display: flex;
+}
+
+.video-container .loading-screen {
+  display: none;
   align-items: center;
   justify-content: center;
 

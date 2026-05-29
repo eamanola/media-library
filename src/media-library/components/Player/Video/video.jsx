@@ -52,7 +52,30 @@ const Video = ({
         };
       }
 
-      console.log('todo sub', codec);
+      if (codec === 'webvtt') {
+        console.log('TODO wtt', subtitleTrack);
+        const { language } = subtitleTrack;
+        const track = document.createElement('track');
+        track.setAttribute('label', language);
+        track.setAttribute('kind', 'subtitles');
+        track.setAttribute('srclang', language);
+        track.setAttribute('src', subUrl);
+        // track.setAttribute('default', true);
+
+        const videoEl = document.querySelector('video');
+        videoEl.appendChild(track);
+
+        const { textTracks } = videoEl;
+        const latestTract = textTracks[textTracks.length - 1];
+        latestTract.mode = 'showing';
+
+        return () => {
+          latestTract.mode = 'disabled';
+          track.remove();
+        };
+      }
+
+      console.warn('todo sub', codec);
     }
 
     return () => null;

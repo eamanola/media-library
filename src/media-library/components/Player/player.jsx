@@ -68,11 +68,11 @@ const onEnded = () => {
 };
 
 const Player = () => {
+  const dispatch = useDispatch();
   const mediaLibrary = useSelector(({ mediaLibrary: state }) => state);
   const played = useSelector(({ played: state }) => state);
-  const dispatch = useDispatch();
-
   const { videoId } = useParams();
+
   const [videoStream, setVideoStream] = useState(null);
   const [audioStream, setAudioStream] = useState(null);
   const [subtitleStream, setSubtitleStream] = useState(SUBS_UNSET);
@@ -80,7 +80,7 @@ const Player = () => {
   const [showNext, setShowNext] = useState(false);
   const [hideUI, setHideUI] = useState(false);
 
-  const video = (mediaLibrary || []).find(({ id }) => id === videoId);
+  const video = mediaLibrary.find(({ id }) => id === videoId);
   const { probe } = useSelector(
     (({ probes }) => probes.find(({ path }) => path === video.path)),
   ) || {};
@@ -99,7 +99,7 @@ const Player = () => {
   }
 
   useEffect(() => {
-    if (video && !probe) {
+    if (dispatch && video && !probe) {
       dispatch(getProbes([video]));
     }
   }, [
@@ -231,18 +231,15 @@ const Player = () => {
         onKeyUp={CUSTOM_CONTROLS === true ? onKeyUp : null}
         onMouseMove={CUSTOM_CONTROLS === true ? showUI : null}
       >
-        {!!loading && (
-          <div className="loading-screen">
-            <span>
-              Loading...
-            </span>
-          </div>
-        )}
 
-        <div
-          className="video"
-          style={{ visibility: loading ? 'hidden' : 'visible' }}
-        >
+        <div className="loading-screen">
+          {/* eslint-disable-next-line react/jsx-max-depth */}
+          <span>
+            Loading...
+          </span>
+        </div>
+
+        <div className="video">
           {/* eslint-disable-next-line react/jsx-max-depth */}
           <Video
             audioTrack={audioStream}
