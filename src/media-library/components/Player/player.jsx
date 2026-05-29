@@ -90,7 +90,6 @@ const Player = () => {
     if (audioStream === null && audios.length) {
       const prefAudio = audios.find(({ language }) => language === PREF_LANG);
 
-      console.log('set audio');
       setAudioStream(prefAudio || audios[0]);
     }
 
@@ -111,11 +110,11 @@ const Player = () => {
   ]);
 
   useEffect(() => {
-    console.log('set video');
+    console.log('set video', videoStream);
   }, [videoStream]);
 
   useEffect(() => {
-    console.log('set audio');
+    console.log('set audio', audioStream);
   }, [audioStream]);
 
   if (!videoStream) {
