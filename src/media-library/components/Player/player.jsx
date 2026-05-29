@@ -80,9 +80,12 @@ const Player = () => {
   const [hideUI, setHideUI] = useState(false);
 
   const video = (mediaLibrary || []).find(({ id }) => id === videoId);
+  const { probe } = useSelector(
+    (({ probes }) => probes.find(({ path }) => path === video.path)),
+  ) || {};
 
-  if (video?.probe) {
-    const { audios, video: vidStream } = video.probe;
+  if (probe) {
+    const { audios, video: vidStream } = probe;
     if (audioStream === null && audios.length) {
       const prefAudio = audios.find(({ language }) => language === PREF_LANG);
 
@@ -96,11 +99,15 @@ const Player = () => {
   }
 
   useEffect(() => {
-    if (video && !video.probe) {
-      console.log('probe');
+    if (video && !probe) {
+      console.log('get probe');
       dispatch(getProbes([video]));
     }
-  }, [video, dispatch]);
+  }, [
+    dispatch,
+    probe,
+    video,
+  ]);
 
   useEffect(() => {
     console.log('set video');
@@ -115,12 +122,10 @@ const Player = () => {
   }
 
   const onLanguageChange = ({ target }) => {
-    const { probe } = video;
     setAudioStream(probe.audios.find(({ index }) => index === Number(target.value)));
   };
 
   const onSubtitleChange = ({ target }) => {
-    const { probe } = video;
     setSubtitleStream(
       probe.subtitles.find(({ index }) => index === Number(target.value)) || SUBS_REMOV,
     );
@@ -130,7 +135,7 @@ const Player = () => {
     setLoading(!isReady);
 
     if (isReady && subtitleStream === SUBS_UNSET) {
-      const { subtitles } = video.probe;
+      const { subtitles } = probe;
       if (subtitles.length) {
         const prefSubtitle = subtitles.find(({ language, title }) => (
           language === PREF_SUBS && !/forced/ui.test(title)
@@ -144,7 +149,6 @@ const Player = () => {
 
   const onTimeUpdate = ({ target }) => {
     const { currentTime } = target;
-    const { probe } = video;
     const { duration } = probe;
 
     if (currentTime >= duration * 0.90) {
@@ -215,8 +219,9 @@ const Player = () => {
             onEnded={onEnded}
             onReady={onReady}
             onTimeUpdate={onTimeUpdate}
+            path={video.path}
+            probe={probe}
             subtitleTrack={subtitleStream}
-            video={video}
             videoTrack={videoStream}
           />
 
@@ -250,11 +255,11 @@ const Player = () => {
           textAlign: 'center',
         }}
       >
-        {video.probe?.audios.length > 1 && (
+        {probe?.audios.length > 1 && (
           <select onChange={onLanguageChange} value={audioStream.index}>
 
             {
-              video.probe.audios.map(({ index, language }) => (
+              probe.audios.map(({ index, language }) => (
                 <option key={index} value={index}>
                   {language}
                 </option>
@@ -264,14 +269,14 @@ const Player = () => {
           </select>
         )}
 
-        {video.probe?.subtitles.length > 1 && (
+        {probe?.subtitles.length > 1 && (
           <select onChange={onSubtitleChange} value={subtitleStream?.index}>
             <option value={-1}>
               no subs
             </option>
 
             {
-              video.probe.subtitles.map(({ index, language, title }) => (
+              probe.subtitles.map(({ index, language, title }) => (
                 <option key={index} value={index}>
                   {`${title} (${language})`}
                 </option>

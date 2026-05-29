@@ -29,6 +29,7 @@ const MediaList = () => {
 
   const mediaLibrary = useSelector(({ mediaLibrary: state }) => state);
   const thumbnails = useSelector(({ thumbnails: state }) => state);
+  const probes = useSelector(({ probes: state }) => state);
   const [selected, setSelected] = useState(null);
   const [tree, setTree] = useState(null);
   const [folder, setFolder] = useState([]);
@@ -77,16 +78,22 @@ const MediaList = () => {
       const updateMeta = async () => {
         const videos = folder.filter(({ video }) => !!video).map(({ video }) => video);
 
-        const withoutProbe = videos.filter(({ probe }) => !probe);
+        const withoutProbe = videos.filter(
+          ({ path }) => !probes.find(({ path: probePath }) => probePath === path),
+        );
 
         if (withoutProbe.length) {
-          console.log('update probs', withoutProbe);
+          console.log('update probes', withoutProbe);
           await dispatch(getProbes(withoutProbe));
         }
       };
       updateMeta();
     }
-  }, [dispatch, folder]);
+  }, [
+    dispatch,
+    folder,
+    probes,
+  ]);
 
   useEffect(() => {
     if (folder.length) {
@@ -166,6 +173,7 @@ const MediaList = () => {
                 onPlay={onPlay(video)}
                 onPlayExp={onPlayExp(video)}
                 onTogglePlayed={onTogglePlayed(video)}
+                probe={probes.find(({ path }) => path === video.path)?.probe}
                 selected={selected === video.id}
                 thumbnail={thumbnails.find(({ id }) => id === video.id)?.thumbnail}
                 video={video}

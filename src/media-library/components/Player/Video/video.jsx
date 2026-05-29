@@ -7,7 +7,8 @@ import mediaSrc, { fontSrc } from './media-src';
 import './libass-wasm-overrides.css';
 
 const Video = ({
-  video,
+  path,
+  probe,
   videoTrack,
   audioTrack = null,
   subtitleTrack = null,
@@ -19,23 +20,22 @@ const Video = ({
   const [transcodeVideo, setTranscodeVideo] = useState(false);
   const [currentAudio, setCurrentAudio] = useState(audioTrack);
 
-  const videoSrc = () => mediaSrc('video', video.path, videoTrack.index, transcodeVideo);
-  const audioSrc = () => mediaSrc('audio', video.path, audioTrack.index, transcodeAudio);
+  const videoSrc = () => mediaSrc('video', path, videoTrack.index, transcodeVideo);
+  const audioSrc = () => mediaSrc('audio', path, audioTrack.index, transcodeAudio);
 
   useEffect(() => {
     if (subtitleTrack) {
       console.log('onSubChanged', subtitleTrack);
       const { codec, index } = subtitleTrack;
-      // const { path, probe } = video;
 
-      const subUrl = mediaSrc('subtitle', video.path, index, codec !== 'ass');
+      const subUrl = mediaSrc('subtitle', path, index, codec !== 'ass');
 
       if (codec === 'ass') {
         console.log('create', subtitleTrack);
 
         const octopus = new SubtitlesOctopus({
           fallbackFont: '/fonts/default.woff2',
-          fonts: video.probe.fonts.map(({ filename }) => fontSrc(video.path, filename)),
+          fonts: probe.fonts.map(({ filename }) => fontSrc(path, filename)),
           lazyFileLoading: true,
           legacyWorkerUrl: '/libass-wasm/js/libassjs-worker-legacy.js',
           // lossyRender: 'js-blend',
@@ -58,8 +58,8 @@ const Video = ({
     return () => null;
   }, [
     subtitleTrack,
-    video.path,
-    video.probe,
+    path,
+    probe,
   ]);
 
   // onAudioChanged
@@ -112,18 +112,16 @@ Video.propTypes = {
   onEnded: PropTypes.func,
   onReady: PropTypes.func,
   onTimeUpdate: PropTypes.func,
+  path: PropTypes.string.isRequired,
+  probe: PropTypes.shape({
+    fonts: PropTypes.arrayOf(PropTypes.shape({
+      filename: PropTypes.string.isRequired,
+    })).isRequired,
+  }).isRequired,
   subtitleTrack: PropTypes.shape({
     codec: PropTypes.string.isRequired,
     index: PropTypes.number.isRequired,
   }),
-  video: PropTypes.shape({
-    path: PropTypes.string.isRequired,
-    probe: PropTypes.shape({
-      fonts: PropTypes.arrayOf(PropTypes.shape({
-        filename: PropTypes.string.isRequired,
-      })).isRequired,
-    }).isRequired,
-  }).isRequired,
   videoTrack: PropTypes.shape({ index: PropTypes.number.isRequired }).isRequired,
 };
 

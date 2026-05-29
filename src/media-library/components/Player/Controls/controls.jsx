@@ -35,9 +35,11 @@ const Controls = ({ hide = false, onFullscreen = null }) => {
   const [currentTime, setCurrentTime] = useState(0);
 
   const { videoId } = useParams();
-
   const video = useSelector(
     ({ mediaLibrary }) => (mediaLibrary || []).find(({ id }) => id === videoId),
+  );
+  const probe = useSelector(
+    (({ probes }) => probes.find(({ path }) => path === video.path)),
   );
 
   useEffect(() => {
@@ -74,7 +76,7 @@ const Controls = ({ hide = false, onFullscreen = null }) => {
         />
 
         <Chapters
-          chapters={video.probe?.chapters}
+          chapters={probe?.chapters}
           currentTime={currentTime}
           onChapterSelected={toChapter}
         />
@@ -82,13 +84,13 @@ const Controls = ({ hide = false, onFullscreen = null }) => {
         <Progress
           buffered={videoEl.buffered}
           currentTime={currentTime}
-          duration={video.probe?.duration}
+          duration={probe?.duration}
           onSeekTo={onSeekTo}
         />
 
         <Time
           currentTime={currentTime}
-          duration={video.probe?.duration}
+          duration={probe?.duration}
           videoDuration={videoEl.duration}
         />
 

@@ -23,14 +23,6 @@ const reducer = (state, action) => {
       }));
       break;
 
-    case 'MEDIA_LIBS_SET_PROBES':
-      newState = state.map(({ path, probe, ...rest }) => ({
-        path,
-        ...rest,
-        probe: (payload.find(({ path: dPath }) => path === dPath)?.probe || probe),
-      }));
-      break;
-
     default:
       newState = state || initialState;
   }
