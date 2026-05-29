@@ -147,6 +147,8 @@ Video.propTypes = {
   subtitleTrack: PropTypes.shape({
     codec: PropTypes.string.isRequired,
     index: PropTypes.number.isRequired,
+    language: PropTypes.string,
+    title: PropTypes.string,
   }),
   videoTrack: PropTypes.shape({ index: PropTypes.number.isRequired }).isRequired,
 };
