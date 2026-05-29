@@ -8,6 +8,7 @@ import Folder, { countUnPlayed } from '../Folder';
 import MediaItem from '../MediaItem';
 import { nextSelected } from './keyboard';
 import './styles.css';
+import logger from '../../../logger';
 
 const {
   createThumbnails,
@@ -113,33 +114,29 @@ const MediaList = () => {
     }
   }, [selected]);
 
-  // useEffect(() => {
-  //   console.log('set media lib', mediaLibrary);
-  // }, [mediaLibrary]);
+  useEffect(() => {
+    logger.log('set media lib', mediaLibrary);
+  }, [mediaLibrary]);
 
-  // useEffect(() => {
-  //   console.log('set tree', tree);
-  // }, [tree]);
+  useEffect(() => {
+    logger.log('set tree', tree);
+  }, [tree]);
 
-  // useEffect(() => {
-  //   console.log('set folder', folder);
-  // }, [folder]);
+  useEffect(() => {
+    logger.log('set folder', folder);
+  }, [folder]);
 
-  // useEffect(() => {
-  //   console.log('set thumbnails', thumbnails);
-  // }, [thumbnails]);
+  useEffect(() => {
+    logger.log('set thumbnails', thumbnails);
+  }, [thumbnails]);
 
-  // useEffect(() => {
-  //   console.log('set probes', probes);
-  // }, [probes]);
+  useEffect(() => {
+    logger.log('set probes', probes);
+  }, [probes]);
 
-  // useEffect(() => {
-  //   console.log('set played', played);
-  // }, [played]);
-
-  // if (!folder?.children.length) {
-  //   return null;
-  // }
+  useEffect(() => {
+    logger.log('set played', played);
+  }, [played]);
 
   const onPlay = (video) => () => {
     dispatch(play(video));

@@ -6,6 +6,7 @@ import Progress from './Progress';
 import Time from './Time';
 import './controls.css';
 import PlayToggle from './PlayToggle';
+import logger from '../../../../logger';
 
 const onPlay = () => {
   const videoEl = document.querySelector('video');
@@ -38,7 +39,6 @@ const Controls = ({
 
   useEffect(() => {
     const videoElement = document.querySelector('video');
-    console.log('video changed', videoElement);
     if (videoElement) {
       // console.log('setup', videoEl);
 
@@ -55,6 +55,10 @@ const Controls = ({
     }
 
     return () => null;
+  }, []);
+
+  useEffect(() => {
+    logger.log('redraw Controls');
   }, []);
 
   const videoEl = document.querySelector('video');

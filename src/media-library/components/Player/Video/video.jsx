@@ -5,6 +5,7 @@ import SubtitlesOctopus from 'libass-wasm';
 import Av from './AV';
 import mediaSrc, { fontSrc } from './media-src';
 import './libass-wasm-overrides.css';
+import logger from '../../../../logger';
 
 const Video = ({
   path,
@@ -22,7 +23,7 @@ const Video = ({
 
   useEffect(() => {
     if (subtitleTrack) {
-      console.log('onSubChanged', subtitleTrack);
+      logger.log('onSubChanged', subtitleTrack);
       const { codec, index } = subtitleTrack;
 
       const supported = ['ass', 'webvtt'].includes(codec);
@@ -32,7 +33,7 @@ const Video = ({
       const subUrl = mediaSrc('subtitle', path, index, transcode);
 
       if (codec === 'ass') {
-        console.log('create', subtitleTrack);
+        logger.log('create', subtitleTrack);
 
         const octopus = new SubtitlesOctopus({
           fallbackFont: '/fonts/default.woff2',
@@ -48,7 +49,7 @@ const Video = ({
         });
 
         return () => {
-          console.log('dispose', subtitleTrack);
+          logger.log('dispose', subtitleTrack);
           octopus.dispose();
         };
       }
@@ -56,6 +57,7 @@ const Video = ({
       // transcode defaults to webvtt
       // playlist-manager-server formats for more info
       if (codec === 'webvtt' || transcode) {
+        logger.log('webvtt');
         const { language, title } = subtitleTrack;
         const track = document.createElement('track');
         track.setAttribute('label', title || language);
@@ -72,6 +74,7 @@ const Video = ({
         latestTract.mode = 'showing';
 
         return () => {
+          logger.log('webvtt remove');
           latestTract.mode = 'disabled';
           track.remove();
         };
@@ -85,9 +88,13 @@ const Video = ({
     probe,
   ]);
 
+  useEffect(() => {
+    logger.log('redraw Video');
+  }, []);
+
   // onAudioChanged
   if (currentAudio !== audioTrack) {
-    console.log('onAudioChanged', audioTrack);
+    logger.log('onAudioChanged', audioTrack);
     setCurrentAudio(audioTrack);
     setTranscodeAudio(false);
   }
@@ -98,14 +105,14 @@ const Video = ({
     if (transcodeAudio === false) {
       setTranscodeAudio(true);
     }
-    console.log('audio', err);
+    console.warn('audio', err);
   };
 
   const onVideoError = (err) => {
     if (transcodeVideo === false) {
       setTranscodeVideo(true);
     }
-    console.log('video', err);
+    console.warn('video', err);
   };
 
   const onVideoEnded = (e) => {

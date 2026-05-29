@@ -7,6 +7,7 @@ import { actions } from '../../reducers';
 import Video from './Video';
 import './styles.css';
 import Controls from './Controls';
+import logger from '../../../logger';
 
 const { getProbes, togglePlayed } = actions;
 
@@ -108,49 +109,51 @@ const Player = () => {
     video,
   ]);
 
-  // useEffect(() => {
-  //   console.log('set media lib', mediaLibrary);
-  // }, [mediaLibrary]);
+  useEffect(() => {
+    logger.log('redraw Player');
+  }, []);
 
-  // useEffect(() => {
-  //   console.log('set played', played);
-  // }, [played]);
+  useEffect(() => {
+    logger.log('set media lib', mediaLibrary);
+  }, [mediaLibrary]);
 
-  // useEffect(() => {
-  //   console.log('set probe', probe);
-  // }, [probe]);
+  useEffect(() => {
+    logger.log('set played', played);
+  }, [played]);
 
-  // useEffect(() => {
-  //   console.log('set videoId', videoId);
-  // }, [videoId]);
+  useEffect(() => {
+    logger.log('set probe', probe);
+  }, [probe]);
 
-  // useEffect(() => {
-  //   console.log('set videoStream', videoStream);
-  // }, [videoStream]);
+  useEffect(() => {
+    logger.log('set videoId', videoId);
+  }, [videoId]);
 
-  // useEffect(() => {
-  //   console.log('set audioStream', audioStream);
-  // }, [audioStream]);
+  useEffect(() => {
+    logger.log('set videoStream', videoStream);
+  }, [videoStream]);
 
-  // useEffect(() => {
-  //   console.log('set subtitleStream', subtitleStream);
-  // }, [subtitleStream]);
+  useEffect(() => {
+    logger.log('set audioStream', audioStream);
+  }, [audioStream]);
 
-  // useEffect(() => {
-  //   console.log('set loading', loading);
-  // }, [loading]);
+  useEffect(() => {
+    logger.log('set subtitleStream', subtitleStream);
+  }, [subtitleStream]);
 
-  // useEffect(() => {
-  //   console.log('set showNext', showNext);
-  // }, [showNext]);
+  useEffect(() => {
+    logger.log('set loading', loading);
+  }, [loading]);
 
-  // useEffect(() => {
-  //   console.log('set hideUI', hideUI);
-  // }, [hideUI]);
+  useEffect(() => {
+    logger.log('set showNext', showNext);
+  }, [showNext]);
 
-  if (!videoStream) {
-    return null;
-  }
+  useEffect(() => {
+    logger.log('set hideUI', hideUI);
+  }, [hideUI]);
+
+  if (!video || !probe) return null;
 
   const onLanguageChange = ({ target }) => {
     setAudioStream(probe.audios.find(({ index }) => index === Number(target.value)));
@@ -288,7 +291,7 @@ const Player = () => {
         }}
       >
         {probe?.audios.length > 1 && (
-          <select onChange={onLanguageChange} value={audioStream.index}>
+          <select onChange={onLanguageChange} value={audioStream?.index}>
 
             {
               probe.audios.map(({ index, language }) => (
