@@ -1,11 +1,11 @@
 {
   "name": "fullstack-demo-react",
-  "version": "0.1.71",
+  "version": "0.1.72",
   "private": true,
   "main": "src/index.jsx",
   "type": "module",
   "dependencies": {
-    "axios": "^1.16.1",
+    "automata-api": "git+ssh://git@codeberg.org/eamanola/automata-api",
     "libass-wasm": "^4.1.0",
     "media-filename-parser": "github:eamanola/media-filename-parser",
     "prop-types": "^15.8.1",

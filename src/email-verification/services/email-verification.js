@@ -1,61 +1,58 @@
-import axios from 'axios';
+import { users } from 'automata-api';
 
 import GenericError from '../../services/generic-error';
 import config from '../../config';
 
-const { BACKEND_URL } = config;
+const { BACKEND_URL: BASE_URL } = config;
+const { emailVerification } = users;
 
+// TODO: dry run
 const request = async (email) => {
   try {
-    const { status } = await axios.post(
-      `${BACKEND_URL}/email-verification`,
-      {
-        byCode: `${window.location.origin}/email-verification/by-code`,
-        byLink: {
-          onFail: `${window.location.origin}/email/verify/by-link/fail`,
-          onSuccess: `${window.location.origin}/email/verify/by-link/success`,
-        },
-        email,
-      },
+    const byCode = `${window.location.origin}/email-verification/by-code`;
+    const byLink = {
+      onFail: `${window.location.origin}/email/verify/by-link/fail`,
+      onSuccess: `${window.location.origin}/email/verify/by-link/success`,
+    };
+    const { status, body } = await emailVerification.request(
+      email,
+      byCode,
+      byLink,
+      { BASE_URL },
     );
 
-    return status === 200;
+    const success = status === 200;
+
+    if (!success) {
+      const { message } = body;
+      throw new Error(message);
+    }
+
+    return success;
   } catch (err) {
-    const { message } = err?.response?.data || GenericError;
+    const { message } = err || GenericError;
     throw new Error(message, { cause: err });
   }
 };
 
+// TODO: dry run
 const verifyByCode = async ({ token }, code) => {
   try {
-    const { status } = await axios.patch(
-      `${BACKEND_URL}/email-verification`,
-      { code },
-      { headers: { authorization: `bearer ${token}` } },
-    );
+    const { status, body } = await emailVerification.verifyByCode(token, code, { BASE_URL });
 
-    return status === 200;
+    const success = status === 200;
+
+    if (!success) {
+      const { message } = body;
+      throw new Error(message);
+    }
+
+    return success;
   } catch (err) {
-    const { message } = err?.response?.data || GenericError;
+    const { message } = err || GenericError;
     throw new Error(message, { cause: err });
   }
 };
-
-// const fetchToken = async ({ email, password }) => {
-//   try {
-//     const { token } = (
-//       await axios.post(
-//         `${BACKEND_URL}/login`,
-//         { email, password },
-//       )
-//     ).data;
-
-//     return token;
-//   } catch (e) {
-//     const { message } = e?.response?.data || GenericError;
-//     throw new Error(message);
-//   }
-// };
 
 const emailVerificationServices = {
   request,
