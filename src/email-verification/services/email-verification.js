@@ -6,7 +6,6 @@ import config from '../../config';
 const { BACKEND_URL: BASE_URL } = config;
 const { emailVerification } = users;
 
-// TODO: dry run
 const request = async (email) => {
   try {
     const byCode = `${window.location.origin}/email-verification/by-code`;
@@ -35,7 +34,6 @@ const request = async (email) => {
   }
 };
 
-// TODO: dry run
 const verifyByCode = async ({ token }, code) => {
   try {
     const { status, body } = await emailVerification.verifyByCode(token, code, { BASE_URL });

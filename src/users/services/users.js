@@ -5,7 +5,6 @@ import config from '../../config';
 
 const { BACKEND_URL: BASE_URL } = config;
 
-// TODO: dry run
 const create = async ({ email, password }) => {
   try {
     const { status, body } = await users.signup(email, password, { BASE_URL });
@@ -21,7 +20,6 @@ const create = async ({ email, password }) => {
   }
 };
 
-// TODO: dry run
 const login = async ({ email, password }) => {
   try {
     const { status, body } = await users.login(email, password, { BASE_URL });
