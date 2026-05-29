@@ -31,14 +31,6 @@ const reducer = (state, action) => {
       }));
       break;
 
-    case 'MEDIA_LIBS_SET_THUMBNAILS':
-      newState = state.map(({ id, thumbnail, ...rest }) => ({
-        id,
-        ...rest,
-        thumbnail: payload.find(({ id: aId }) => id === aId)?.thumbnail || thumbnail || null,
-      }));
-      break;
-
     default:
       newState = state || initialState;
   }

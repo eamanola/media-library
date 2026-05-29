@@ -22,6 +22,7 @@ const MediaItem = ({
   onPlayExp,
   onTogglePlayed,
   selected,
+  thumbnail,
   video,
 }) => {
   const playRef = useRef(null);
@@ -46,8 +47,8 @@ const MediaItem = ({
         role="presentation"
       >
         {
-          video.thumbnail
-            ? <img alt={video.id} src={video.thumbnail} />
+          thumbnail
+            ? <img alt={video.id} src={thumbnail} />
             : (
               <div>
                 {video.id}
@@ -104,6 +105,7 @@ MediaItem.propTypes = {
   onPlayExp: PropTypes.func.isRequired,
   onTogglePlayed: PropTypes.func.isRequired,
   selected: PropTypes.bool.isRequired,
+  thumbnail: PropTypes.string.isRequired,
   video: PropTypes.shape({
     episode: PropTypes.number,
     extra: PropTypes.string,
@@ -115,8 +117,8 @@ MediaItem.propTypes = {
       duration: PropTypes.number.isRequired,
     }),
     season: PropTypes.number,
-    thumbnail: PropTypes.string,
     title: PropTypes.string.isRequired,
   }).isRequired,
 };
+
 export default MediaItem;

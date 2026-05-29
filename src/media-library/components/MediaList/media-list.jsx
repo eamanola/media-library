@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -27,10 +27,91 @@ const MediaList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const mediaLibrary = useSelector((state) => state.mediaLibrary);
+  const mediaLibrary = useSelector(({ mediaLibrary: state }) => state);
+  const thumbnails = useSelector(({ thumbnails: state }) => state);
   const [selected, setSelected] = useState(null);
+  const [tree, setTree] = useState(null);
+  const [folder, setFolder] = useState([]);
 
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    if (mediaLibrary.length) {
+      const updateTree = async () => {
+        console.log('create tree', mediaLibrary);
+
+        const thetree = createTree(mediaLibrary);
+
+        setTree(thetree);
+      };
+      updateTree();
+    }
+  }, [mediaLibrary]);
+
+  useEffect(() => {
+    if (tree) {
+      const updateFolder = async () => {
+        console.log('set folder', tree);
+
+        const path = pathname
+          .split('/')
+          .filter((subdir) => subdir !== '')
+          .map((val) => decodeURIComponent(val));
+
+        const firstLib = tree[0];
+        const target = path.reduce(
+          (currentFolder, subFolder) => currentFolder.children.find(
+            ({ title }) => title === subFolder,
+          ),
+          firstLib,
+        );
+
+        setFolder(formatFolder(target));
+      };
+      updateFolder();
+    }
+  }, [tree, pathname]);
+
+  useEffect(() => {
+    if (folder.length) {
+      const updateMeta = async () => {
+        const videos = folder.filter(({ video }) => !!video).map(({ video }) => video);
+
+        const withoutProbe = videos.filter(({ probe }) => !probe);
+
+        if (withoutProbe.length) {
+          console.log('update probs', withoutProbe);
+          await dispatch(getProbes(withoutProbe));
+        }
+      };
+      updateMeta();
+    }
+  }, [dispatch, folder]);
+
+  useEffect(() => {
+    if (folder.length) {
+      const videos = folder.filter(({ video }) => !!video).map(({ video }) => video);
+      const withoutThumbnail = videos.filter(
+        ({ id }) => !thumbnails.find(({ id: videoId }) => videoId === id),
+      );
+      if (withoutThumbnail.length) {
+        console.log('update thumbnails', withoutThumbnail);
+        dispatch(createThumbnails(withoutThumbnail));
+      }
+    }
+  }, [
+    dispatch,
+    folder,
+    thumbnails,
+  ]);
+
+  useEffect(() => {
+    if (selected) {
+      document.querySelector(`[data-id="${selected}"]`).scrollIntoView(
+        { behavior: 'smooth', block: 'center', inline: 'nearest' },
+      );
+    }
+  }, [selected]);
 
   const onPlay = (video) => () => {
     dispatch(play(video));
@@ -38,7 +119,6 @@ const MediaList = () => {
 
   const onPlayExp = ({ id }) => () => {
     navigate(`/player/${id}`);
-    // console.log(navigate, video);
   };
 
   const onTogglePlayed = (video) => () => {
@@ -54,71 +134,6 @@ const MediaList = () => {
       setSelected(next.getAttribute('data-id'));
     }
   };
-
-  const tree = useMemo(() => {
-    if (mediaLibrary.length) {
-      console.log('create tree', mediaLibrary);
-
-      const thetree = createTree(mediaLibrary);
-
-      return thetree;
-    }
-    return null;
-  }, [mediaLibrary]);
-
-  const folder = useMemo(() => {
-    if (tree) {
-      console.log('set folder', tree);
-
-      const path = pathname
-        .split('/')
-        .filter((subdir) => subdir !== '')
-        .map((val) => decodeURIComponent(val));
-
-      const firstLib = tree[0];
-      const target = path.reduce(
-        (currentFolder, subFolder) => currentFolder.children.find(
-          ({ title }) => title === subFolder,
-        ),
-        firstLib,
-      );
-
-      return formatFolder(target);
-    }
-    return [];
-  }, [tree, pathname]);
-
-  console.log('render');
-
-  useEffect(() => {
-    if (folder) {
-      const videos = folder.filter(({ video }) => !!video).map(({ video }) => video);
-
-      const withoutThumbnail = videos
-        .filter(({ thumbnail }) => !thumbnail);
-
-      const withoutProbe = videos
-        .filter(({ probe }) => !probe);
-
-      // affect the same reducer, do after each other
-      if (withoutThumbnail.length) {
-        dispatch(createThumbnails(withoutThumbnail));
-      } else if (withoutProbe.length) {
-        dispatch(getProbes(withoutProbe));
-      }
-    }
-  }, [folder, dispatch]);
-
-  useEffect(() => {
-    if (selected) {
-      document.querySelector(`[data-id="${selected}"]`).scrollIntoView(
-        { behavior: 'smooth', block: 'center', inline: 'nearest' },
-      );
-    }
-
-    // console.log(`[data-id="${selected}"]`);
-    // console.log('selected', selected);
-  }, [selected]);
 
   return (
     <div
@@ -152,6 +167,7 @@ const MediaList = () => {
                 onPlayExp={onPlayExp(video)}
                 onTogglePlayed={onTogglePlayed(video)}
                 selected={selected === video.id}
+                thumbnail={thumbnails.find(({ id }) => id === video.id)?.thumbnail}
                 video={video}
               />
             );
