@@ -1,7 +1,12 @@
-import { defineConfig } from 'vite';
+// defineConfig is for intellisense
+// importing vite 8.0.14 causes import-x/no-cycle
+// can put back if fixed upstream
+// import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-export default defineConfig({
+export default
+// defineConfig(
+{
   build: {
     outDir: 'dist',
   },
@@ -15,4 +20,5 @@ export default defineConfig({
       },
     },
   },
-});
+};
+// );

@@ -117,11 +117,4 @@ export default [
       'import-x/no-extraneous-dependencies': ['error', { devDependencies: true }],
     },
   },
-  // TODO
-  {
-    files: ['vite.config.js'],
-    rules: {
-      'import-x/no-cycle': ['off'],
-    },
-  },
 ];
