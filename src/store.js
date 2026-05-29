@@ -6,6 +6,10 @@ import notificationReducer from './reducers/notification';
 import { reducers as mediaLibraryReducers } from './media-library';
 
 const reducers = combineReducers({
+  // logger: (state, action) => {
+  //   console.log(action);
+  //   return null;
+  // },
   notification: notificationReducer,
   user: userReducer,
   ...mediaLibraryReducers,

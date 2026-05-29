@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router';
 
-import Chapters from './Chapters';
+import Chapters, { chaptersPropType } from './Chapters';
 import Progress from './Progress';
 import Time from './Time';
 import './controls.css';
@@ -30,17 +28,13 @@ const toChapter = (chapter) => {
   seekTo(chapter.start);
 };
 
-const Controls = ({ hide = false, onFullscreen = null }) => {
+const Controls = ({
+  hide = false,
+  onFullscreen = null,
+  probe,
+}) => {
   // tigger render every sec for sub components
   const [currentTime, setCurrentTime] = useState(0);
-
-  const { videoId } = useParams();
-  const video = useSelector(
-    ({ mediaLibrary }) => (mediaLibrary || []).find(({ id }) => id === videoId),
-  );
-  const { probe } = useSelector(
-    (({ probes }) => probes.find(({ path }) => path === video.path)),
-  ) || {};
 
   useEffect(() => {
     const videoElement = document.querySelector('video');
@@ -107,6 +101,10 @@ const Controls = ({ hide = false, onFullscreen = null }) => {
 Controls.propTypes = {
   hide: PropTypes.bool,
   onFullscreen: PropTypes.func,
+  probe: PropTypes.shape({
+    chapters: chaptersPropType,
+    duration: PropTypes.number,
+  }).isRequired,
 };
 
 Controls.defaultProps = {

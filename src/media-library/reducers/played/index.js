@@ -11,12 +11,10 @@ const reducer = (state, action) => {
   switch (type) {
     case 'INIT_PLAYED':
       newState = [...payload];
-      console.log(action);
       break;
 
     case 'SET_PLAYED':
       newState = [...state.filter(({ mediaId }) => mediaId !== payload.mediaId), { ...payload }];
-      console.log(action);
       break;
 
     default:

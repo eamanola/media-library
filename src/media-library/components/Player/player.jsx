@@ -100,7 +100,6 @@ const Player = () => {
 
   useEffect(() => {
     if (video && !probe) {
-      console.log('get probe');
       dispatch(getProbes([video]));
     }
   }, [
@@ -109,13 +108,45 @@ const Player = () => {
     video,
   ]);
 
-  useEffect(() => {
-    console.log('set video', videoStream);
-  }, [videoStream]);
+  // useEffect(() => {
+  //   console.log('set media lib', mediaLibrary);
+  // }, [mediaLibrary]);
 
-  useEffect(() => {
-    console.log('set audio', audioStream);
-  }, [audioStream]);
+  // useEffect(() => {
+  //   console.log('set played', played);
+  // }, [played]);
+
+  // useEffect(() => {
+  //   console.log('set probe', probe);
+  // }, [probe]);
+
+  // useEffect(() => {
+  //   console.log('set videoId', videoId);
+  // }, [videoId]);
+
+  // useEffect(() => {
+  //   console.log('set videoStream', videoStream);
+  // }, [videoStream]);
+
+  // useEffect(() => {
+  //   console.log('set audioStream', audioStream);
+  // }, [audioStream]);
+
+  // useEffect(() => {
+  //   console.log('set subtitleStream', subtitleStream);
+  // }, [subtitleStream]);
+
+  // useEffect(() => {
+  //   console.log('set loading', loading);
+  // }, [loading]);
+
+  // useEffect(() => {
+  //   console.log('set showNext', showNext);
+  // }, [showNext]);
+
+  // useEffect(() => {
+  //   console.log('set hideUI', hideUI);
+  // }, [hideUI]);
 
   if (!videoStream) {
     return null;
@@ -244,7 +275,11 @@ const Player = () => {
           )}
 
           {(CUSTOM_CONTROLS === true) && (
-            <Controls hide={hideUI} onFullscreen={toggleFullscreen} />
+            <Controls
+              hide={hideUI}
+              onFullscreen={toggleFullscreen}
+              probe={probe}
+            />
           )}
         </div>
       </div>

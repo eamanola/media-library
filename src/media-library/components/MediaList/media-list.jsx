@@ -38,8 +38,6 @@ const MediaList = () => {
   useEffect(() => {
     if (mediaLibrary.length) {
       const updateTree = async () => {
-        console.log('create tree', mediaLibrary);
-
         const thetree = createTree(mediaLibrary);
 
         setTree(thetree);
@@ -64,7 +62,6 @@ const MediaList = () => {
           firstLib,
         );
 
-        console.log('set folder', target);
         setFolder(target);
       };
       updateFolder();
@@ -81,8 +78,7 @@ const MediaList = () => {
         );
 
         if (withoutProbe.length) {
-          console.log('update probes', withoutProbe);
-          await dispatch(getProbes(withoutProbe));
+          dispatch(getProbes(withoutProbe));
         }
       };
       updateMeta();
@@ -100,7 +96,6 @@ const MediaList = () => {
         ({ id }) => !thumbnails.find(({ id: videoId }) => videoId === id),
       );
       if (withoutThumbnail.length) {
-        console.log('update thumbnails', withoutThumbnail);
         dispatch(createThumbnails(withoutThumbnail));
       }
     }
@@ -118,9 +113,33 @@ const MediaList = () => {
     }
   }, [selected]);
 
-  if (!folder?.children.length) {
-    return null;
-  }
+  // useEffect(() => {
+  //   console.log('set media lib', mediaLibrary);
+  // }, [mediaLibrary]);
+
+  // useEffect(() => {
+  //   console.log('set tree', tree);
+  // }, [tree]);
+
+  // useEffect(() => {
+  //   console.log('set folder', folder);
+  // }, [folder]);
+
+  // useEffect(() => {
+  //   console.log('set thumbnails', thumbnails);
+  // }, [thumbnails]);
+
+  // useEffect(() => {
+  //   console.log('set probes', probes);
+  // }, [probes]);
+
+  // useEffect(() => {
+  //   console.log('set played', played);
+  // }, [played]);
+
+  // if (!folder?.children.length) {
+  //   return null;
+  // }
 
   const onPlay = (video) => () => {
     dispatch(play(video));
@@ -151,7 +170,7 @@ const MediaList = () => {
       role="presentation"
     >
       {
-        folder.children.map((item) => {
+        folder?.children.map((item) => {
           const { children, title, video } = item;
 
           const isSubFolder = Array.isArray(children);
