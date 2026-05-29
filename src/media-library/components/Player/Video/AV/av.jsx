@@ -103,16 +103,12 @@ const AV = ({
         onTimeUpdate={onVideoTimeUpdate}
         ref={videoRef}
       >
-        <track kind="captions" label="foo" />
-
         <source src={videoSrc} />
       </video>
 
       {
         hasAudio() && (
           <audio onCanPlay={onCanPlay} onError={onAudioError} ref={audioRef}>
-            <track kind="captions" label="foo" />
-
             <source src={audioSrc} />
           </audio>
         )

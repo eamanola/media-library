@@ -54,9 +54,9 @@ const Video = ({
 
       if (codec === 'webvtt') {
         console.log('TODO wtt', subtitleTrack);
-        const { language } = subtitleTrack;
+        const { language, title } = subtitleTrack;
         const track = document.createElement('track');
-        track.setAttribute('label', language);
+        track.setAttribute('label', title || language);
         track.setAttribute('kind', 'subtitles');
         track.setAttribute('srclang', language);
         track.setAttribute('src', subUrl);
