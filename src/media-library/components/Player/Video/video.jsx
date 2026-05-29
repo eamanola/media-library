@@ -28,7 +28,11 @@ const Video = ({
       console.log('onSubChanged', subtitleTrack);
       const { codec, index } = subtitleTrack;
 
-      const subUrl = mediaSrc('subtitle', path, index, codec !== 'ass');
+      const supported = ['ass', 'webvtt'].includes(codec);
+      if (!supported) { console.warn('todo sub', codec); }
+
+      const transcode = !supported;
+      const subUrl = mediaSrc('subtitle', path, index, transcode);
 
       if (codec === 'ass') {
         console.log('create', subtitleTrack);
@@ -52,8 +56,9 @@ const Video = ({
         };
       }
 
-      if (codec === 'webvtt') {
-        console.log('TODO wtt', subtitleTrack);
+      // transcode defaults to webvtt
+      // playlist-manager-server formats for more info
+      if (codec === 'webvtt' || transcode) {
         const { language, title } = subtitleTrack;
         const track = document.createElement('track');
         track.setAttribute('label', title || language);
@@ -74,8 +79,6 @@ const Video = ({
           track.remove();
         };
       }
-
-      console.warn('todo sub', codec);
     }
 
     return () => null;
