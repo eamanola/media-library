@@ -131,8 +131,7 @@ const MediaList = () => {
   };
 
   const onTogglePlayed = (video) => () => {
-    const current = played.find(({ mediaId }) => mediaId === video.id);
-    dispatch(togglePlayed(video, current));
+    dispatch(togglePlayed(video));
   };
 
   const onKeyDown = (e) => {

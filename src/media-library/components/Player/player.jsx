@@ -155,7 +155,7 @@ const Player = () => {
       const current = played.find(({ mediaId }) => video.id === mediaId);
 
       if (current?.isPlayed !== true) {
-        dispatch(togglePlayed(video, current));
+        dispatch(togglePlayed(video));
         console.log('played');
       }
 

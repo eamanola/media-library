@@ -26,8 +26,8 @@ const reducer = (state, action) => {
   return newState;
 };
 
-const togglePlayed = ({ id: mediaId }, current) => async (dispatch) => {
-  // TODO: get rid or current param, kinda uglt & error prone
+const togglePlayed = ({ id: mediaId }) => async (dispatch, getState) => {
+  const current = getState().played.find(({ mediaId: aMediaId }) => aMediaId === mediaId);
   const { played } = await (current
     ? updatePlayed({ ...current, isPlayed: !current.isPlayed })
     : createPlayed(mediaId, true)
