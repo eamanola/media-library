@@ -6,7 +6,7 @@ import { actions as usersActions } from './users';
 import { Dashboard, Notification } from './components';
 import { actions } from './media-library';
 
-const { getVideos } = actions;
+const { getPlayed, getVideos } = actions;
 
 const App = () => {
   const dispatch = useDispatch();
@@ -16,6 +16,7 @@ const App = () => {
   }, [dispatch]);
 
   useEffect(() => {
+    dispatch(getPlayed());
     dispatch(getVideos());
   }, [dispatch]);
 

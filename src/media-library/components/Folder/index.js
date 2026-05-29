@@ -1,8 +1,8 @@
 import Folder from './folder.jsx';
-import unPlayedCount from './count-unplayeds';
+import { countUnPlayed } from './count-unplayeds';
 
 export {
-  unPlayedCount,
+  countUnPlayed,
 };
 
 export default Folder;

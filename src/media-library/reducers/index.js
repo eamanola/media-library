@@ -1,18 +1,24 @@
 import videos, { getVideos } from './videos';
 import { play } from './playback';
-import { togglePlayed } from './played';
+import played, { getPlayed, togglePlayed } from './played';
 import thumbnails, { createThumbnails } from './create-thumbnails';
 import probes, { getProbes } from './probes';
 
 const actions = {
   createThumbnails,
+  getPlayed,
   getProbes,
   getVideos,
   play,
   togglePlayed,
 };
 
-const reducers = { mediaLibrary: videos, probes, thumbnails };
+const reducers = {
+  mediaLibrary: videos,
+  played,
+  probes,
+  thumbnails,
+};
 
 export {
   actions,

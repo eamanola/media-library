@@ -21,6 +21,7 @@ const MediaItem = ({
   onPlay,
   onPlayExp,
   onTogglePlayed,
+  isPlayed = false,
   probe = null,
   selected,
   thumbnail = null,
@@ -82,7 +83,7 @@ const MediaItem = ({
         htmlFor={`played-${video.id}`}
       >
         <input
-          checked={video.played?.isPlayed === true}
+          checked={isPlayed === true}
           id={`played-${video.id}`}
           onChange={onTogglePlayed}
           onFocus={onFocus}
@@ -100,6 +101,7 @@ const MediaItem = ({
 };
 
 MediaItem.propTypes = {
+  isPlayed: PropTypes.bool,
   onClick: PropTypes.func.isRequired,
   onFocus: PropTypes.func.isRequired,
   onPlay: PropTypes.func.isRequired,
@@ -114,15 +116,13 @@ MediaItem.propTypes = {
     episode: PropTypes.number,
     extra: PropTypes.string,
     id: PropTypes.string.isRequired,
-    played: PropTypes.shape({
-      isPlayed: PropTypes.bool.isRequired,
-    }),
     season: PropTypes.number,
     title: PropTypes.string.isRequired,
   }).isRequired,
 };
 
 MediaItem.defaultProps = {
+  isPlayed: false,
   probe: null,
   thumbnail: null,
 };

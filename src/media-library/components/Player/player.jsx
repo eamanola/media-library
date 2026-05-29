@@ -68,7 +68,8 @@ const onEnded = () => {
 };
 
 const Player = () => {
-  const mediaLibrary = useSelector((state) => state.mediaLibrary);
+  const mediaLibrary = useSelector(({ mediaLibrary: state }) => state);
+  const played = useSelector(({ played: state }) => state);
   const dispatch = useDispatch();
 
   const { videoId } = useParams();
@@ -152,10 +153,10 @@ const Player = () => {
     const { duration } = probe;
 
     if (currentTime >= duration * 0.90) {
-      const { played } = video;
+      const current = played.find(({ mediaId }) => video.id === mediaId);
 
-      if (played?.isPlayed !== true) {
-        dispatch(togglePlayed(video));
+      if (current?.isPlayed !== true) {
+        dispatch(togglePlayed(video, current));
         console.log('played');
       }
 

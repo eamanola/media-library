@@ -5,11 +5,12 @@ import { Link } from 'react-router';
 import './styles.css';
 
 const Folder = ({
-  folder,
   onClick,
   onFocus,
   path,
   selected,
+  title,
+  unPlayed = 0,
 }) => {
   const linkRef = useRef(null);
 
@@ -22,27 +23,29 @@ const Folder = ({
   return (
     <div className="media-folder">
       <Link
-        data-id={folder.title}
+        data-id={title}
         onClick={onClick}
         onFocus={onFocus}
         ref={linkRef}
         to={path}
       >
-        {`${folder.title}${folder.unplayed ? ` (${folder.unplayed})` : ''}`}
+        {`${title}${unPlayed > 0 ? ` (${unPlayed})` : ''}`}
       </Link>
     </div>
   );
 };
 
 Folder.propTypes = {
-  folder: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    unplayed: PropTypes.number,
-  }).isRequired,
   onClick: PropTypes.func.isRequired,
   onFocus: PropTypes.func.isRequired,
   path: PropTypes.string.isRequired,
   selected: PropTypes.bool.isRequired,
+  title: PropTypes.string.isRequired,
+  unPlayed: PropTypes.number,
+};
+
+Folder.defaultProps = {
+  unPlayed: 0,
 };
 
 export default Folder;

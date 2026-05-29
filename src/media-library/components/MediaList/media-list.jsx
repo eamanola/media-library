@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { actions } from '../../reducers';
 import { createTree } from './tree';
-import Folder, { unPlayedCount } from '../Folder';
+import Folder, { countUnPlayed } from '../Folder';
 import MediaItem from '../MediaItem';
 import { nextSelected } from './keyboard';
 import './styles.css';
@@ -21,8 +21,6 @@ const join = (current, subdir) => {
   return `${current}/${subdir}`;
 };
 
-const formatFolder = (aFolder) => unPlayedCount(aFolder);
-
 const MediaList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -30,9 +28,10 @@ const MediaList = () => {
   const mediaLibrary = useSelector(({ mediaLibrary: state }) => state);
   const thumbnails = useSelector(({ thumbnails: state }) => state);
   const probes = useSelector(({ probes: state }) => state);
+  const played = useSelector(({ played: state }) => state);
   const [selected, setSelected] = useState(null);
   const [tree, setTree] = useState(null);
-  const [folder, setFolder] = useState([]);
+  const [folder, setFolder] = useState(null);
 
   const { pathname } = useLocation();
 
@@ -52,8 +51,6 @@ const MediaList = () => {
   useEffect(() => {
     if (tree) {
       const updateFolder = async () => {
-        console.log('set folder', tree);
-
         const path = pathname
           .split('/')
           .filter((subdir) => subdir !== '')
@@ -67,16 +64,17 @@ const MediaList = () => {
           firstLib,
         );
 
-        setFolder(formatFolder(target));
+        console.log('set folder', target);
+        setFolder(target);
       };
       updateFolder();
     }
   }, [tree, pathname]);
 
   useEffect(() => {
-    if (folder.length) {
+    if (folder?.children.length) {
       const updateMeta = async () => {
-        const videos = folder.filter(({ video }) => !!video).map(({ video }) => video);
+        const videos = folder.children.filter(({ video }) => !!video).map(({ video }) => video);
 
         const withoutProbe = videos.filter(
           ({ path }) => !probes.find(({ path: probePath }) => probePath === path),
@@ -96,8 +94,8 @@ const MediaList = () => {
   ]);
 
   useEffect(() => {
-    if (folder.length) {
-      const videos = folder.filter(({ video }) => !!video).map(({ video }) => video);
+    if (folder?.children.length) {
+      const videos = folder.children.filter(({ video }) => !!video).map(({ video }) => video);
       const withoutThumbnail = videos.filter(
         ({ id }) => !thumbnails.find(({ id: videoId }) => videoId === id),
       );
@@ -120,6 +118,10 @@ const MediaList = () => {
     }
   }, [selected]);
 
+  if (!folder?.children.length) {
+    return null;
+  }
+
   const onPlay = (video) => () => {
     dispatch(play(video));
   };
@@ -129,7 +131,8 @@ const MediaList = () => {
   };
 
   const onTogglePlayed = (video) => () => {
-    dispatch(togglePlayed(video));
+    const current = played.find(({ mediaId }) => mediaId === video.id);
+    dispatch(togglePlayed(video, current));
   };
 
   const onKeyDown = (e) => {
@@ -149,10 +152,10 @@ const MediaList = () => {
       role="presentation"
     >
       {
-        folder.map((item) => {
+        folder.children.map((item) => {
           const { children, title, video } = item;
 
-          const isSubFolder = !!children;
+          const isSubFolder = Array.isArray(children);
 
           return isSubFolder
             ? (
@@ -163,10 +166,13 @@ const MediaList = () => {
                 onFocus={() => setSelected(title)}
                 path={join(pathname, title)}
                 selected={selected === title}
+                title={title}
+                unPlayed={countUnPlayed(item, played)}
               />
             )
             : (
               <MediaItem
+                isPlayed={played.find(({ mediaId }) => video.id === mediaId)?.isPlayed === true}
                 key={title}
                 onClick={() => setSelected(video.id)}
                 onFocus={() => setSelected(video.id)}

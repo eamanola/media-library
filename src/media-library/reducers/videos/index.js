@@ -1,6 +1,5 @@
 import { videos as fetchVideos } from '../../services/videos';
 import parseMediaInfo from './parse-media-info';
-import { getPlayed } from '../played';
 import testName from './test-names.json';
 import addIds from './add-ids';
 
@@ -13,14 +12,6 @@ const reducer = (state, action) => {
   switch (type) {
     case 'MEDIA_LIBS_INIT':
       newState = [...payload];
-      break;
-
-    case 'MEDIA_LIBS_SET_PLAYED':
-      newState = state.map(({ id, played, ...rest }) => ({
-        id,
-        ...rest,
-        played: payload.find(({ mediaId }) => id === mediaId) || played,
-      }));
       break;
 
     default:
@@ -50,8 +41,6 @@ const getVideos = () => async (dispatch) => {
     .map(addIds);
 
   await dispatch({ payload: videos, type: 'MEDIA_LIBS_INIT' });
-
-  dispatch(getPlayed(videos));
 };
 
 export { getVideos };

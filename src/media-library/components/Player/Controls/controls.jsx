@@ -38,9 +38,9 @@ const Controls = ({ hide = false, onFullscreen = null }) => {
   const video = useSelector(
     ({ mediaLibrary }) => (mediaLibrary || []).find(({ id }) => id === videoId),
   );
-  const probe = useSelector(
+  const { probe } = useSelector(
     (({ probes }) => probes.find(({ path }) => path === video.path)),
-  );
+  ) || {};
 
   useEffect(() => {
     const videoElement = document.querySelector('video');

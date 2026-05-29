@@ -1,31 +1,25 @@
-const isPlayed = (video) => video.played?.isPlayed === true;
+const isPlayed = ({ id }, played) => played.find(({ mediaId }) => mediaId === id)?.isPlayed;
 
-const countUnplayed = (subFolder) => {
-  let unplayed = 0;
+const countUnPlayed = (subFolder, played) => {
+  let unPlayed = 0;
 
   const { video, children } = subFolder;
 
   if (video) {
-    if (!isPlayed(video)) unplayed += 1;
+    if (!isPlayed(video, played)) unPlayed += 1;
   } else if (children) {
     for (let i = 0; i < children.length; i += 1) {
-      unplayed += countUnplayed(children[i]);
+      unPlayed += countUnPlayed(children[i], played);
     }
   } else {
     console.error(subFolder);
   }
 
-  return unplayed;
+  return unPlayed;
 };
 
-const unPlayedCount = (folder) => {
-  const counted = folder.children.map((child) => {
-    const unplayed = countUnplayed(child);
-
-    return { ...child, unplayed };
-  });
-
-  return counted;
+export {
+  countUnPlayed,
 };
 
-export default unPlayedCount;
+export default null;

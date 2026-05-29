@@ -13,10 +13,10 @@ const played = async (/* list */) => {
   }
 };
 
-const createPlayed = async (id, isPlayed) => {
+const createPlayed = async (mediaId, isPlayed) => {
   try {
     const response = await fetch(`${BACKEND_URL}/played`, {
-      body: JSON.stringify({ isPlayed, mediaId: id }),
+      body: JSON.stringify({ isPlayed, mediaId }),
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
