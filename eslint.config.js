@@ -1,10 +1,10 @@
-// import airbnb from 'eslint-config-xaxa/airbnb';
 import airbnb from 'eslint-stylistic-airbnb';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import { configs as importConfigs } from 'eslint-plugin-import-x';
 import globals from 'globals';
 import js from '@eslint/js';
+import { fixupPluginRules } from '@eslint/compat';
 
 const SHOW_WARNINGS = 'off';
 
@@ -38,8 +38,9 @@ export default [
       },
     },
     plugins: {
-      ...react.configs.flat.all.plugins,
+      react: fixupPluginRules(react.configs.flat.all.plugins.react),
       // ...react.configs.flat['jsx-runtime'].plugins,
+
       ...reactHooks.configs.flat['recommended-latest'].plugins,
       // ...importConfigs['flat/react'].plugins,
       // ...airbnb.configs['flat/addon-react'].plugins,
@@ -114,6 +115,13 @@ export default [
     },
     rules: {
       'import-x/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    },
+  },
+  // TODO
+  {
+    files: ['vite.config.js'],
+    rules: {
+      'import-x/no-cycle': ['off'],
     },
   },
 ];
