@@ -20,9 +20,6 @@ const Video = ({
   const [transcodeVideo, setTranscodeVideo] = useState(false);
   const [currentAudio, setCurrentAudio] = useState(audioTrack);
 
-  const videoSrc = () => mediaSrc('video', path, videoTrack.index, transcodeVideo);
-  const audioSrc = () => mediaSrc('audio', path, audioTrack.index, transcodeAudio);
-
   useEffect(() => {
     if (subtitleTrack) {
       console.log('onSubChanged', subtitleTrack);
@@ -119,6 +116,9 @@ const Video = ({
       onEnded(e);
     }
   };
+
+  const videoSrc = () => mediaSrc('video', path, videoTrack.index, transcodeVideo);
+  const audioSrc = () => mediaSrc('audio', path, audioTrack.index, transcodeAudio);
 
   return (
     <Av

@@ -19,7 +19,7 @@ const CUSTOM_CONTROLS = true;
 let hideUITimeout = 0;
 
 const toggleFullscreen = () => {
-  const wrapper = document.querySelector('.video-container');
+  const wrapper = document.querySelector('.player');
 
   if (document.fullscreenElement === wrapper) {
     document.exitFullscreen();
@@ -35,7 +35,7 @@ const onDoubleClick = (e) => {
 };
 
 const togglePlay = () => {
-  const videoEl = document.querySelector('.video-container video');
+  const videoEl = document.querySelector('.player video');
   if (videoEl.paused) {
     videoEl.play();
   } else {
@@ -44,7 +44,7 @@ const togglePlay = () => {
 };
 
 const onClick = (e) => {
-  const videoEl = document.querySelector('.video-container video');
+  const videoEl = document.querySelector('.player video');
   // let controls events through
   if (e.target === videoEl) {
     e.preventDefault();
@@ -218,7 +218,7 @@ const Player = () => {
     }
   };
 
-  const classNames = ['video-container'];
+  const classNames = ['player'];
   if (loading) classNames.push('loading');
   if (hideUI) classNames.push('hide-ui');
 

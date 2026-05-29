@@ -60,8 +60,11 @@ const Controls = ({
   const videoEl = document.querySelector('video');
   if (!videoEl) return null;
 
+  const className = ['controls'];
+  if (hide) className.push('hide');
+
   return (
-    <div className={`controls ${hide ? ' hide' : ''}`}>
+    <div className={className.join(' ')}>
       <div className="controls-container">
         <PlayToggle
           isPaused={videoEl.paused}

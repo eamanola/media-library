@@ -14,28 +14,28 @@
   max-width: unset;
 }
 
-.video-container {
+.player {
   position: relative;
   text-align: center;
 }
 
-.video-container:fullscreen.hide-ui {
+.player:fullscreen.hide-ui {
   cursor: none;
 }
 
-.video-container.loading {
+.player.loading {
   cursor: wait;
 }
 
-.video-container.loading .video {
+.player.loading .video {
   visibility: hidden;
 }
 
-.video-container.loading .loading-screen {
+.player.loading .loading-screen {
   display: flex;
 }
 
-.video-container .loading-screen {
+.player .loading-screen {
   display: none;
   align-items: center;
   justify-content: center;
