@@ -115,27 +115,27 @@ const MediaList = () => {
   }, [selected]);
 
   useEffect(() => {
-    logger.log('set media lib', mediaLibrary);
+    logger.log('MediaList: set media lib', mediaLibrary);
   }, [mediaLibrary]);
 
   useEffect(() => {
-    logger.log('set tree', tree);
+    logger.log('MediaList: set tree', tree);
   }, [tree]);
 
   useEffect(() => {
-    logger.log('set folder', folder);
+    logger.log('MediaList: set folder', folder);
   }, [folder]);
 
   useEffect(() => {
-    logger.log('set thumbnails', thumbnails);
+    logger.log('MediaList: set thumbnails', thumbnails);
   }, [thumbnails]);
 
   useEffect(() => {
-    logger.log('set probes', probes);
+    logger.log('MediaList: set probes', probes);
   }, [probes]);
 
   useEffect(() => {
-    logger.log('set played', played);
+    logger.log('MediaList: set played', played);
   }, [played]);
 
   const onPlay = (video) => () => {
