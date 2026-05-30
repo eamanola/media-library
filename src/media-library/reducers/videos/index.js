@@ -2,6 +2,7 @@ import { videos as fetchVideos } from '../../services/videos';
 import parseMediaInfo from './parse-media-info';
 import testName from './test-names.json';
 import addIds from './add-ids';
+import { createTree } from './tree';
 
 const initialState = [];
 
@@ -40,7 +41,9 @@ const getVideos = () => async (dispatch) => {
     .map(parseMediaInfo)
     .map(addIds);
 
-  await dispatch({ payload: videos, type: 'MEDIA_LIBS_INIT' });
+  const mediaLibrary = createTree(videos);
+
+  await dispatch({ payload: mediaLibrary, type: 'MEDIA_LIBS_INIT' });
 };
 
 export { getVideos };

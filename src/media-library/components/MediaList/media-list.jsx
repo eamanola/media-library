@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions } from '../../reducers';
-import { createTree } from './tree';
 import Folder, { countUnPlayed } from '../Folder';
 import MediaItem from '../MediaItem';
 import { nextSelected } from './keyboard';
@@ -31,31 +30,19 @@ const MediaList = () => {
   const probes = useSelector(({ probes: state }) => state);
   const played = useSelector(({ played: state }) => state);
   const [selected, setSelected] = useState(null);
-  const [tree, setTree] = useState(null);
   const [folder, setFolder] = useState(null);
 
   const { pathname } = useLocation();
 
   useEffect(() => {
-    if (mediaLibrary.length) {
-      const updateTree = async () => {
-        const thetree = createTree(mediaLibrary);
-
-        setTree(thetree);
-      };
-      updateTree();
-    }
-  }, [mediaLibrary]);
-
-  useEffect(() => {
-    if (tree) {
+    if (mediaLibrary?.length) {
       const updateFolder = async () => {
         const path = pathname
           .split('/')
           .filter((subdir) => subdir !== '')
           .map((val) => decodeURIComponent(val));
 
-        const firstLib = tree[0];
+        const firstLib = mediaLibrary[0];
         const target = path.reduce(
           (currentFolder, subFolder) => currentFolder.children.find(
             ({ title }) => title === subFolder,
@@ -67,7 +54,7 @@ const MediaList = () => {
       };
       updateFolder();
     }
-  }, [tree, pathname]);
+  }, [mediaLibrary, pathname]);
 
   useEffect(() => {
     if (folder?.children.length) {
@@ -117,10 +104,6 @@ const MediaList = () => {
   useEffect(() => {
     logger.log('MediaList: set media lib', mediaLibrary);
   }, [mediaLibrary]);
-
-  useEffect(() => {
-    logger.log('MediaList: set tree', tree);
-  }, [tree]);
 
   useEffect(() => {
     logger.log('MediaList: set folder', folder);
