@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useLocation, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -21,40 +22,15 @@ const join = (current, subdir) => {
   return `${current}/${subdir}`;
 };
 
-const MediaList = () => {
+const MediaList = ({ folder = null }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
-  const mediaLibrary = useSelector(({ mediaLibrary: state }) => state);
   const thumbnails = useSelector(({ thumbnails: state }) => state);
   const probes = useSelector(({ probes: state }) => state);
   const played = useSelector(({ played: state }) => state);
   const [selected, setSelected] = useState(null);
-  const [folder, setFolder] = useState(null);
-
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    if (mediaLibrary?.length) {
-      const updateFolder = async () => {
-        const path = pathname
-          .split('/')
-          .filter((subdir) => subdir !== '')
-          .map((val) => decodeURIComponent(val));
-
-        const firstLib = mediaLibrary[0];
-        const target = path.reduce(
-          (currentFolder, subFolder) => currentFolder.children.find(
-            ({ title }) => title === subFolder,
-          ),
-          firstLib,
-        );
-
-        setFolder(target);
-      };
-      updateFolder();
-    }
-  }, [mediaLibrary, pathname]);
 
   useEffect(() => {
     if (folder?.children.length) {
@@ -66,6 +42,7 @@ const MediaList = () => {
         );
 
         if (withoutProbe.length) {
+          logger.log('MediaList:', folder.title, 'set probes', withoutProbe.length);
           dispatch(getProbes(withoutProbe));
         }
       };
@@ -79,13 +56,19 @@ const MediaList = () => {
 
   useEffect(() => {
     if (folder?.children.length) {
-      const videos = folder.children.filter(({ video }) => !!video).map(({ video }) => video);
-      const withoutThumbnail = videos.filter(
-        ({ id }) => !thumbnails.find(({ id: videoId }) => videoId === id),
-      );
-      if (withoutThumbnail.length) {
-        dispatch(createThumbnails(withoutThumbnail));
-      }
+      const setupThumnails = async () => {
+        const videos = folder.children.filter(({ video }) => !!video).map(({ video }) => video);
+
+        const withoutThumbnail = videos.filter(
+          ({ id }) => !thumbnails.find(({ id: videoId }) => videoId === id),
+        );
+
+        if (withoutThumbnail.length) {
+          logger.log('MediaList:', folder.title, 'set thumbnails', withoutThumbnail.length);
+          dispatch(createThumbnails(withoutThumbnail));
+        }
+      };
+      setupThumnails();
     }
   }, [
     dispatch,
@@ -100,26 +83,6 @@ const MediaList = () => {
       );
     }
   }, [selected]);
-
-  useEffect(() => {
-    logger.log('MediaList: set media lib', mediaLibrary);
-  }, [mediaLibrary]);
-
-  useEffect(() => {
-    logger.log('MediaList: set folder', folder);
-  }, [folder]);
-
-  useEffect(() => {
-    logger.log('MediaList: set thumbnails', thumbnails);
-  }, [thumbnails]);
-
-  useEffect(() => {
-    logger.log('MediaList: set probes', probes);
-  }, [probes]);
-
-  useEffect(() => {
-    logger.log('MediaList: set played', played);
-  }, [played]);
 
   const onPlay = (video) => () => {
     dispatch(play(video));
@@ -142,6 +105,8 @@ const MediaList = () => {
       setSelected(next.getAttribute('data-id'));
     }
   };
+
+  if (folder === null) return null;
 
   return (
     <div
@@ -187,6 +152,25 @@ const MediaList = () => {
       }
     </div>
   );
+};
+
+const videoProps = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+});
+
+const videoItemProps = PropTypes.shape({
+  title: PropTypes.string.isRequired,
+  video: videoProps.isRequired,
+});
+
+let folderProps = null;
+folderProps = PropTypes.shape({
+  children: PropTypes.arrayOf(PropTypes.oneOf([videoItemProps, folderProps])),
+  title: PropTypes.string.isRequired,
+});
+
+MediaList.propTypes = {
+  folder: folderProps.isRequired,
 };
 
 export default MediaList;

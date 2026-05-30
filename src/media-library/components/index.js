@@ -1,14 +1,16 @@
-import Browser from './Browser';
-import Folder from './Folder';
-import MediaItem from './MediaItem';
-import MediaList from './MediaList';
+import FileBrowser from './FileBrowser';
+// import Folder from './Folder';
+import FrontPage from './FrontPage';
+// import MediaItem from './MediaItem';
+// import MediaList from './MediaList';
 import Player from './Player';
 
 export {
-  Browser,
-  Folder,
-  MediaItem,
-  MediaList,
+  FileBrowser,
+  // Folder,
+  FrontPage,
+  // MediaItem,
+  // MediaList,
   Player,
 };
 

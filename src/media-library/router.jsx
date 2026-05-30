@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { MediaList, Player } from './components';
+import { FileBrowser, FrontPage, Player } from './components';
 
 const router = [
   {
@@ -8,11 +8,11 @@ const router = [
     path: 'player/:videoId',
   },
   {
-    element: <MediaList />,
+    element: <FrontPage />,
     path: '',
   },
   {
-    element: <MediaList />,
+    element: <FileBrowser />,
     path: '*',
   },
 ];
