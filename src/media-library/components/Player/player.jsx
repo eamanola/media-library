@@ -81,7 +81,20 @@ const Player = () => {
   const [showNext, setShowNext] = useState(false);
   const [hideUI, setHideUI] = useState(false);
 
-  const video = mediaLibrary.find(({ id }) => id === videoId);
+  const findVideo = (aFolder) => {
+    let found = aFolder.children.find(({ video: vid }) => !!vid && vid.id === videoId);
+    if (found) return found;
+
+    const subFolders = aFolder.children.filter(({ children }) => Array.isArray(children));
+    for (let i = 0; i < subFolders.length; i += 1) {
+      found = findVideo(subFolders[i]);
+      if (found) return found;
+    }
+
+    return null;
+  };
+  const { video } = mediaLibrary.length > 0 ? findVideo(mediaLibrary[0]) : {};
+
   const { probe } = useSelector(
     (({ probes }) => probes.find(({ path }) => path === video.path)),
   ) || {};
@@ -199,8 +212,10 @@ const Player = () => {
     }
   };
 
-  const previous = mediaLibrary[mediaLibrary.indexOf(video) - 1];
-  const next = mediaLibrary[mediaLibrary.indexOf(video) + 1];
+  const previous = null;
+  // mediaLibrary[mediaLibrary.indexOf(video) - 1];
+  const next = null;
+  // mediaLibrary[mediaLibrary.indexOf(video) + 1];
 
   let titleString = video.title;
   titleString = `${titleString}${video.season ? ` S${video.season}` : ''}`;
