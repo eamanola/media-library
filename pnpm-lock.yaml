@@ -10,7 +10,7 @@ importers:
     dependencies:
       automata-api:
         specifier: git+ssh://git@codeberg.org/eamanola/automata-api
-        version: git+ssh://git@codeberg.org/eamanola/automata-api#8d0d03f82378cd13dabb6e6951beb3a8d5b8dcdc
+        version: git+ssh://git@codeberg.org/eamanola/automata-api#a90d78b685b22c7dc4f7a1ef03e475bee241c7b5
       libass-wasm:
         specifier: ^4.1.0
         version: 4.1.0
@@ -554,9 +554,9 @@ packages:
     resolution: {integrity: sha512-hsU18Ae8CDTR6Kgu9DYf0EbCr/a5iGL0rytQDobUcdpYOKokk8LEjVphnXkDkgpi0wYVsqrXuP0bZxJaTqdgoA==}
     engines: {node: '>= 0.4'}
 
-  automata-api@git+ssh://git@codeberg.org/eamanola/automata-api#8d0d03f82378cd13dabb6e6951beb3a8d5b8dcdc:
-    resolution: {commit: 8d0d03f82378cd13dabb6e6951beb3a8d5b8dcdc, repo: ssh://git@codeberg.org/eamanola/automata-api, type: git}
-    version: 0.0.14
+  automata-api@git+ssh://git@codeberg.org/eamanola/automata-api#a90d78b685b22c7dc4f7a1ef03e475bee241c7b5:
+    resolution: {commit: a90d78b685b22c7dc4f7a1ef03e475bee241c7b5, repo: ssh://git@codeberg.org/eamanola/automata-api, type: git}
+    version: 0.0.15
 
   available-typed-arrays@1.0.7:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
@@ -2017,7 +2017,7 @@ snapshots:
 
   async-function@1.0.0: {}
 
-  automata-api@git+ssh://git@codeberg.org/eamanola/automata-api#8d0d03f82378cd13dabb6e6951beb3a8d5b8dcdc: {}
+  automata-api@git+ssh://git@codeberg.org/eamanola/automata-api#a90d78b685b22c7dc4f7a1ef03e475bee241c7b5: {}
 
   available-typed-arrays@1.0.7:
     dependencies:

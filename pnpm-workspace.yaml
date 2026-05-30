@@ -1,3 +1,4 @@
 allowBuilds:
   media-filename-parser: true
   unrs-resolver: true
+  automata-api: true

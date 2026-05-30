@@ -1,10 +1,9 @@
-import { users } from 'automata-api';
+import { emailVerification } from 'automata-api';
 
 import GenericError from '../../services/generic-error';
 import config from '../../config';
 
 const { BACKEND_URL: BASE_URL } = config;
-const { emailVerification } = users;
 
 const request = async (email) => {
   try {
