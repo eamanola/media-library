@@ -35,15 +35,13 @@ const MediaList = ({ folder = null }) => {
   useEffect(() => {
     if (folder?.children.length) {
       const updateMeta = async () => {
-        const videos = folder.children.filter(({ video }) => !!video).map(({ video }) => video);
+        const videosWithoutProbe = folder.children
+          .filter(({ video }) => !!video)
+          .filter(({ video }) => !probes.some(({ path }) => path === video.path));
 
-        const withoutProbe = videos.filter(
-          ({ path }) => !probes.find(({ path: probePath }) => probePath === path),
-        );
-
-        if (withoutProbe.length) {
-          logger.log('MediaList:', folder.title, 'set probes', withoutProbe.length);
-          dispatch(getProbes(withoutProbe));
+        if (videosWithoutProbe.length) {
+          logger.log('MediaList:', folder.title, 'set probes', videosWithoutProbe.length);
+          dispatch(getProbes(videosWithoutProbe.map(({ video }) => video)));
         }
       };
       updateMeta();
@@ -57,15 +55,13 @@ const MediaList = ({ folder = null }) => {
   useEffect(() => {
     if (folder?.children.length) {
       const setupThumnails = async () => {
-        const videos = folder.children.filter(({ video }) => !!video).map(({ video }) => video);
+        const videosWithoutThumbnail = folder.children
+          .filter(({ video }) => !!video)
+          .filter(({ video }) => !thumbnails.some(({ id }) => id === video.id));
 
-        const withoutThumbnail = videos.filter(
-          ({ id }) => !thumbnails.find(({ id: videoId }) => videoId === id),
-        );
-
-        if (withoutThumbnail.length) {
-          logger.log('MediaList:', folder.title, 'set thumbnails', withoutThumbnail.length);
-          dispatch(createThumbnails(withoutThumbnail));
+        if (videosWithoutThumbnail.length) {
+          logger.log('MediaList:', folder.title, 'set thumbnails', videosWithoutThumbnail.length);
+          dispatch(createThumbnails(videosWithoutThumbnail.map(({ video }) => video)));
         }
       };
       setupThumnails();
@@ -106,7 +102,7 @@ const MediaList = ({ folder = null }) => {
     }
   };
 
-  if (folder === null) return null;
+  if (!folder?.children.length) return null;
 
   return (
     <div
