@@ -12,7 +12,7 @@ const reducer = (state, action) => {
     case 'SET_THUMBNAILS':
       newState = [
         ...state.filter(
-          ({ id }) => !payload.find(({ id: payloadId }) => payloadId === id),
+          ({ id }) => !payload.some(({ id: payloadId }) => payloadId === id),
         ),
         ...payload,
       ];
@@ -25,10 +25,19 @@ const reducer = (state, action) => {
   return newState;
 };
 
-const actionCreateThumbnails = (videos) => async (dispatch) => {
-  const list = videos.map(({ id, path }) => ({ cacheId: id, path }));
+let lock = false;
+const queue = [];
+const actionCreateThumbnails = (videos) => async (dispatch, getState) => {
+  if (lock) {
+    const notInQueue = videos.filter(({ id: videoId }) => !queue.some(({ id }) => id === videoId));
+    if (notInQueue.length) {
+      queue.push(...notInQueue);
+    }
+    return;
+  }
 
-  await createThumbnails(list);
+  lock = true;
+  await createThumbnails(videos.map(({ id, path }) => ({ cacheId: id, path })));
 
   await dispatch({
     payload: videos.map(({ id }) => ({
@@ -37,6 +46,16 @@ const actionCreateThumbnails = (videos) => async (dispatch) => {
     })),
     type: 'SET_THUMBNAILS',
   });
+  lock = false;
+
+  if (queue.length) {
+    const { thumbnails: state } = getState();
+    const notInState = queue.filter(({ id: videoId }) => !state.some(({ id }) => id === videoId));
+    if (notInState.length) {
+      dispatch(actionCreateThumbnails(notInState));
+    }
+    queue.length = 0;
+  }
 };
 
 export { actionCreateThumbnails as createThumbnails };
