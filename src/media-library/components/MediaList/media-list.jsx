@@ -4,11 +4,12 @@ import { useLocation, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions } from '../../reducers';
-import Folder, { countUnPlayed } from '../Folder';
+import Folder from '../Folder';
 import MediaItem from '../MediaItem';
 import { nextSelected } from './keyboard';
 import './styles.css';
 import logger from '../../../logger';
+import { countUnPlayed } from './count-unplayeds';
 
 const {
   createThumbnails,
