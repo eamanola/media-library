@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import SubtitlesOctopus from 'libass-wasm';
 
 import Av from './AV';
@@ -138,34 +137,6 @@ const Video = ({
       videoSrc={videoSrc()}
     />
   );
-};
-
-Video.propTypes = {
-  audioTrack: PropTypes.shape({ index: PropTypes.number.isRequired }),
-  onEnded: PropTypes.func,
-  onReady: PropTypes.func,
-  onTimeUpdate: PropTypes.func,
-  path: PropTypes.string.isRequired,
-  probe: PropTypes.shape({
-    fonts: PropTypes.arrayOf(PropTypes.shape({
-      filename: PropTypes.string.isRequired,
-    })).isRequired,
-  }).isRequired,
-  subtitleTrack: PropTypes.shape({
-    codec: PropTypes.string.isRequired,
-    index: PropTypes.number.isRequired,
-    language: PropTypes.string,
-    title: PropTypes.string,
-  }),
-  videoTrack: PropTypes.shape({ index: PropTypes.number.isRequired }).isRequired,
-};
-
-Video.defaultProps = {
-  audioTrack: null,
-  onEnded: null,
-  onReady: null,
-  onTimeUpdate: null,
-  subtitleTrack: null,
 };
 
 export default Video;

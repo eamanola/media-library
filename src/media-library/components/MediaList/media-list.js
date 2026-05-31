@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -96,20 +95,6 @@ const AMediaList = ({ folder = null }) => {
   });
 
   return MediaList({ list, title: folder.title });
-};
-
-AMediaList.propTypes = {
-  folder: PropTypes.shape({
-    children: PropTypes.arrayOf(PropTypes.shape({
-      children: PropTypes.arrayOf(PropTypes.shape({})),
-      title: PropTypes.string.isRequired,
-      video: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        path: PropTypes.string.isRequired,
-      }),
-    })),
-    title: PropTypes.string.isRequired,
-  }).isRequired,
 };
 
 export default AMediaList;

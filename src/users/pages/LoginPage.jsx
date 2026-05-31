@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -57,14 +56,6 @@ const LoginPage = ({ from = '/' }) => {
       }
     </EmailPasswordForm>
   );
-};
-
-LoginPage.propTypes = {
-  from: PropTypes.string,
-};
-
-LoginPage.defaultProps = {
-  from: '/',
 };
 
 export default LoginPage;

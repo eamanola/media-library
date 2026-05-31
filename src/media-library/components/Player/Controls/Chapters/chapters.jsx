@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 const Chapters = ({
   chapters = null,
@@ -44,25 +43,5 @@ const Chapters = ({
     </>
   );
 };
-
-const chaptersPropType = PropTypes.arrayOf(PropTypes.shape({
-  end: PropTypes.number.isRequired,
-  start: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-}));
-
-Chapters.propTypes = {
-  chapters: chaptersPropType,
-  currentTime: PropTypes.number,
-  onChapterSelected: PropTypes.func,
-};
-
-Chapters.defaultProps = {
-  chapters: null,
-  currentTime: 0,
-  onChapterSelected: null,
-};
-
-export { chaptersPropType };
 
 export default Chapters;

@@ -1,5 +1,3 @@
-import Progress, { timeRangeArrayPropType } from './progress.jsx';
-
-export { timeRangeArrayPropType };
+import Progress from './progress.jsx';
 
 export default Progress;

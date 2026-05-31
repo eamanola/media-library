@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
 
 import secondsToTimeStr from './seconds-to-timestr';
 
@@ -100,34 +99,6 @@ const MediaItem = ({
       </label>
     </div>
   );
-};
-
-MediaItem.propTypes = {
-  duration: PropTypes.number,
-  hasProbe: PropTypes.func,
-  isPlayed: PropTypes.bool,
-  onClick: PropTypes.func.isRequired,
-  // onFocus: PropTypes.func.isRequired,
-  onPlay: PropTypes.func.isRequired,
-  onPlayExp: PropTypes.func.isRequired,
-  onTogglePlayed: PropTypes.func.isRequired,
-  selected: PropTypes.bool.isRequired,
-  selectedId: PropTypes.string.isRequired,
-  thumbnail: PropTypes.string,
-  video: PropTypes.shape({
-    episode: PropTypes.number,
-    extra: PropTypes.string,
-    id: PropTypes.string.isRequired,
-    season: PropTypes.number,
-    title: PropTypes.string.isRequired,
-  }).isRequired,
-};
-
-MediaItem.defaultProps = {
-  duration: 0,
-  hasProbe: false,
-  isPlayed: false,
-  thumbnail: null,
 };
 
 export default MediaItem;

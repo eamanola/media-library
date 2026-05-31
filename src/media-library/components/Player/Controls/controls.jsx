@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 
-import Chapters, { chaptersPropType } from './Chapters';
+import Chapters from './Chapters';
 import Progress from './Progress';
 import Time from './Time';
 import './controls.css';
@@ -103,20 +102,6 @@ const Controls = ({
       </div>
     </div>
   );
-};
-
-Controls.propTypes = {
-  hide: PropTypes.bool,
-  onFullscreen: PropTypes.func,
-  probe: PropTypes.shape({
-    chapters: chaptersPropType,
-    duration: PropTypes.number,
-  }).isRequired,
-};
-
-Controls.defaultProps = {
-  hide: false,
-  onFullscreen: null,
 };
 
 export default Controls;

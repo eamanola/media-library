@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import './progress.css';
 
@@ -50,26 +49,5 @@ const Progress = ({
     </div>
   );
 };
-
-const timeRangeArrayPropType = PropTypes.arrayOf(PropTypes.shape({
-  end: PropTypes.func.isRequired,
-  start: PropTypes.func.isRequired,
-}));
-
-Progress.propTypes = {
-  buffered: timeRangeArrayPropType,
-  currentTime: PropTypes.number,
-  duration: PropTypes.number,
-  onSeekTo: PropTypes.func,
-};
-
-Progress.defaultProps = {
-  buffered: null,
-  currentTime: 0,
-  duration: 0,
-  onSeekTo: null,
-};
-
-export { timeRangeArrayPropType };
 
 export default Progress;

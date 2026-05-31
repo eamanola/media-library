@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 
 import './styles.css';
@@ -33,20 +32,6 @@ const SubFolder = ({
       </Link>
     </div>
   );
-};
-
-SubFolder.propTypes = {
-  // onClick: PropTypes.func.isRequired,
-  // onFocus: PropTypes.func.isRequired,
-  path: PropTypes.string.isRequired,
-  selected: PropTypes.bool.isRequired,
-  selectedId: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  unPlayed: PropTypes.number,
-};
-
-SubFolder.defaultProps = {
-  unPlayed: 0,
 };
 
 export default SubFolder;

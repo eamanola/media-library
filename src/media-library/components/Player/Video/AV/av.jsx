@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 
 import './av.css';
 
@@ -115,27 +114,6 @@ const AV = ({
       }
     </>
   );
-};
-
-AV.propTypes = {
-  audioSrc: PropTypes.string,
-  controls: PropTypes.bool,
-  onAudioError: PropTypes.func,
-  onEnded: PropTypes.func,
-  onReady: PropTypes.func,
-  onTimeUpdate: PropTypes.func,
-  onVideoError: PropTypes.func,
-  videoSrc: PropTypes.string.isRequired,
-};
-
-AV.defaultProps = {
-  audioSrc: null,
-  controls: false,
-  onAudioError: null,
-  onEnded: null,
-  onReady: null,
-  onTimeUpdate: null,
-  onVideoError: null,
 };
 
 export default AV;

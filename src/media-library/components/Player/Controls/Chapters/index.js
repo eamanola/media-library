@@ -1,5 +1,3 @@
-import Chapters, { chaptersPropType } from './chapters.jsx';
-
-export { chaptersPropType };
+import Chapters from './chapters.jsx';
 
 export default Chapters;

@@ -71,6 +71,8 @@ export default [
         },
       ],
       'react/jsx-no-literals': ['off'],
+      // deprecated from react 19
+      'react/prop-types': ['off'],
     },
     settings: {
       react: {

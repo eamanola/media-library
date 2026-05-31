@@ -17,9 +17,6 @@ importers:
       media-filename-parser:
         specifier: github:eamanola/media-filename-parser
         version: git+https://git@github.com:eamanola/media-filename-parser.git#55d12dfa1ee9056b102b492afb8461a56c5a6b86
-      prop-types:
-        specifier: ^15.8.1
-        version: 15.8.1
       react:
         specifier: ^19.2.6
         version: 19.2.6

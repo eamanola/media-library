@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 
@@ -100,31 +99,6 @@ const MediaList = ({ list = null, title }) => {
       </div>
     </>
   );
-};
-
-MediaList.propTypes = {
-  list: PropTypes.arrayOf(PropTypes.oneOf([
-    PropTypes.shape({
-      isSubFolder: PropTypes.bool.isRequired,
-      path: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      unPlayed: PropTypes.number.isRequired,
-    }),
-    PropTypes.shape({
-      duration: PropTypes.number,
-      hasProbe: PropTypes.bool,
-      isPlayed: PropTypes.bool,
-      isSubFolder: PropTypes.bool.isRequired,
-      thumbnail: PropTypes.string,
-      title: PropTypes.string.isRequired,
-      video: PropTypes.shape({ id: PropTypes.string.isRequired }).isRequired,
-    }),
-  ])),
-  title: PropTypes.string.isRequired,
-};
-
-MediaList.defaultProps = {
-  list: null,
 };
 
 export default MediaList;
