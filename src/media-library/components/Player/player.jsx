@@ -95,14 +95,14 @@ const Player = () => {
   // };
 
   const findVideo = (aFolder) => {
-    const videos = aFolder.children.filter(({ video: vid }) => !!vid);
-    const found = videos.find(({ video: vid }) => vid.id === videoId);
+    const videos = aFolder.children.filter(({ video }) => !!video);
+    const found = videos.find(({ video }) => video.id === videoId);
     if (found) {
       const index = videos.indexOf(found);
       const nextOne = index >= 0 && index < videos.length ? videos[index + 1] : null;
       return {
+        current: found.video,
         next: nextOne.video,
-        video: found.video,
       };
     }
 
@@ -114,33 +114,33 @@ const Player = () => {
 
     return null;
   };
-  const { video, next } = mediaLibrary.length > 0 ? findVideo(mediaLibrary[0]) : {};
+  const { current, next } = mediaLibrary.length > 0 ? findVideo(mediaLibrary[0]) : {};
 
   const { probe } = useSelector(
-    (({ probes }) => probes.find(({ path }) => path === video.path)),
+    (({ probes }) => probes.find(({ path }) => path === current.path)),
   ) || {};
 
   if (probe) {
-    const { audios, video: vidStream } = probe;
+    const { audios, video } = probe;
     if (audioStream === null && audios.length) {
       const prefAudio = audios.find(({ language }) => language === PREF_LANG);
 
       setAudioStream(prefAudio || audios[0]);
     }
 
-    if (videoStream === null && vidStream) {
-      setVideoStream(vidStream);
+    if (videoStream === null && video) {
+      setVideoStream(video);
     }
   }
 
   useEffect(() => {
-    if (dispatch && video && !probe) {
-      dispatch(getProbes([video]));
+    if (dispatch && current && !probe) {
+      dispatch(getProbes([current]));
     }
   }, [
     dispatch,
     probe,
-    video,
+    current,
   ]);
 
   useEffect(() => {
@@ -187,7 +187,7 @@ const Player = () => {
     logger.log('set hideUI', hideUI);
   }, [hideUI]);
 
-  if (!video || !probe) return null;
+  if (!current || !probe) return null;
 
   const onLanguageChange = ({ target }) => {
     setAudioStream(probe.audios.find(({ index }) => index === Number(target.value)));
@@ -220,10 +220,10 @@ const Player = () => {
     const { duration } = probe;
 
     if (currentTime >= duration * 0.90) {
-      const current = played.find(({ mediaId }) => video.id === mediaId);
+      const playedObj = played.find(({ mediaId }) => current.id === mediaId);
 
-      if (current?.isPlayed !== true) {
-        dispatch(togglePlayed(video));
+      if (playedObj?.isPlayed !== true) {
+        dispatch(togglePlayed(current));
         console.log('played');
       }
 
@@ -238,9 +238,9 @@ const Player = () => {
   // const next = null;
   // mediaLibrary[mediaLibrary.indexOf(video) + 1];
 
-  let titleString = video.title;
-  titleString = `${titleString}${video.season ? ` S${video.season}` : ''}`;
-  titleString = `${titleString}${video.episode ? ` E${video.episode}` : ''}`;
+  let titleString = current.title;
+  titleString = `${titleString}${current.season ? ` S${current.season}` : ''}`;
+  titleString = `${titleString}${current.episode ? ` E${current.episode}` : ''}`;
 
   const showUI = () => {
     if (hideUITimeout) {
@@ -286,7 +286,7 @@ const Player = () => {
             onEnded={onEnded}
             onReady={onReady}
             onTimeUpdate={onTimeUpdate}
-            path={video.path}
+            path={current.path}
             probe={probe}
             subtitleTrack={subtitleStream}
             videoTrack={videoStream}
