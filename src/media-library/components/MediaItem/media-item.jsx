@@ -17,7 +17,7 @@ const printTitle = ({
 
 const MediaItem = ({
   onClick,
-  onFocus,
+  // onFocus,
   onPlay,
   onPlayExp,
   onTogglePlayed,
@@ -25,6 +25,7 @@ const MediaItem = ({
   hasProbe = false,
   duration = 0,
   selected,
+  selectedId,
   thumbnail = null,
   video,
 }) => {
@@ -40,7 +41,7 @@ const MediaItem = ({
   return (
     <div
       className={`media-item ${selected ? 'selected' : ''}`}
-      data-id={video.id}
+      data-selected-id={selectedId}
       onClick={onClick}
       role="presentation"
     >
@@ -72,7 +73,7 @@ const MediaItem = ({
       <button
         className="media-item-play-button"
         onClick={onPlay}
-        onFocus={onFocus}
+        // onFocus={onFocus}
         ref={playRef}
         type="button"
       >
@@ -87,7 +88,7 @@ const MediaItem = ({
           checked={isPlayed === true}
           id={`played-${video.id}`}
           onChange={onTogglePlayed}
-          onFocus={onFocus}
+          // onFocus={onFocus}
           ref={playedRef}
           type="checkbox"
         />
@@ -106,11 +107,12 @@ MediaItem.propTypes = {
   hasProbe: PropTypes.func,
   isPlayed: PropTypes.bool,
   onClick: PropTypes.func.isRequired,
-  onFocus: PropTypes.func.isRequired,
+  // onFocus: PropTypes.func.isRequired,
   onPlay: PropTypes.func.isRequired,
   onPlayExp: PropTypes.func.isRequired,
   onTogglePlayed: PropTypes.func.isRequired,
   selected: PropTypes.bool.isRequired,
+  selectedId: PropTypes.string.isRequired,
   thumbnail: PropTypes.string,
   video: PropTypes.shape({
     episode: PropTypes.number,

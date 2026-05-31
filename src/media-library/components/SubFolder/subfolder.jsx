@@ -5,10 +5,11 @@ import { Link } from 'react-router';
 import './styles.css';
 
 const SubFolder = ({
-  onClick,
-  onFocus,
+  // onClick,
+  // onFocus,
   path,
   selected,
+  selectedId,
   title,
   unPlayed = 0,
 }) => {
@@ -21,11 +22,10 @@ const SubFolder = ({
   }, [selected]);
 
   return (
-    <div className="sub-folder">
+    <div className="sub-folder" data-selected-id={selectedId}>
       <Link
-        data-id={title}
-        onClick={onClick}
-        onFocus={onFocus}
+        // onClick={onClick}
+        // onFocus={onFocus}
         ref={linkRef}
         to={path}
       >
@@ -36,10 +36,11 @@ const SubFolder = ({
 };
 
 SubFolder.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  onFocus: PropTypes.func.isRequired,
+  // onClick: PropTypes.func.isRequired,
+  // onFocus: PropTypes.func.isRequired,
   path: PropTypes.string.isRequired,
   selected: PropTypes.bool.isRequired,
+  selectedId: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   unPlayed: PropTypes.number,
 };

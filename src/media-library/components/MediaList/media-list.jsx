@@ -23,7 +23,8 @@ const MediaList = ({ list = null, title }) => {
 
   useEffect(() => {
     if (selected) {
-      document.querySelector(`[data-id="${selected}"]`).scrollIntoView(
+      const current = document.querySelector(`[data-selected-id="${selected}"]`);
+      current.scrollIntoView(
         { behavior: 'smooth', block: 'center', inline: 'nearest' },
       );
     }
@@ -49,51 +50,55 @@ const MediaList = ({ list = null, title }) => {
       e.preventDefault();
       e.stopPropagation();
 
-      setSelected(next.getAttribute('data-id'));
+      setSelected(next.getAttribute('data-selected-id'));
     }
   };
   return (
-    <div
-      className="media-list"
-      onKeyDown={onKeyDown}
-      role="presentation"
-    >
+    <>
       <h4>
         {title}
       </h4>
 
-      {
-        list.map((item) => (item.isSubFolder
-          ? (
-            <SubFolder
-              key={item.title}
-              // onClick={() => setSelected(item.title)}
-              // onFocus={() => setSelected(item.title)}
-              path={item.path}
-              selected={selected === item.title}
-              title={item.title}
-              unPlayed={item.unPlayed}
-            />
-          )
-          : (
-            <MediaItem
-              duration={item.duration}
-              hasProbe={item.hasProbe}
-              isPlayed={item.isPlayed}
-              key={item.title}
-              // onClick={() => setSelected(item.video.id)}
-              // onFocus={() => setSelected(item.video.id)}
-              onPlay={onPlay(item.video)}
-              onPlayExp={onPlayExp(item.video)}
-              onTogglePlayed={onTogglePlayed(item.video)}
-              selected={selected === item.video.id}
-              thumbnail={item.thumbnail}
-              video={item.video}
-            />
-          )
-        ))
-      }
-    </div>
+      <div
+        className="media-list"
+        onKeyDown={onKeyDown}
+        role="presentation"
+      >
+        {
+          list.map((item) => (item.isSubFolder
+            ? (
+              <SubFolder
+                key={item.title}
+                // onClick={() => setSelected(item.title)}
+                // onFocus={() => setSelected(item.title)}
+                path={item.path}
+                selected={selected === item.title}
+                selectedId={item.title}
+                title={item.title}
+                unPlayed={item.unPlayed}
+              />
+            )
+            : (
+              <MediaItem
+                duration={item.duration}
+                hasProbe={item.hasProbe}
+                isPlayed={item.isPlayed}
+                key={item.video.id}
+                onClick={() => setSelected(item.video.id)}
+                // onFocus={() => setSelected(item.video.id)}
+                onPlay={onPlay(item.video)}
+                onPlayExp={onPlayExp(item.video)}
+                onTogglePlayed={onTogglePlayed(item.video)}
+                selected={selected === item.video.id}
+                selectedId={item.video.id}
+                thumbnail={item.thumbnail}
+                video={item.video}
+              />
+            )
+          ))
+        }
+      </div>
+    </>
   );
 };
 

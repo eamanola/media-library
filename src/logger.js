@@ -1,4 +1,4 @@
-const ENABLE_LOGGING = true;
+const ENABLE_LOGGING = false;
 
 const log = ENABLE_LOGGING ? console.log.bind(console) : () => null;
 

@@ -6,9 +6,12 @@ const getWidth = (element) => {
   return element.offsetWidth + marginLeft + marginRight;
 };
 
-const jump = (element) => Math.floor(element.parentNode.clientWidth / getWidth(element));
+const isDisplayBlock = (element) => {
+  const style = getComputedStyle(element);
+  return style.getPropertyValue('display') === 'block';
+};
 
-const isFolder = (element) => element.classList.contains('media-folder');
+const isFolder = (element) => element.classList.contains('sub-folder');
 
 const isMediaItem = (element) => element.classList.contains('media-item');
 
@@ -26,79 +29,88 @@ const getListItem = (target) => {
   return listItem;
 };
 
-const handleLeft = (listItem) => (
-  listItem.previousSibling
+const handleLeft = (listItem) => {
+  const next = (listItem.previousSibling
+    // End of line
     || listItem.parentNode.childNodes[listItem.parentNode.childNodes.length - 1]
-);
+  );
 
-const handleRight = (listItem) => (
-  listItem.nextSibling || listItem.parentNode.childNodes[0]
-);
+  return next;
+};
 
-// TODO: up, from folder to media-item row,
-// it should go first in row, not last
-// jump should be based on inbetweens not current
+const handleRight = (listItem) => {
+  const next = listItem.nextSibling
+    // End of line
+    || listItem.parentNode.childNodes[0];
 
-// TODO: up & down, media-item row. to go to target, not 1st or last
-// inbeweens could include items from other end of list, if not full
-
-// NOTE: wait for real life applications
-
-// const testing = (listItem) => {
-//   let current = listItem;
-//   let width = 0;
-//   const maxWidth = listItem.parentNode.clientWidth;
-
-//   while (current.previousSibling) {
-//     const previous = current.previousSibling;
-
-//     const previousWidth = getWidth(previous);
-//     if (width + previousWidth > maxWidth) {
-//       return current;
-//     }
-//     console.log(previous, previousWidth, width, maxWidth);
-
-//     current = previous;
-//     width += previousWidth;
-//   }
-
-//   console.log(111);
-//   return current;
-// };
+  return next;
+};
 
 const handleUp = (listItem) => {
-  const siblings = [...listItem.parentNode.childNodes];
-  const index = siblings.indexOf(listItem);
-  const maxSteps = jump(listItem);
-  const steps = siblings.slice(Math.max(index - maxSteps, 0), index).reverse();
+  const container = listItem.parentNode;
+  const containerWidth = listItem.parentNode.clientWidth;
+  const elementIndex = [...container.childNodes].indexOf(listItem);
 
-  const folder = steps.find((item) => isFolder(item));
-  if (folder) {
-    return folder;
+  if (isDisplayBlock(listItem)) {
+    return listItem.previousSibling
+      // End of line
+      || listItem.parentNode.childNodes[0];
   }
 
-  return steps[steps.length - 1] || siblings[siblings.length - 1];
+  let traversed = 0;
+
+  for (let i = elementIndex; i >= 0; i -= 1) {
+    const current = container.childNodes[i];
+    const width = getWidth(current);
+    traversed += width;
+
+    // traverse one container width worth
+    if (traversed >= containerWidth) {
+      return current;
+    }
+  }
+
+  // End of line
+  return container.childNodes[0];
 };
 
 const handleDown = (listItem) => {
-  const siblings = [...listItem.parentNode.childNodes];
-  const index = siblings.indexOf(listItem);
-  const maxSteps = jump(listItem);
-  const steps = siblings.slice(index + 1, Math.min(index + maxSteps + 1, siblings.length));
+  const container = listItem.parentNode;
+  const containerWidth = listItem.parentNode.clientWidth;
+  const elementIndex = [...container.childNodes].indexOf(listItem);
 
-  const folder = steps.find((item) => isFolder(item));
-  if (folder) {
-    return folder;
+  if (isDisplayBlock(listItem)) {
+    return listItem.nextSibling
+      // End of line
+      || listItem.parentNode.childNodes[listItem.parentNode.childNodes.length - 1];
   }
 
-  return steps[steps.length - 1] || siblings[0];
+  let traversed = 0;
+
+  for (let i = elementIndex; i < container.childNodes.length; i += 1) {
+    const current = container.childNodes[i];
+    const width = current.offsetWidth;
+    traversed += width;
+
+    // traverse one container width worth
+    if (traversed >= containerWidth) {
+      return current;
+    }
+  }
+
+  // End of line
+  return container.childNodes[container.childNodes.length - 1];
 };
 
-// media-list contains only media-items and media-folders
-// event target is a child of media-list
-// media-folder display is block
-// media-item display is inline-block
-// media-items are equal in width
+// End of line handling
+// - null for no action
+// - element for default eg. 1st or last
+// - throw out of bound, and let client take focus elsewhere, eg another container
+
+// conditions:
+// media-list (or the container) contains only, and only media-items and sub-folders
+// event target is inside the container, child or child of
+// focus must be within container
 const nextSelected = (e) => {
   const { key, target } = e;
 
