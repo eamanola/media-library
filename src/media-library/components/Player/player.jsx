@@ -81,19 +81,40 @@ const Player = () => {
   const [showNext, setShowNext] = useState(false);
   const [hideUI, setHideUI] = useState(false);
 
+  // const getNext = (aFolder, current) => {
+  //   const index = aFolder.children.indexOf(current);
+  //   for(let i = index + 1; i < aFolder.children.length; i +=1) {
+  //     if (!(played
+  //  .find(({ mediaId }) => mediaId === aFolder.children[i]?.video.id))?.isPlayed === true) {
+  //       console.log('nexy', next)
+  //       return aFolder.children[i].video;
+  //     }
+  //   }
+
+  //   return null;
+  // };
+
   const findVideo = (aFolder) => {
-    let found = aFolder.children.find(({ video: vid }) => !!vid && vid.id === videoId);
-    if (found) return found;
+    const videos = aFolder.children.filter(({ video: vid }) => !!vid);
+    const found = videos.find(({ video: vid }) => vid.id === videoId);
+    if (found) {
+      const index = videos.indexOf(found);
+      const nextOne = index >= 0 && index < videos.length ? videos[index + 1] : null;
+      return {
+        next: nextOne.video,
+        video: found.video,
+      };
+    }
 
     const subFolders = aFolder.children.filter(({ children }) => Array.isArray(children));
     for (let i = 0; i < subFolders.length; i += 1) {
-      found = findVideo(subFolders[i]);
-      if (found) return found;
+      const respone = findVideo(subFolders[i]);
+      if (respone !== null) return respone;
     }
 
     return null;
   };
-  const { video } = mediaLibrary.length > 0 ? findVideo(mediaLibrary[0]) : {};
+  const { video, next } = mediaLibrary.length > 0 ? findVideo(mediaLibrary[0]) : {};
 
   const { probe } = useSelector(
     (({ probes }) => probes.find(({ path }) => path === video.path)),
@@ -206,7 +227,7 @@ const Player = () => {
         console.log('played');
       }
 
-      setShowNext(true);
+      setShowNext(!!next);
     } else {
       setShowNext(false);
     }
@@ -214,7 +235,7 @@ const Player = () => {
 
   const previous = null;
   // mediaLibrary[mediaLibrary.indexOf(video) - 1];
-  const next = null;
+  // const next = null;
   // mediaLibrary[mediaLibrary.indexOf(video) + 1];
 
   let titleString = video.title;
