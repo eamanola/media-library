@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions } from '../../reducers';
-import Folder from '../Folder';
+import SubFolder from '../SubFolder';
 import MediaItem from '../MediaItem';
 import { nextSelected } from './keyboard';
 import './styles.css';
@@ -119,7 +119,7 @@ const MediaList = ({ folder = null }) => {
 
           return isSubFolder
             ? (
-              <Folder
+              <SubFolder
                 folder={item}
                 key={title}
                 onClick={() => setSelected(title)}

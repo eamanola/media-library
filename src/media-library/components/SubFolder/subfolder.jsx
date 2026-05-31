@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 
 import './styles.css';
 
-const Folder = ({
+const SubFolder = ({
   onClick,
   onFocus,
   path,
@@ -21,7 +21,7 @@ const Folder = ({
   }, [selected]);
 
   return (
-    <div className="media-folder">
+    <div className="sub-folder">
       <Link
         data-id={title}
         onClick={onClick}
@@ -35,7 +35,7 @@ const Folder = ({
   );
 };
 
-Folder.propTypes = {
+SubFolder.propTypes = {
   onClick: PropTypes.func.isRequired,
   onFocus: PropTypes.func.isRequired,
   path: PropTypes.string.isRequired,
@@ -44,8 +44,8 @@ Folder.propTypes = {
   unPlayed: PropTypes.number,
 };
 
-Folder.defaultProps = {
+SubFolder.defaultProps = {
   unPlayed: 0,
 };
 
-export default Folder;
+export default SubFolder;
