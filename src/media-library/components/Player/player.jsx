@@ -101,8 +101,8 @@ const Player = () => {
       const index = videos.indexOf(found);
       const nextOne = index >= 0 && index < videos.length ? videos[index + 1] : null;
       return {
-        current: found.video,
-        next: nextOne.video,
+        current: found,
+        next: nextOne,
       };
     }
 
@@ -117,7 +117,7 @@ const Player = () => {
   const { current, next } = mediaLibrary.length > 0 ? findVideo(mediaLibrary[0]) : {};
 
   const { probe } = useSelector(
-    (({ probes }) => probes.find(({ path }) => path === current.path)),
+    (({ probes }) => probes.find(({ path }) => path === current?.video.path)),
   ) || {};
 
   if (probe) {
@@ -135,7 +135,7 @@ const Player = () => {
 
   useEffect(() => {
     if (dispatch && current && !probe) {
-      dispatch(getProbes([current]));
+      dispatch(getProbes([current.video]));
     }
   }, [
     dispatch,
@@ -220,10 +220,10 @@ const Player = () => {
     const { duration } = probe;
 
     if (currentTime >= duration * 0.90) {
-      const playedObj = played.find(({ mediaId }) => current.id === mediaId);
+      const playedObj = played.find(({ mediaId }) => current.video.id === mediaId);
 
       if (playedObj?.isPlayed !== true) {
-        dispatch(togglePlayed(current));
+        dispatch(togglePlayed(current.video));
         console.log('played');
       }
 
@@ -239,8 +239,8 @@ const Player = () => {
   // mediaLibrary[mediaLibrary.indexOf(video) + 1];
 
   let titleString = current.title;
-  titleString = `${titleString}${current.season ? ` S${current.season}` : ''}`;
-  titleString = `${titleString}${current.episode ? ` E${current.episode}` : ''}`;
+  titleString = `${titleString}${current.video.season ? ` S${current.video.season}` : ''}`;
+  titleString = `${titleString}${current.video.episode ? ` E${current.video.episode}` : ''}`;
 
   const showUI = () => {
     if (hideUITimeout) {
@@ -286,7 +286,7 @@ const Player = () => {
             onEnded={onEnded}
             onReady={onReady}
             onTimeUpdate={onTimeUpdate}
-            path={current.path}
+            path={current.video.path}
             probe={probe}
             subtitleTrack={subtitleStream}
             videoTrack={videoStream}
@@ -304,7 +304,7 @@ const Player = () => {
                 top: '50%',
               }}
             >
-              <Link reloadDocument to={`/player/${next.id}`}>
+              <Link reloadDocument to={`/player/${next.video.id}`}>
                 next
               </Link>
             </span>
@@ -364,7 +364,7 @@ const Player = () => {
         )}
 
         {!!next && (
-          <Link reloadDocument to={`/player/${next.id}`}>
+          <Link reloadDocument to={`/player/${next.video.id}`}>
             next
           </Link>
         )}
