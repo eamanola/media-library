@@ -17,7 +17,6 @@ const FrontPage = () => {
           const nexts = [];
 
           const videos = aFolder.children.filter(({ video }) => typeof video === 'object');
-          // .map(({ video }) => video);
 
           // has started
           const firstWatch = videos.find(({ video }) => alreadyPlayed.find(
@@ -42,8 +41,7 @@ const FrontPage = () => {
         };
 
         const nexts = playNext(mediaLibrary[0], played);
-        console.log('to play', ...nexts.map(({ title }) => title));
-        logger.log('Browser: set play next', nexts);
+        logger.log('FileBrowser: set play next', nexts);
         setNextsList(nexts);
       };
 

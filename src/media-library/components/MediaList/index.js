@@ -1,3 +1,3 @@
-import MediaList from './media-list.jsx';
+import MediaList from './media-list';
 
 export default MediaList;

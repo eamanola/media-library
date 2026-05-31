@@ -22,7 +22,8 @@ const MediaItem = ({
   onPlayExp,
   onTogglePlayed,
   isPlayed = false,
-  probe = null,
+  hasProbe = false,
+  duration = 0,
   selected,
   thumbnail = null,
   video,
@@ -45,7 +46,7 @@ const MediaItem = ({
     >
       <div
         className="media-item-image-container"
-        onClick={probe ? onPlayExp : onPlay}
+        onClick={hasProbe ? onPlayExp : onPlay}
         role="presentation"
       >
         {
@@ -65,7 +66,7 @@ const MediaItem = ({
       </div>
 
       <div className="media-item-duration">
-        {probe?.duration ? secondsToTimeStr(probe.duration) : '-'}
+        {duration ? secondsToTimeStr(duration) : '-'}
       </div>
 
       <button
@@ -101,15 +102,14 @@ const MediaItem = ({
 };
 
 MediaItem.propTypes = {
+  duration: PropTypes.number,
+  hasProbe: PropTypes.func,
   isPlayed: PropTypes.bool,
   onClick: PropTypes.func.isRequired,
   onFocus: PropTypes.func.isRequired,
   onPlay: PropTypes.func.isRequired,
   onPlayExp: PropTypes.func.isRequired,
   onTogglePlayed: PropTypes.func.isRequired,
-  probe: PropTypes.shape({
-    duration: PropTypes.number.isRequired,
-  }),
   selected: PropTypes.bool.isRequired,
   thumbnail: PropTypes.string,
   video: PropTypes.shape({
@@ -122,8 +122,9 @@ MediaItem.propTypes = {
 };
 
 MediaItem.defaultProps = {
+  duration: 0,
+  hasProbe: false,
   isPlayed: false,
-  probe: null,
   thumbnail: null,
 };
 
