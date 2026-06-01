@@ -1,26 +1,38 @@
 .progress {
   position: relative;
+  --border-radius: 0.5em;
 }
 
 .progress>* {
   position: absolute;
-  border-radius: 0.5em;
+  border-radius: var(--border-radius);
   top: 0.35em;
   bottom: 0.35em;
 }
 
-.progress>.available {
+.progress>.available,
+.progress>.buffered,
+.progress>.played {
   border: var(--border);
-  width: 100%;
 }
 
+.progress>.buffered,
 .progress>.played {
-  background-color: var(--accent-color);
-  width: 0%;
-  min-width: 1em;
+  border-color: transparent;
+}
+
+.progress>.available {
+  background-color: transparent;
+  width: 100%;
 }
 
 .progress>.buffered {
   background-color: var(--default-color);
   width: 0%;
+}
+
+.progress>.played {
+  background-color: var(--accent-color);
+  width: 0%;
+  min-width: calc(var(--border-radius));
 }
