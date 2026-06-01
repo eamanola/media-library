@@ -18,6 +18,7 @@ const SUBS_REMOV = null;
 
 const CUSTOM_CONTROLS = true;
 let hideUITimeout = 0;
+const HIDE_UI_TIMEOUT = 5000;
 
 const toggleFullscreen = () => {
   const wrapper = document.querySelector('.player');
@@ -251,7 +252,7 @@ const Player = () => {
     hideUITimeout = setTimeout(() => {
       setHideUI(true);
       hideUITimeout = 0;
-    }, 4000);
+    }, HIDE_UI_TIMEOUT);
 
     if (hideUI) {
       setHideUI(false);
