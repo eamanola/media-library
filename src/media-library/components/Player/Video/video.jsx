@@ -103,7 +103,7 @@ const Video = ({
   const onAudioError = (err) => {
     if (transcodeAudio === false) {
       setTranscodeAudio(true);
-      console.log('transcoding audio');
+      console.log('transcoding audio', 'was:', audioTrack);
     } else {
       console.error('audio', err);
     }
@@ -112,7 +112,7 @@ const Video = ({
   const onVideoError = (err) => {
     if (transcodeVideo === false) {
       setTranscodeVideo(true);
-      console.log('transcoding video');
+      console.log('transcoding video', 'was:', videoTrack);
     } else {
       console.error('video', err);
     }
