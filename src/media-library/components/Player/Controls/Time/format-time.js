@@ -40,7 +40,7 @@ const formatTime = (currentTime, availableDuration, duration) => {
       timeStr = `${timeStr} / ${secsToTime(availableDuration)}`;
     }
 
-    if (stillLoading(availableDuration < duration)) {
+    if (stillLoading(availableDuration, duration)) {
       const available = Math.round((availableDuration / duration) * 100);
 
       if (lessThanRoundingError(available)) {
