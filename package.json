@@ -1,6 +1,6 @@
 {
   "name": "fullstack-demo-react",
-  "version": "0.1.95",
+  "version": "0.1.96",
   "private": true,
   "main": "src/index.jsx",
   "type": "module",
@@ -16,11 +16,12 @@
     "redux-thunk": "^3.1.0"
   },
   "scripts": {
+    "copy-libass-wasm": "cp -R node_modules/libass-wasm/dist public/libass-wasm",
     "start": "vite",
-    "build": "vite build && cp -R node_modules/libass-wasm/dist dist/libass-wasm",
+    "build": "pnpm run copy-libass-wasm && vite build",
     "serve": "vite preview",
-    "lint": "eslint .",
-    "postinstall": "cp -R node_modules/libass-wasm/dist public/libass-wasm",
+    "lint": "eslint",
+    "postinstall": "pnpm run copy-libass-wasm",
     "prepare": "husky"
   },
   "devDependencies": {
