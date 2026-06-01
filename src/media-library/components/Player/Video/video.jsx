@@ -103,15 +103,19 @@ const Video = ({
   const onAudioError = (err) => {
     if (transcodeAudio === false) {
       setTranscodeAudio(true);
+      console.log('transcoding audio');
+    } else {
+      console.error('audio', err);
     }
-    console.warn('audio', err);
   };
 
   const onVideoError = (err) => {
     if (transcodeVideo === false) {
       setTranscodeVideo(true);
+      console.log('transcoding video');
+    } else {
+      console.error('video', err);
     }
-    console.warn('video', err);
   };
 
   const onVideoEnded = (e) => {
