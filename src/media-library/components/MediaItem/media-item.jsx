@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
 import secondsToTimeStr from './seconds-to-timestr';
+import ImageButton from '../ImageButton';
 
 import './styles.css';
 
@@ -44,8 +45,17 @@ const MediaItem = ({
       onClick={onClick}
       role="presentation"
     >
-      <div
-        className="media-item-image-container"
+
+      <ImageButton
+        alt={video.id}
+        classNames="media-item-image-button"
+        onClick={hasProbe ? onPlayExp : onPlay}
+        role="presentation"
+        src={thumbnail}
+      />
+
+      {/* <div
+        className="media-item-image-button"
         onClick={hasProbe ? onPlayExp : onPlay}
         role="presentation"
       >
@@ -59,7 +69,7 @@ const MediaItem = ({
             )
         }
 
-      </div>
+      </div> */}
 
       <div className="media-item-title">
         {printTitle(video)}
