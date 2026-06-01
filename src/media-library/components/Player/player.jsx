@@ -114,6 +114,8 @@ const Player = () => {
 
     return null;
   };
+
+  const previous = null;
   const { current, next } = mediaLibrary.length > 0 ? findVideo(mediaLibrary[0]) : {};
 
   const { probe } = useSelector(
@@ -233,12 +235,11 @@ const Player = () => {
     }
   };
 
-  const previous = null;
   // mediaLibrary[mediaLibrary.indexOf(video) - 1];
   // const next = null;
   // mediaLibrary[mediaLibrary.indexOf(video) + 1];
 
-  let titleString = current.title;
+  let titleString = current.video.title;
   titleString = `${titleString}${current.video.season ? ` S${current.video.season}` : ''}`;
   titleString = `${titleString}${current.video.episode ? ` E${current.video.episode}` : ''}`;
 
