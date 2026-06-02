@@ -24,11 +24,11 @@ const reducer = (state, action) => {
   return newState;
 };
 
-const togglePlayed = ({ id: mediaId }) => async (dispatch, getState) => {
-  const current = getState().played.find(({ mediaId: aMediaId }) => aMediaId === mediaId);
+const togglePlayed = ({ displayId }) => async (dispatch, getState) => {
+  const current = getState().played.find(({ mediaId }) => mediaId === displayId);
   const { played } = await (current
     ? updatePlayed({ ...current, isPlayed: !current.isPlayed })
-    : createPlayed(mediaId, true)
+    : createPlayed(displayId, true)
   );
 
   dispatch({ payload: played, type: 'SET_PLAYED' });

@@ -42,8 +42,8 @@ const actionCreateThumbnails = (videos) => async (dispatch, getState) => {
   await createThumbnails(videos.map(({ realId }) => realId));
 
   await dispatch({
-    payload: videos.map(({ id, realId }) => ({
-      id,
+    payload: videos.map(({ realId }) => ({
+      id: realId,
       thumbnail: `${BACKEND_URL}/thumbnails/${realId}.jpg`,
     })),
     type: 'SET_THUMBNAILS',
@@ -52,7 +52,7 @@ const actionCreateThumbnails = (videos) => async (dispatch, getState) => {
 
   if (queue.length) {
     const { thumbnails: state } = getState();
-    const notInState = queue.filter(({ id: videoId }) => !state.some(({ id }) => id === videoId));
+    const notInState = queue.filter(({ realId }) => !state.some(({ id }) => id === realId));
     if (notInState.length) {
       dispatch(actionCreateThumbnails(notInState));
     }

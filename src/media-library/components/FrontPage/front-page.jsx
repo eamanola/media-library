@@ -20,12 +20,12 @@ const FrontPage = () => {
 
           // has started
           const firstWatch = videos.find(({ video }) => alreadyPlayed.find(
-            ({ mediaId, isPlayed }) => mediaId === video.id && isPlayed === true,
+            ({ mediaId, isPlayed }) => mediaId === video.displayId && isPlayed === true,
           ));
 
           // not finished
           const firstUnwatched = videos.find(({ video }) => !alreadyPlayed.find(
-            ({ mediaId, isPlayed }) => mediaId === video.id && isPlayed === true,
+            ({ mediaId, isPlayed }) => mediaId === video.displayId && isPlayed === true,
           ));
 
           if (firstWatch && firstUnwatched) {

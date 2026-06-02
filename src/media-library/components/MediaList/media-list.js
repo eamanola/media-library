@@ -50,7 +50,7 @@ const AMediaList = ({ folder = null }) => {
       const setupThumnails = async () => {
         const videosWithoutThumbnail = folder.children
           .filter(({ video }) => !!video)
-          .filter(({ video }) => !thumbnails.some(({ id }) => id === video.id));
+          .filter(({ video }) => !thumbnails.some(({ id }) => id === video.realId));
 
         if (videosWithoutThumbnail.length) {
           logger.log('MediaList:', folder.title, 'set thumbnails', videosWithoutThumbnail.length);
@@ -86,9 +86,10 @@ const AMediaList = ({ folder = null }) => {
     return {
       duration: probe?.duration || 0,
       hasProbe: !!probe,
-      isPlayed: played.find(({ mediaId }) => video.id === mediaId)?.isPlayed === true,
+      isPlayed: played.find(({ mediaId }) => video.displayId === mediaId)?.isPlayed === true,
       isSubFolder,
-      thumbnail: thumbnails.find(({ id: thumbnailId }) => thumbnailId === video.id)?.thumbnail,
+      thumbnail: thumbnails
+        .find(({ id: thumbnailId }) => thumbnailId === video.realId)?.thumbnail,
       title,
       video,
     };

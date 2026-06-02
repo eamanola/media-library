@@ -3,25 +3,30 @@ const getEpisodeStr = (episode, extra, version) => (
 );
 
 const addIds = (video) => {
-  const id = [];
+  const displayId = [];
 
   const {
-    episode, extra, filename, id: realId, season, title, version, year,
+    episode, extra, filename, season, title, version, year,
   } = video;
 
-  if (title) { id.push(title.replace(/\s/ug, '_')); }
-  if (year) { id.push(`(${year})`); }
-  if (season) { id.push(`S${season}`); }
-  if (typeof episode === 'number') { id.push(getEpisodeStr(episode, extra, version)); }
+  if (title) { displayId.push(title.replace(/\s/ug, '_')); }
+  if (year) { displayId.push(`(${year})`); }
+  if (season) { displayId.push(`S${season}`); }
+  if (typeof episode === 'number') { displayId.push(getEpisodeStr(episode, extra, version)); }
 
   if (!season && !episode) {
     // not a recognizeed show
     // case folder, but not a season
     // takes in movies (not show, and not folder), but it is what it is
-    id.push(filename.replace(/[\s/]/ug, '_'));
+    displayId.push(filename.replace(/[\s/]/ug, '_'));
   }
 
-  const withId = { ...video, id: id.join('_'), realId };
+  const { id, ...rest } = video;
+  const withId = {
+    ...rest,
+    displayId: displayId.join('_'),
+    realId: id,
+  };
 
   // console.log(withId);
 

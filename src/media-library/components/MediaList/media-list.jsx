@@ -35,8 +35,8 @@ const MediaList = ({ list = null, title }) => {
     dispatch(play(video));
   };
 
-  const onPlayExp = ({ id }) => () => {
-    navigate(`/player/${id}`);
+  const onPlayExp = ({ displayId }) => () => {
+    navigate(`/player/${displayId}`);
   };
 
   const onTogglePlayed = (video) => () => {
@@ -82,14 +82,14 @@ const MediaList = ({ list = null, title }) => {
                 duration={item.duration}
                 hasProbe={item.hasProbe}
                 isPlayed={item.isPlayed}
-                key={item.video.id}
-                onClick={() => setSelected(item.video.id)}
-                // onFocus={() => setSelected(item.video.id)}
+                key={item.video.realId}
+                onClick={() => setSelected(item.video.realId)}
+                // onFocus={() => setSelected(item.video.realId)}
                 onPlay={onPlay(item.video)}
                 onPlayExp={onPlayExp(item.video)}
                 onTogglePlayed={onTogglePlayed(item.video)}
-                selected={selected === item.video.id}
-                selectedId={item.video.id}
+                selected={selected === item.video.realId}
+                selectedId={item.video.realId}
                 thumbnail={item.thumbnail}
                 video={item.video}
               />

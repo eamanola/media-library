@@ -1,4 +1,5 @@
-const isPlayed = ({ id }, played) => played.find(({ mediaId }) => mediaId === id)?.isPlayed;
+const isPlayed = ({ displayId }, played) => played
+  .find(({ mediaId }) => mediaId === displayId)?.isPlayed;
 
 const countUnPlayed = (subFolder, played) => {
   let unPlayed = 0;

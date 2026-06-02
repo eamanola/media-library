@@ -47,29 +47,12 @@ const MediaItem = ({
     >
 
       <ImageButton
-        alt={video.id}
+        alt={video.displayId}
         classNames="media-item-image-button"
         onClick={hasProbe ? onPlayExp : onPlay}
         role="presentation"
         src={thumbnail}
       />
-
-      {/* <div
-        className="media-item-image-button"
-        onClick={hasProbe ? onPlayExp : onPlay}
-        role="presentation"
-      >
-        {
-          thumbnail
-            ? <img alt={video.id} src={thumbnail} />
-            : (
-              <div>
-                {video.id}
-              </div>
-            )
-        }
-
-      </div> */}
 
       <div className="media-item-title">
         {printTitle(video)}
@@ -91,11 +74,11 @@ const MediaItem = ({
 
       <label
         className="media-item-played-label"
-        htmlFor={`played-${video.id}`}
+        htmlFor={`played-${video.displayId}`}
       >
         <input
           checked={isPlayed === true}
-          id={`played-${video.id}`}
+          id={`played-${video.displayId}`}
           onChange={onTogglePlayed}
           // onFocus={onFocus}
           ref={playedRef}

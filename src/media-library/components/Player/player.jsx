@@ -82,22 +82,9 @@ const Player = () => {
   const [showNext, setShowNext] = useState(false);
   const [hideUI, setHideUI] = useState(false);
 
-  // const getNext = (aFolder, current) => {
-  //   const index = aFolder.children.indexOf(current);
-  //   for(let i = index + 1; i < aFolder.children.length; i +=1) {
-  //     if (!(played
-  //  .find(({ mediaId }) => mediaId === aFolder.children[i]?.video.id))?.isPlayed === true) {
-  //       console.log('nexy', next)
-  //       return aFolder.children[i].video;
-  //     }
-  //   }
-
-  //   return null;
-  // };
-
   const findVideo = (aFolder) => {
     const videos = aFolder.children.filter(({ video }) => !!video);
-    const found = videos.find(({ video }) => video.id === videoId);
+    const found = videos.find(({ video }) => video.displayId === videoId);
     if (found) {
       const index = videos.indexOf(found);
       const nextOne = index >= 0 && index < videos.length ? videos[index + 1] : null;
@@ -223,7 +210,7 @@ const Player = () => {
     const { duration } = probe;
 
     if (currentTime >= duration * 0.90) {
-      const playedObj = played.find(({ mediaId }) => current.video.id === mediaId);
+      const playedObj = played.find(({ mediaId }) => current.video.displayId === mediaId);
 
       if (playedObj?.isPlayed !== true) {
         dispatch(togglePlayed(current.video));
@@ -306,7 +293,7 @@ const Player = () => {
                 top: '50%',
               }}
             >
-              <Link reloadDocument to={`/player/${next.video.id}`}>
+              <Link reloadDocument to={`/player/${next.video.displayId}`}>
                 next
               </Link>
             </span>
@@ -360,13 +347,13 @@ const Player = () => {
         )}
 
         {!!previous && (
-          <Link reloadDocument to={`/player/${previous.id}`}>
+          <Link reloadDocument to={`/player/${previous.displayId}`}>
             previous
           </Link>
         )}
 
         {!!next && (
-          <Link reloadDocument to={`/player/${next.video.id}`}>
+          <Link reloadDocument to={`/player/${next.video.displayId}`}>
             next
           </Link>
         )}
