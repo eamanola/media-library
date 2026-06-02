@@ -120,7 +120,7 @@ const Player = () => {
   const { current, next } = mediaLibrary.length > 0 ? findVideo(mediaLibrary[0]) : {};
 
   const { probe } = useSelector(
-    (({ probes }) => probes.find(({ path }) => path === current?.video.path)),
+    (({ probes }) => probes.find(({ id }) => id === current?.video.realId)),
   ) || {};
 
   if (probe) {
@@ -285,10 +285,10 @@ const Player = () => {
           <Video
             audioTrack={audioStream}
             controls={!CUSTOM_CONTROLS}
+            id={current.video.realId}
             onEnded={onEnded}
             onReady={onReady}
             onTimeUpdate={onTimeUpdate}
-            path={current.video.path}
             probe={probe}
             subtitleTrack={subtitleStream}
             videoTrack={videoStream}

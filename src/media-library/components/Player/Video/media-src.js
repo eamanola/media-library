@@ -1,17 +1,17 @@
 import config from '../../../../config';
 
-const mediaSrc = (type, filepath, streamIndex, transcode) => [
+const mediaSrc = (type, id, streamIndex, transcode) => [
   config.BACKEND_URL,
   `/${type}`,
-  `/${encodeURIComponent(filepath)}`,
+  `/${id}`,
   `/${streamIndex}`,
   transcode ? '/transcode' : '',
 ]
   .filter((element) => element !== '')
   .join('');
 
-const fontSrc = (path, filename) => (
-  `${config.BACKEND_URL}/fonts/${encodeURIComponent(path)}/${filename}`
+const fontSrc = (id, filename) => (
+  `${config.BACKEND_URL}/fonts/${id}/${filename}`
 );
 
 export { fontSrc };

@@ -7,7 +7,7 @@ import './libass-wasm-overrides.css';
 import logger from '../../../../logger';
 
 const Video = ({
-  path,
+  id,
   probe,
   videoTrack,
   audioTrack = null,
@@ -29,14 +29,14 @@ const Video = ({
       if (!supported) { console.warn('todo sub', codec); }
 
       const transcode = !supported;
-      const subUrl = mediaSrc('subtitle', path, index, transcode);
+      const subUrl = mediaSrc('subtitle', id, index, transcode);
 
       if (codec === 'ass') {
         logger.log('create', subtitleTrack);
 
         const octopus = new SubtitlesOctopus({
           fallbackFont: '/fonts/default.woff2',
-          fonts: probe.fonts.map(({ filename }) => fontSrc(path, filename)),
+          fonts: probe.fonts.map(({ filename }) => fontSrc(id, filename)),
           lazyFileLoading: true,
           legacyWorkerUrl: '/libass-wasm/js/libassjs-worker-legacy.js',
           // lossyRender: 'js-blend',
@@ -83,7 +83,7 @@ const Video = ({
     return () => null;
   }, [
     subtitleTrack,
-    path,
+    id,
     probe,
   ]);
 
@@ -127,8 +127,8 @@ const Video = ({
     }
   };
 
-  const videoSrc = () => mediaSrc('video', path, videoTrack.index, transcodeVideo);
-  const audioSrc = () => mediaSrc('audio', path, audioTrack.index, transcodeAudio);
+  const videoSrc = () => mediaSrc('video', id, videoTrack.index, transcodeVideo);
+  const audioSrc = () => mediaSrc('audio', id, audioTrack.index, transcodeAudio);
 
   return (
     <Av
