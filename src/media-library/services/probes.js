@@ -3,12 +3,12 @@ import appConfig from '../../config';
 
 const { BACKEND_URL } = appConfig;
 
-const probes = async (paths) => {
+const probes = async (ids) => {
   try {
     const response = await fetch(
       `${BACKEND_URL}/probes`,
       {
-        body: JSON.stringify(paths),
+        body: JSON.stringify(ids),
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',

@@ -9,7 +9,7 @@ const reducer = (state, action) => {
     case 'SET_PROBES':
       newState = [
         ...state.filter(
-          ({ path }) => !payload.some(({ path: payloadPath }) => payloadPath === path),
+          ({ id }) => !payload.some(({ id: payloadId }) => payloadId === id),
         ),
         ...payload,
       ];
@@ -29,7 +29,7 @@ const getProbes = (videos) => async (dispatch, getState) => {
 
   if (lock) {
     const notInQueue = videos.filter(
-      ({ path: videoPath }) => !queue.some(({ path }) => path === videoPath),
+      ({ realId: toAddId }) => !queue.some(({ realId }) => realId === toAddId),
     );
     if (notInQueue.length) {
       queue.push(...notInQueue);
@@ -40,7 +40,7 @@ const getProbes = (videos) => async (dispatch, getState) => {
 
   lock = true;
   logger.log('getProbes: fetching', videos);
-  const probes = await fetchProbes(videos.map(({ path }) => path));
+  const probes = await fetchProbes(videos.map(({ realId }) => realId));
   logger.log('getProbes: fetched', videos);
 
   dispatch({
@@ -52,7 +52,7 @@ const getProbes = (videos) => async (dispatch, getState) => {
   if (queue.length) {
     const { probes: state } = getState();
     const notInState = queue.filter(
-      ({ path: videoPath }) => !state.some(({ path }) => path === videoPath),
+      ({ realId }) => !state.some(({ id }) => id === realId),
     );
     logger.log('getProbes: dequeue', notInState.length);
     if (notInState.length) {
