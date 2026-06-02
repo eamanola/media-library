@@ -1,6 +1,6 @@
 import { play as startPlay } from '../../services/playback';
 
-const play = ({ id, path }) => (/* dispatch */) => startPlay({ id, path });
+const play = ({ id, realId }) => (/* dispatch */) => startPlay({ id, realId });
 
 export { play };
 

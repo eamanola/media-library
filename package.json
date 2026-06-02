@@ -1,6 +1,6 @@
 {
   "name": "fullstack-demo-react",
-  "version": "0.1.111",
+  "version": "0.1.112",
   "private": true,
   "main": "src/index.jsx",
   "type": "module",
