@@ -63,6 +63,8 @@ const Controls = ({
   const videoEl = document.querySelector('video');
   if (!videoEl) return null;
 
+  const audioEl = document.querySelector('audio');
+
   const className = ['controls'];
   if (hide) className.push('hide');
 
@@ -82,6 +84,7 @@ const Controls = ({
         />
 
         <Progress
+          abuffered={audioEl?.buffered}
           buffered={videoEl.buffered}
           currentTime={currentTime}
           duration={probe?.duration}

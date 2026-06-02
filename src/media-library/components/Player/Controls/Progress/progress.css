@@ -26,9 +26,16 @@
   width: 100%;
 }
 
-.progress>.buffered {
+.progress>.buffered,
+.progress>.abuffered {
   background-color: var(--default-color);
   width: 0%;
+}
+
+.progress>.abuffered {
+  background-color: var(--accent-color);
+  width: 0%;
+  opacity: 0.25;
 }
 
 .progress>.played {

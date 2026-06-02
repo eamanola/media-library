@@ -4,25 +4,35 @@ import './progress.css';
 
 const secToWidth = (sec, max) => `${Math.round((sec / max) * 100)}%`;
 
+const getBuffers = (timeRangeArr, duration) => {
+  const buffers = [];
+
+  for (let i = 0; i < timeRangeArr.length; i += 1) {
+    const start = timeRangeArr.start(i);
+    const end = timeRangeArr.end(i);
+    const left = secToWidth(start, duration);
+    const width = secToWidth(end - start, duration);
+
+    if (width !== '0%') {
+      buffers.push({ left, width });
+    }
+  }
+
+  return buffers;
+};
+
 const Progress = ({
+  abuffered = null,
   buffered = null,
   currentTime = 0,
   duration = 0,
   onSeekTo = null,
 }) => {
-  const buffers = [];
-  if (buffered?.length > 0) {
-    for (let i = 0; i < buffered.length; i += 1) {
-      const start = buffered.start(i);
-      const end = buffered.end(i);
-      const left = secToWidth(start, duration);
-      const width = secToWidth(end - start, duration);
+  const buffers = buffered?.length > 0 ? getBuffers(buffered, duration) : [];
+  const abuffers = abuffered?.length > 0 ? getBuffers(abuffered, duration) : [];
+  if (abuffers.some(({ width }) => width === '100%')) { abuffers.length = 0; }
 
-      if (width !== '0%') {
-        buffers.push({ left, width });
-      }
-    }
-  }
+  console.log(abuffers, buffers);
 
   const onClick = (e) => {
     const { nativeEvent } = e;
@@ -42,6 +52,12 @@ const Progress = ({
       {
         buffers.map(({ left, width }) => (
           <div className="buffered" key={`key-${left}-${width}`} style={{ left, width }} />
+        ))
+      }
+
+      {
+        abuffers.map(({ left, width }) => (
+          <div className="abuffered" key={`key-${left}-${width}`} style={{ left, width }} />
         ))
       }
 
