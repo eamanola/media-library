@@ -60,7 +60,7 @@ const seasonTree = (groupedBySeason) => groupedBySeason
     }
 
     // console.warn('experimental: seasonTree. just a folder without season info? ', video);
-    return [...tree, { title: video.path, video: { ...video, title: video.path } }];
+    return [...tree, { title: video.filename, video: { ...video, title: video.filename } }];
   }, []);
 
 // if (groupedByTitle.length === 1) {
