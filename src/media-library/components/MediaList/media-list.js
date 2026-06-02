@@ -30,7 +30,7 @@ const AMediaList = ({ folder = null }) => {
       const updateMeta = async () => {
         const videosWithoutProbe = folder.children
           .filter(({ video }) => !!video)
-          .filter(({ video }) => !probes.some(({ probeId }) => probeId === video.realId));
+          .filter(({ video }) => !probes.some(({ probeId }) => probeId === video.videoId));
 
         if (videosWithoutProbe.length) {
           logger.log('MediaList:', folder.title, 'set probes', videosWithoutProbe.length);
@@ -51,7 +51,7 @@ const AMediaList = ({ folder = null }) => {
         const videosWithoutThumbnail = folder.children
           .filter(({ video }) => !!video)
           .filter(({ video }) => !thumbnails
-            .some(({ thumbnailId }) => thumbnailId === video.realId));
+            .some(({ thumbnailId }) => thumbnailId === video.videoId));
 
         if (videosWithoutThumbnail.length) {
           logger.log('MediaList:', folder.title, 'set thumbnails', videosWithoutThumbnail.length);
@@ -82,14 +82,14 @@ const AMediaList = ({ folder = null }) => {
     }
 
     // media item
-    const { probe } = probes.find(({ probeId }) => probeId === video.realId) || {};
+    const { probe } = probes.find(({ probeId }) => probeId === video.videoId) || {};
 
     return {
       duration: probe?.duration || 0,
       hasProbe: !!probe,
       isPlayed: played.find(({ mediaId }) => video.displayId === mediaId)?.isPlayed === true,
       isSubFolder,
-      thumbnail: thumbnails.find(({ thumbnailId }) => thumbnailId === video.realId)?.thumbnail,
+      thumbnail: thumbnails.find(({ thumbnailId }) => thumbnailId === video.videoId)?.thumbnail,
       title,
       video,
     };

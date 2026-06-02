@@ -3,10 +3,10 @@ import appConfig from '../../config';
 
 const { BACKEND_URL } = appConfig;
 
-const play = async ({ id, realId }) => {
+const play = async ({ displayId, videoId }) => {
   try {
-    const response = await fetch(`${BACKEND_URL}/play/${id}`, {
-      body: JSON.stringify({ id: realId }),
+    const response = await fetch(`${BACKEND_URL}/play/${displayId}`, {
+      body: JSON.stringify({ id: videoId }),
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',

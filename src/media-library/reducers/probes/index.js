@@ -29,7 +29,7 @@ const getProbes = (videos) => async (dispatch, getState) => {
 
   if (lock) {
     const notInQueue = videos.filter(
-      ({ realId: toAddId }) => !queue.some(({ realId }) => realId === toAddId),
+      ({ videoId }) => !queue.some(({ videoId: queueId }) => videoId === queueId),
     );
     if (notInQueue.length) {
       queue.push(...notInQueue);
@@ -40,7 +40,7 @@ const getProbes = (videos) => async (dispatch, getState) => {
 
   lock = true;
   logger.log('getProbes: fetching', videos);
-  const probes = await fetchProbes(videos.map(({ realId }) => realId));
+  const probes = await fetchProbes(videos.map(({ videoId }) => videoId));
   logger.log('getProbes: fetched', videos);
 
   dispatch({
@@ -55,7 +55,7 @@ const getProbes = (videos) => async (dispatch, getState) => {
   if (queue.length) {
     const { probes: state } = getState();
     const notInState = queue.filter(
-      ({ realId }) => !state.some(({ probeId }) => probeId === realId),
+      ({ videoId }) => !state.some(({ probeId }) => probeId === videoId),
     );
     logger.log('getProbes: dequeue', notInState.length);
     if (notInState.length) {

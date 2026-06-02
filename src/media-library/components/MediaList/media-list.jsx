@@ -82,14 +82,14 @@ const MediaList = ({ list = null, title }) => {
                 duration={item.duration}
                 hasProbe={item.hasProbe}
                 isPlayed={item.isPlayed}
-                key={item.video.realId}
-                onClick={() => setSelected(item.video.realId)}
-                // onFocus={() => setSelected(item.video.realId)}
+                key={item.video.videoId}
+                onClick={() => setSelected(item.video.videoId)}
+                // onFocus={() => setSelected(item.video.videoId)}
                 onPlay={onPlay(item.video)}
                 onPlayExp={onPlayExp(item.video)}
                 onTogglePlayed={onTogglePlayed(item.video)}
-                selected={selected === item.video.realId}
-                selectedId={item.video.realId}
+                selected={selected === item.video.videoId}
+                selectedId={item.video.videoId}
                 thumbnail={item.thumbnail}
                 video={item.video}
               />

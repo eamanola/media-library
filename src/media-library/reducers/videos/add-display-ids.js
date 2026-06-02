@@ -21,11 +21,9 @@ const addIds = (video) => {
     displayId.push(filename.replace(/[\s/]/ug, '_'));
   }
 
-  const { id, ...rest } = video;
   const withId = {
-    ...rest,
+    ...video,
     displayId: displayId.join('_'),
-    realId: id,
   };
 
   // console.log(withId);
