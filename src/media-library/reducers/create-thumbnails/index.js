@@ -12,7 +12,8 @@ const reducer = (state, action) => {
     case 'SET_THUMBNAILS':
       newState = [
         ...state.filter(
-          ({ id }) => !payload.some(({ id: payloadId }) => payloadId === id),
+          ({ thumbnailId }) => !payload
+            .some(({ thumbnailId: payloadId }) => payloadId === thumbnailId),
         ),
         ...payload,
       ];
@@ -43,8 +44,8 @@ const actionCreateThumbnails = (videos) => async (dispatch, getState) => {
 
   await dispatch({
     payload: videos.map(({ realId }) => ({
-      id: realId,
       thumbnail: `${BACKEND_URL}/thumbnails/${realId}.jpg`,
+      thumbnailId: realId,
     })),
     type: 'SET_THUMBNAILS',
   });
@@ -52,7 +53,8 @@ const actionCreateThumbnails = (videos) => async (dispatch, getState) => {
 
   if (queue.length) {
     const { thumbnails: state } = getState();
-    const notInState = queue.filter(({ realId }) => !state.some(({ id }) => id === realId));
+    const notInState = queue
+      .filter(({ realId }) => !state.some(({ thumbnailId }) => thumbnailId === realId));
     if (notInState.length) {
       dispatch(actionCreateThumbnails(notInState));
     }
