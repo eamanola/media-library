@@ -23,7 +23,7 @@ const addIds = (video) => {
     id.push(filename(path).replace(/[\s/]/ug, '_'));
   }
 
-  const withId = { ...video, id: id.join('_') };
+  const withId = { ...video, id: id.join('_'), videoId: video.id };
 
   // console.log(withId);
 

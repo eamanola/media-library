@@ -1,5 +1,4 @@
 import { videos as fetchVideos } from '../../services/videos';
-import parseMediaInfo from './parse-media-info';
 import testName from './test-names.json';
 import addIds from './add-ids';
 import { createTree } from './tree';
@@ -33,12 +32,11 @@ const getMock = () => [
 ];
 
 const formatMediaLibs = ({ mediaLib, videos }) => videos
-  .map((path) => ({ mediaLib, path }));
+  .map((video) => ({ mediaLib, ...video }));
 
 const getVideos = () => async (dispatch) => {
   const videos = (USE_MOCK ? getMock() : await fetchVideos())
     .map(formatMediaLibs).flat()
-    .map(parseMediaInfo)
     .map(addIds);
 
   const mediaLibrary = createTree(videos);
