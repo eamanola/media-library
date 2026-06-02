@@ -32,8 +32,6 @@ const Progress = ({
   const abuffers = abuffered?.length > 0 ? getBuffers(abuffered, duration) : [];
   if (abuffers.some(({ width }) => width === '100%')) { abuffers.length = 0; }
 
-  console.log(abuffers, buffers);
-
   const onClick = (e) => {
     const { nativeEvent } = e;
 
