@@ -107,7 +107,7 @@ const Player = () => {
   const { current, next } = mediaLibrary.length > 0 ? findVideo(mediaLibrary[0]) : {};
 
   const { probe } = useSelector(
-    (({ probes }) => probes.find(({ id }) => id === current?.video.realId)),
+    (({ probes }) => probes.find(({ probeId }) => probeId === current?.video.realId)),
   ) || {};
 
   if (probe) {

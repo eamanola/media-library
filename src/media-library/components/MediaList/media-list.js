@@ -30,7 +30,7 @@ const AMediaList = ({ folder = null }) => {
       const updateMeta = async () => {
         const videosWithoutProbe = folder.children
           .filter(({ video }) => !!video)
-          .filter(({ video }) => !probes.some(({ id }) => id === video.realId));
+          .filter(({ video }) => !probes.some(({ probeId }) => probeId === video.realId));
 
         if (videosWithoutProbe.length) {
           logger.log('MediaList:', folder.title, 'set probes', videosWithoutProbe.length);
@@ -82,7 +82,7 @@ const AMediaList = ({ folder = null }) => {
     }
 
     // media item
-    const { probe } = probes.find(({ id }) => id === video.realId) || {};
+    const { probe } = probes.find(({ probeId }) => probeId === video.realId) || {};
 
     return {
       duration: probe?.duration || 0,

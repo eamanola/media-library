@@ -9,7 +9,7 @@ const reducer = (state, action) => {
     case 'SET_PROBES':
       newState = [
         ...state.filter(
-          ({ id }) => !payload.some(({ id: payloadId }) => payloadId === id),
+          ({ probeId }) => !payload.some(({ probeId: payloadId }) => payloadId === probeId),
         ),
         ...payload,
       ];
@@ -44,7 +44,10 @@ const getProbes = (videos) => async (dispatch, getState) => {
   logger.log('getProbes: fetched', videos);
 
   dispatch({
-    payload: probes,
+    payload: probes.map(({ id, ...rest }) => ({
+      ...rest,
+      probeId: id,
+    })),
     type: 'SET_PROBES',
   });
   lock = false;
@@ -52,7 +55,7 @@ const getProbes = (videos) => async (dispatch, getState) => {
   if (queue.length) {
     const { probes: state } = getState();
     const notInState = queue.filter(
-      ({ realId }) => !state.some(({ id }) => id === realId),
+      ({ realId }) => !state.some(({ probeId }) => probeId === realId),
     );
     logger.log('getProbes: dequeue', notInState.length);
     if (notInState.length) {
