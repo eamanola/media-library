@@ -30,7 +30,7 @@ const queue = [];
 const actionCreateThumbnails = (videos) => async (dispatch, getState) => {
   if (lock) {
     const notInQueue = videos.filter(
-      ({ videoId: toAddId }) => !queue.some(({ videoId }) => toAddId === videoId),
+      ({ realId: toAddId }) => !queue.some(({ realId }) => toAddId === realId),
     );
     if (notInQueue.length) {
       queue.push(...notInQueue);
@@ -39,12 +39,12 @@ const actionCreateThumbnails = (videos) => async (dispatch, getState) => {
   }
 
   lock = true;
-  await createThumbnails(videos.map(({ videoId }) => videoId));
+  await createThumbnails(videos.map(({ realId }) => realId));
 
   await dispatch({
-    payload: videos.map(({ id, videoId }) => ({
+    payload: videos.map(({ id, realId }) => ({
       id,
-      thumbnail: `${BACKEND_URL}/thumbnails/${videoId}.jpg`,
+      thumbnail: `${BACKEND_URL}/thumbnails/${realId}.jpg`,
     })),
     type: 'SET_THUMBNAILS',
   });

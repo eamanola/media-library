@@ -6,7 +6,7 @@ const addIds = (video) => {
   const id = [];
 
   const {
-    episode, extra, filename, id: videoId, season, title, version, year,
+    episode, extra, filename, id: realId, season, title, version, year,
   } = video;
 
   if (title) { id.push(title.replace(/\s/ug, '_')); }
@@ -21,7 +21,7 @@ const addIds = (video) => {
     id.push(filename.replace(/[\s/]/ug, '_'));
   }
 
-  const withId = { ...video, id: id.join('_'), videoId };
+  const withId = { ...video, id: id.join('_'), realId };
 
   // console.log(withId);
 
