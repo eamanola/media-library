@@ -41,6 +41,8 @@ const getVideos = () => async (dispatch) => {
 
   const mediaLibrary = createTree(videos);
 
+  // console.log(videos);
+
   await dispatch({ payload: mediaLibrary, type: 'MEDIA_LIBS_INIT' });
 };
 
