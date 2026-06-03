@@ -11,7 +11,7 @@ const mediaSrc = (type, id, streamIndex, transcode) => [
   .join('');
 
 const fontSrc = (id, filename) => (
-  `${config.BACKEND_URL}/fonts/${id}/${filename}`
+  `${config.BACKEND_URL}/stream/${id}/fonts/${filename}`
 );
 
 export { fontSrc };
