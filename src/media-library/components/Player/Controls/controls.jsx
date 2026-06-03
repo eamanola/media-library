@@ -65,6 +65,10 @@ const Controls = ({
 
   const audioEl = document.querySelector('audio');
 
+  const availableDuration = audioEl?.duration
+    ? Math.min(videoEl.duration, audioEl.duration)
+    : videoEl.duration;
+
   const className = ['controls'];
   if (hide) className.push('hide');
 
@@ -94,7 +98,7 @@ const Controls = ({
         <Time
           currentTime={currentTime}
           duration={probe?.duration}
-          videoDuration={videoEl.duration}
+          videoDuration={availableDuration}
         />
 
         {typeof onFullscreen === 'function' && (
