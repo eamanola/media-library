@@ -37,7 +37,7 @@ const Progress = ({
 
     const { offsetX: x } = nativeEvent;
 
-    const progressBar = document.querySelector('.progress > .available');
+    const progressBar = document.querySelector('.progress');
     const maxWidth = progressBar.offsetWidth;
 
     onSeekTo((x / maxWidth) * duration);
@@ -45,8 +45,6 @@ const Progress = ({
 
   return (
     <div className="progress" onClick={onSeekTo ? onClick : null}>
-      <div className="available" />
-
       {
         buffers.map(({ left, width }) => (
           <div className="buffered" key={`key-${left}-${width}`} style={{ left, width }} />
@@ -58,6 +56,8 @@ const Progress = ({
           <div className="abuffered" key={`key-${left}-${width}`} style={{ left, width }} />
         ))
       }
+
+      <div className="available" />
 
       <div className="played" style={{ width: secToWidth(currentTime, duration) }} />
     </div>
