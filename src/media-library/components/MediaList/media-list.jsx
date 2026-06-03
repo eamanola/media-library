@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 
@@ -19,10 +19,11 @@ const MediaList = ({ list = null, title }) => {
 
   // TODO:
   const [selected, setSelected] = useState(null);
+  const mediaList = useRef(null);
 
   useEffect(() => {
     if (selected) {
-      const current = document.querySelector(`[data-selected-id="${selected}"]`);
+      const current = mediaList.current.querySelector(`[data-selected-id="${selected}"]`);
       current.scrollIntoView(
         { behavior: 'smooth', block: 'center', inline: 'nearest' },
       );
@@ -61,6 +62,7 @@ const MediaList = ({ list = null, title }) => {
       <div
         className="media-list"
         onKeyDown={onKeyDown}
+        ref={mediaList}
         role="presentation"
       >
         {
