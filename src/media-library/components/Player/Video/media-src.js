@@ -2,10 +2,11 @@ import config from '../../../../config';
 
 const mediaSrc = (type, id, streamIndex, transcode) => [
   config.BACKEND_URL,
-  `/${type}`,
-  `/${id}`,
-  `/${streamIndex}`,
+  '/stream',
   transcode ? '/transcode' : '',
+  `/${id}`,
+  `/${type}`,
+  `/${streamIndex}`,
 ]
   .filter((element) => element !== '')
   .join('');
