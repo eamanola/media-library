@@ -29,7 +29,10 @@ const MediaItem = ({
   video,
 }) => {
   const onFocusLocal = (e) => {
-    e.target.querySelector('.media-item-image-button').focus();
+    if (e.target.className === 'media-item') {
+      e.target.querySelector('.media-item-image-button').focus();
+    }
+
     if (onFocus) {
       onFocus(e);
     }

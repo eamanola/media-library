@@ -12,7 +12,9 @@ const SubFolder = ({
   unPlayed = 0,
 }) => {
   const onFocusLocal = (e) => {
-    e.target.children[0].focus();
+    if (e.target.className === 'sub-folder') {
+      e.target.children[0].focus();
+    }
 
     // let child call onFocus()
     // if (onFocus) {
