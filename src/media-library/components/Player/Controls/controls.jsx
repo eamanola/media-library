@@ -68,15 +68,18 @@ const Controls = ({
   const audioDuration = audioEl?.duration || 0;
   const videoDuration = videoEl.duration;
   const probeDuration = probe?.duration || 0;
+  // console.log(audioDuration, videoDuration, probeDuration);
 
-  // vp9-opus.webm
+  // eg vp9-opus.webm
   // audio & video & probe have different durations, but close
   // prefer browser/actual
   const maxDuration = Math.abs(probeDuration - videoDuration) < 1
     ? videoDuration
     : probeDuration;
 
-  const showAudioProgress = audioDuration && (audioDuration < videoDuration);
+  const showAudioProgress = audioDuration
+    && (audioDuration < videoDuration)
+    && Math.abs(audioDuration - maxDuration) > 1;
   const availableDuration = showAudioProgress ? audioDuration : videoDuration;
   const audioBuffered = showAudioProgress ? audioEl.buffered : null;
 
