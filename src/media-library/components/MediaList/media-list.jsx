@@ -45,12 +45,36 @@ const MediaList = ({ list = null, title }) => {
   };
 
   const onKeyDown = (e) => {
+    const { key } = e;
     const params = {
-      key: e.key,
+      key,
       target: mediaList.current.querySelector(`[data-selected-id="${selected}"]`),
     };
 
-    const next = nextSelected(params);
+    let next;
+
+    try {
+      next = nextSelected(params);
+    } catch ({ message, suggestion }) {
+      console.log(message);
+      switch (key) {
+        case 'ArrowLeft':
+          next = suggestion;
+          break;
+        case 'ArrowRight':
+          next = suggestion;
+          break;
+        case 'ArrowUp':
+          next = suggestion;
+          break;
+        case 'ArrowDown':
+          next = suggestion;
+          break;
+        default:
+          next = null;
+          break;
+      }
+    }
 
     if (next) {
       e.preventDefault();

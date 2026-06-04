@@ -30,20 +30,29 @@ const getListItem = (target) => {
 };
 
 const handleLeft = (listItem) => {
-  const next = (listItem.previousSibling
-    // End of line
-    || listItem.parentNode.childNodes[listItem.parentNode.childNodes.length - 1]
-  );
+  if (listItem.previousSibling) {
+    return listItem.previousSibling;
+  }
 
-  return next;
+  // End of line
+  // eslint-disable-next-line no-throw-literal
+  throw {
+    message: 'Out Of Bound',
+    suggestion: listItem.parentNode.childNodes[listItem.parentNode.childNodes.length - 1],
+  };
 };
 
 const handleRight = (listItem) => {
-  const next = listItem.nextSibling
-    // End of line
-    || listItem.parentNode.childNodes[0];
+  if (listItem.nextSibling) {
+    return listItem.nextSibling;
+  }
 
-  return next;
+  // End of line
+  // eslint-disable-next-line no-throw-literal
+  throw {
+    message: 'Out Of Bound',
+    suggestion: listItem.parentNode.childNodes[0],
+  };
 };
 
 const handleUp = (listItem) => {
@@ -52,9 +61,16 @@ const handleUp = (listItem) => {
   const elementIndex = [...container.childNodes].indexOf(listItem);
 
   if (isDisplayBlock(listItem)) {
-    return listItem.previousSibling
-      // End of line
-      || listItem.parentNode.childNodes[0];
+    if (listItem.previousSibling) {
+      return listItem.previousSibling;
+    }
+
+    // End of line
+    // eslint-disable-next-line no-throw-literal
+    throw {
+      message: 'Out Of Bound',
+      suggestion: listItem.parentNode.childNodes[0],
+    };
   }
 
   let traversed = 0;
@@ -71,7 +87,11 @@ const handleUp = (listItem) => {
   }
 
   // End of line
-  return container.childNodes[0];
+  // eslint-disable-next-line no-throw-literal
+  throw {
+    message: 'Out Of Bound',
+    suggestion: listItem.parentNode.childNodes[0],
+  };
 };
 
 const handleDown = (listItem) => {
@@ -80,9 +100,15 @@ const handleDown = (listItem) => {
   const elementIndex = [...container.childNodes].indexOf(listItem);
 
   if (isDisplayBlock(listItem)) {
-    return listItem.nextSibling
-      // End of line
-      || listItem.parentNode.childNodes[listItem.parentNode.childNodes.length - 1];
+    if (listItem.nextSibling) {
+      return listItem.nextSibling;
+    }
+    // End of line
+    // eslint-disable-next-line no-throw-literal
+    throw {
+      message: 'Out Of Bound',
+      suggestion: listItem.parentNode.childNodes[listItem.parentNode.childNodes.length - 1],
+    };
   }
 
   let traversed = 0;
@@ -99,7 +125,11 @@ const handleDown = (listItem) => {
   }
 
   // End of line
-  return container.childNodes[container.childNodes.length - 1];
+  // eslint-disable-next-line no-throw-literal
+  throw {
+    message: 'Out Of Bound',
+    suggestion: listItem.parentNode.childNodes[listItem.parentNode.childNodes.length - 1],
+  };
 };
 
 // End of line handling
