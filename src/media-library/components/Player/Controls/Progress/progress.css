@@ -3,6 +3,7 @@
   position: relative;
 }
 
+/* defaults */
 .progress>* {
   position: absolute;
   border: var(--border);
@@ -11,18 +12,23 @@
   bottom: 0.35em;
 }
 
+/* overrides */
 .progress>.click-stealer {
   border-radius: 0;
   top: 0;
   bottom: 0;
 }
 
+.progress>.abuffered,
 .progress>.buffered,
 .progress>.played,
 .progress>.click-stealer {
   border-color: transparent;
 }
 
+/* overrides */
+
+/* colors */
 .progress>.available,
 .progress>.click-stealer {
   background-color: transparent;
@@ -41,6 +47,9 @@
   background-color: var(--accent-color);
 }
 
+/* colors */
+
+/* initial widths */
 .progress>.available,
 .progress>.click-stealer {
   width: 100%;
@@ -52,6 +61,9 @@
   width: 0%;
 }
 
+/* initial widths */
+
+/* just for fun */
 .progress>.played {
   --magic-look-like-a-ball: 1.25;
   min-width: calc(var(--magic-look-like-a-ball) * var(--border-radius));
