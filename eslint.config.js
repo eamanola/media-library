@@ -119,4 +119,12 @@ export default [
       'import-x/no-extraneous-dependencies': ['error', { devDependencies: true }],
     },
   },
+
+  // EslintPluginImportResolveError
+  {
+    files: ['vite.config.js'],
+    rules: {
+      'import-x/no-cycle': ['off'],
+    },
+  },
 ];
