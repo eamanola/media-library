@@ -65,9 +65,20 @@ const Controls = ({
 
   const audioEl = document.querySelector('audio');
 
-  const availableDuration = audioEl?.duration
-    ? Math.min(videoEl.duration, audioEl.duration)
-    : videoEl.duration;
+  const audioDuration = audioEl?.duration || 0;
+  const videoDuration = videoEl.duration;
+  const probeDuration = probe?.duration || 0;
+
+  // vp9-opus.webm
+  // audio & video & probe have different durations, but close
+  // prefer browser/actual
+  const maxDuration = Math.abs(probeDuration - videoDuration) < 1
+    ? videoDuration
+    : probeDuration;
+
+  const showAudioProgress = audioDuration && (audioDuration < videoDuration);
+  const availableDuration = showAudioProgress ? audioDuration : videoDuration;
+  const audioBuffered = showAudioProgress ? audioEl.buffered : null;
 
   const className = ['controls'];
   if (hide) className.push('hide');
@@ -88,17 +99,17 @@ const Controls = ({
         />
 
         <Progress
-          abuffered={audioEl?.buffered}
+          abuffered={audioBuffered}
           buffered={videoEl.buffered}
           currentTime={currentTime}
-          duration={probe?.duration}
+          duration={maxDuration}
           onSeekTo={onSeekTo}
         />
 
         <Time
+          availableDuration={availableDuration}
           currentTime={currentTime}
-          duration={probe?.duration}
-          videoDuration={availableDuration}
+          duration={maxDuration}
         />
 
         {typeof onFullscreen === 'function' && (
