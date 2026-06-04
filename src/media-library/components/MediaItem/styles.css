@@ -21,13 +21,24 @@
   max-width: var(--max-width);
 }
 
-/* .media-item:focus-within,  */
+/* focus indicator */
+.media-item,
+.media-item-play-button,
+.media-item-played-label,
+.media-item-image-button {
+  /* border-color: coral; */
+  outline: thin groove var(--default-color);
+}
+
+.media-item:focus-within,
 .media-item-play-button:focus,
 .media-item-played-label:focus-within,
 .media-item-image-button:focus {
   /* border-color: coral; */
-  outline: thin groove var(--accent-color);
+  outline-color: var(--accent-color);
 }
+
+/* focus indicator */
 
 .media-item-play-button:active,
 .media-item-played-label:active,
@@ -37,13 +48,9 @@
 
 .media-item:hover,
 .media-item-play-button:hover,
+.media-item-play-button:hover,
 .media-item-played-label:hover {
   border-color: var(--active-color);
-}
-
-.media-item.selected {
-  /* dont let hover overwrite */
-  border-color: var(--accent-color) !important;
 }
 
 .media-item-play-button:hover,

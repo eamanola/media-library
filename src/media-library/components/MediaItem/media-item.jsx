@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
 import secondsToTimeStr from './seconds-to-timestr';
 import ImageButton from '../ImageButton';
@@ -16,34 +16,33 @@ const printTitle = ({
   .join(' ');
 
 const MediaItem = ({
-  onClick,
-  // onFocus,
+  onFocus,
   onPlay,
   onPlayExp,
   onTogglePlayed,
+  onKeyDown,
   isPlayed = false,
   hasProbe = false,
   duration = 0,
-  selected,
   selectedId,
   thumbnail = null,
   video,
 }) => {
-  const playRef = useRef(null);
-  const playedRef = useRef(null);
-
-  useEffect(() => {
-    if (selected && document.activeElement !== playedRef.current) {
-      playRef.current.focus();
+  const onFocusLocal = (e) => {
+    e.target.querySelector('.media-item-image-button').focus();
+    if (onFocus) {
+      onFocus(e);
     }
-  }, [selected]);
+  };
 
   return (
     <div
-      className={`media-item ${selected ? 'selected' : ''}`}
+      className="media-item"
       data-selected-id={selectedId}
-      onClick={onClick}
+      onFocus={onFocusLocal}
+      onKeyDown={onKeyDown}
       role="presentation"
+      tabIndex={-1}
     >
 
       <ImageButton
@@ -65,8 +64,7 @@ const MediaItem = ({
       <button
         className="media-item-play-button"
         onClick={onPlay}
-        // onFocus={onFocus}
-        ref={playRef}
+        onFocus={onFocus}
         type="button"
       >
         Play
@@ -80,8 +78,7 @@ const MediaItem = ({
           checked={isPlayed === true}
           id={`played-${video.displayId}`}
           onChange={onTogglePlayed}
-          // onFocus={onFocus}
-          ref={playedRef}
+          onFocus={onFocus}
           type="checkbox"
         />
 

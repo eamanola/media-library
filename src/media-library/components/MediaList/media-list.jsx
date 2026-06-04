@@ -45,14 +45,32 @@ const MediaList = ({ list = null, title }) => {
   };
 
   const onKeyDown = (e) => {
-    const next = nextSelected(e);
+    const params = {
+      key: e.key,
+      target: mediaList.current.querySelector(`[data-selected-id="${selected}"]`),
+    };
+
+    const next = nextSelected(params);
+
     if (next) {
       e.preventDefault();
       e.stopPropagation();
 
-      setSelected(next.getAttribute('data-selected-id'));
+      next.focus();
     }
   };
+
+  const onClick = (e) => {
+    const { target } = e;
+    const isSelectable = target.hasAttribute('data-selected-id');
+    if (isSelectable) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      target.focus();
+    }
+  };
+
   return (
     <>
       <h4>
@@ -61,7 +79,6 @@ const MediaList = ({ list = null, title }) => {
 
       <div
         className="media-list"
-        onKeyDown={onKeyDown}
         ref={mediaList}
         role="presentation"
       >
@@ -70,8 +87,8 @@ const MediaList = ({ list = null, title }) => {
             ? (
               <SubFolder
                 key={item.title}
-                // onClick={() => setSelected(item.title)}
-                // onFocus={() => setSelected(item.title)}
+                onFocus={() => setSelected(item.title)}
+                onKeyDown={onKeyDown}
                 path={item.path}
                 selected={selected === item.title}
                 selectedId={item.title}
@@ -85,12 +102,12 @@ const MediaList = ({ list = null, title }) => {
                 hasProbe={item.hasProbe}
                 isPlayed={item.isPlayed}
                 key={item.video.videoId}
-                onClick={() => setSelected(item.video.videoId)}
-                // onFocus={() => setSelected(item.video.videoId)}
+                onClick={onClick}
+                onFocus={() => setSelected(item.video.videoId)}
+                onKeyDown={onKeyDown}
                 onPlay={onPlay(item.video)}
                 onPlayExp={onPlayExp(item.video)}
                 onTogglePlayed={onTogglePlayed(item.video)}
-                selected={selected === item.video.videoId}
                 selectedId={item.video.videoId}
                 thumbnail={item.thumbnail}
                 video={item.video}

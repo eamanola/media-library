@@ -1,31 +1,35 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { Link } from 'react-router';
 
 import './styles.css';
 
 const SubFolder = ({
-  // onClick,
-  // onFocus,
+  onKeyDown,
+  onFocus,
   path,
-  selected,
   selectedId,
   title,
   unPlayed = 0,
 }) => {
-  const linkRef = useRef(null);
+  const onFocusLocal = (e) => {
+    e.target.children[0].focus();
 
-  useEffect(() => {
-    if (selected) {
-      linkRef.current.focus();
-    }
-  }, [selected]);
+    // let child call onFocus()
+    // if (onFocus) {
+    //   onFocus(e);
+    // }
+  };
 
   return (
-    <div className="sub-folder" data-selected-id={selectedId}>
+    <div
+      className="sub-folder"
+      data-selected-id={selectedId}
+      onFocus={onFocusLocal}
+      onKeyDown={onKeyDown}
+      tabIndex={-1}
+    >
       <Link
-        // onClick={onClick}
-        // onFocus={onFocus}
-        ref={linkRef}
+        onFocus={onFocus}
         to={path}
       >
         {`${title}${unPlayed > 0 ? ` (${unPlayed})` : ''}`}
