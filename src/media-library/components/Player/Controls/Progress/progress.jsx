@@ -44,6 +44,8 @@ const Progress = ({
 
   return (
     <div className="progress" onClick={onSeekTo ? onClick : null}>
+      <div className="available" />
+
       {
         buffers.map(({ left, width }) => (
           <div className="buffered" key={`key-${left}-${width}`} style={{ left, width }} />
@@ -56,9 +58,11 @@ const Progress = ({
         ))
       }
 
-      <div className="available" />
-
       <div className="played" style={{ width: secToWidth(currentTime, duration) }} />
+
+      <div className="click-stealer">
+        {' '}
+      </div>
     </div>
   );
 };

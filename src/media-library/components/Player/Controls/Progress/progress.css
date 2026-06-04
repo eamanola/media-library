@@ -1,45 +1,58 @@
 .progress {
-  position: relative;
   --border-radius: 0.5em;
+  position: relative;
 }
 
 .progress>* {
   position: absolute;
+  border: var(--border);
   border-radius: var(--border-radius);
   top: 0.35em;
   bottom: 0.35em;
 }
 
-.progress>.available,
-.progress>.buffered,
-.progress>.played {
-  border: var(--border);
+.progress>.click-stealer {
+  border-radius: 0;
+  top: 0;
+  bottom: 0;
 }
 
 .progress>.buffered,
-.progress>.played {
+.progress>.played,
+.progress>.click-stealer {
   border-color: transparent;
 }
 
-.progress>.available {
+.progress>.available,
+.progress>.click-stealer {
   background-color: transparent;
-  width: 100%;
 }
 
-.progress>.buffered,
-.progress>.abuffered {
+.progress>.buffered {
   background-color: var(--default-color);
-  width: 0%;
 }
 
 .progress>.abuffered {
   background-color: var(--accent-color);
-  width: 0%;
   opacity: 0.25;
 }
 
 .progress>.played {
   background-color: var(--accent-color);
+}
+
+.progress>.available,
+.progress>.click-stealer {
+  width: 100%;
+}
+
+.progress>.buffered,
+.progress>.abuffered,
+.progress>.played {
   width: 0%;
-  min-width: calc(var(--border-radius));
+}
+
+.progress>.played {
+  --magic-look-like-a-ball: 1.25;
+  min-width: calc(var(--magic-look-like-a-ball) * var(--border-radius));
 }
