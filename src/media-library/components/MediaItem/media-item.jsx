@@ -16,14 +16,14 @@ const printTitle = ({
   .join(' ');
 
 const MediaItem = ({
+  duration = 0,
+  hasProbe = false,
+  isPlayed = false,
   onFocus,
+  onKeyDown,
   onPlay,
   onPlayExp,
   onTogglePlayed,
-  onKeyDown,
-  isPlayed = false,
-  hasProbe = false,
-  duration = 0,
   selectedId,
   thumbnail = null,
   video,

@@ -113,7 +113,6 @@ const MediaList = ({ list = null, title }) => {
                 onFocus={ENABLE_REMOTE ? onFocus : null}
                 onKeyDown={ENABLE_REMOTE ? onKeyDown : null}
                 path={item.path}
-                selected={selected === item.title}
                 selectedId={item.title}
                 title={item.title}
                 unPlayed={item.unPlayed}
