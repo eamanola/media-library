@@ -16,10 +16,9 @@ const SubFolder = ({
       e.target.children[0].focus();
     }
 
-    // let child call onFocus()
-    // if (onFocus) {
-    //   onFocus(e);
-    // }
+    if (onFocus) {
+      onFocus(e);
+    }
   };
 
   return (
@@ -30,10 +29,7 @@ const SubFolder = ({
       onKeyDown={onKeyDown}
       tabIndex={-1}
     >
-      <Link
-        onFocus={onFocus}
-        to={path}
-      >
+      <Link to={path}>
         {`${title}${unPlayed > 0 ? ` (${unPlayed})` : ''}`}
       </Link>
     </div>

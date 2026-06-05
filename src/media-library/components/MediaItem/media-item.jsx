@@ -67,7 +67,6 @@ const MediaItem = ({
       <button
         className="media-item-play-button"
         onClick={onPlay}
-        onFocus={onFocus}
         type="button"
       >
         Play
@@ -81,7 +80,6 @@ const MediaItem = ({
           checked={isPlayed === true}
           id={`played-${video.displayId}`}
           onChange={onTogglePlayed}
-          onFocus={onFocus}
           type="checkbox"
         />
 

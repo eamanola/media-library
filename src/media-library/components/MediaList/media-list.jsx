@@ -8,6 +8,8 @@ import MediaItem from '../MediaItem';
 import { nextSelected } from './keyboard';
 import './styles.css';
 
+const ENABLE_REMOTE = true;
+
 const {
   togglePlayed,
   play,
@@ -84,14 +86,11 @@ const MediaList = ({ list = null, title }) => {
     }
   };
 
-  const onClick = (e) => {
-    const { target } = e;
-    const isSelectable = target.hasAttribute('data-selected-id');
-    if (isSelectable) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      target.focus();
+  const onFocus = ({ target }) => {
+    const selectedId = target.getAttribute('data-selected-id');
+    if (selectedId) {
+      // label.played fires after .media-list
+      setTimeout(() => setSelected(selectedId), 100);
     }
   };
 
@@ -111,8 +110,8 @@ const MediaList = ({ list = null, title }) => {
             ? (
               <SubFolder
                 key={item.title}
-                onFocus={() => setSelected(item.title)}
-                onKeyDown={onKeyDown}
+                onFocus={ENABLE_REMOTE ? onFocus : null}
+                onKeyDown={ENABLE_REMOTE ? onKeyDown : null}
                 path={item.path}
                 selected={selected === item.title}
                 selectedId={item.title}
@@ -126,9 +125,8 @@ const MediaList = ({ list = null, title }) => {
                 hasProbe={item.hasProbe}
                 isPlayed={item.isPlayed}
                 key={item.video.videoId}
-                onClick={onClick}
-                onFocus={() => setSelected(item.video.videoId)}
-                onKeyDown={onKeyDown}
+                onFocus={ENABLE_REMOTE ? onFocus : null}
+                onKeyDown={ENABLE_REMOTE ? onKeyDown : null}
                 onPlay={onPlay(item.video)}
                 onPlayExp={onPlayExp(item.video)}
                 onTogglePlayed={onTogglePlayed(item.video)}
