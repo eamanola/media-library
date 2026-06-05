@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { actions } from '../../reducers';
 import SubFolder from '../SubFolder';
 import MediaItem from '../MediaItem';
-import { nextSelected } from './keyboard';
+import { jumpList, nextSelected } from './keyboard';
 import './styles.css';
 
 const ENABLE_REMOTE = true;
@@ -46,43 +46,6 @@ const MediaList = ({ list = null, title }) => {
     dispatch(togglePlayed(video));
   };
 
-  const jumpList = (key) => {
-    const mediaLists = [...document.querySelectorAll('.media-list')];
-    const index = mediaLists.indexOf(mediaList.current);
-
-    let nextList;
-    let next;
-
-    switch (key) {
-      case 'ArrowLeft':
-      case 'ArrowUp':
-        if (index > 0) {
-          nextList = mediaLists[index - 1].childNodes;
-          next = nextList[nextList.length - 1];
-        }
-
-        // go around?
-
-        break;
-      case 'ArrowRight':
-      case 'ArrowDown':
-        if (index < mediaLists.length - 1) {
-          nextList = mediaLists[index + 1].childNodes;
-          console.log(index, mediaLists, nextList);
-          [next] = nextList;
-        }
-
-        // go around?
-
-        break;
-      default:
-        next = null;
-        break;
-    }
-
-    return next;
-  };
-
   const onKeyDown = (e) => {
     const { key } = e;
     const params = {
@@ -96,7 +59,7 @@ const MediaList = ({ list = null, title }) => {
       next = nextSelected(params);
     } catch ({ message, suggestion }) {
       console.log(message);
-      next = jumpList(key) || suggestion;
+      next = jumpList(params) || suggestion;
     }
 
     if (next) {
@@ -108,6 +71,10 @@ const MediaList = ({ list = null, title }) => {
   };
 
   const onFocus = ({ target }) => {
+    // to mix tab and arrow key navigations
+    // when [data-selected-id] not present
+    // traverse from target to parent with [data-selected-id] (max at .media-list)
+    // and set selected
     const selectedId = target.getAttribute('data-selected-id');
     if (selectedId) {
       // label.played fires after .media-list

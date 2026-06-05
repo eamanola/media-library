@@ -141,9 +141,7 @@ const handleDown = (listItem) => {
 // media-list (or the container) contains only, and only media-items and sub-folders
 // event target is inside the container, child or child of
 // focus must be within container
-const nextSelected = (e) => {
-  const { key, target } = e;
-
+const nextSelected = ({ key, target }) => {
   const listItem = getListItem(target);
   if (!listItem) return null;
 
@@ -170,6 +168,43 @@ const nextSelected = (e) => {
   return next;
 };
 
-export { nextSelected };
+const jumpList = ({ key, target }) => {
+  const mediaLists = [...document.querySelectorAll('.media-list')];
+  const index = mediaLists.indexOf(target.parentNode);
+
+  let nextList;
+  let next;
+
+  switch (key) {
+    case 'ArrowLeft':
+    case 'ArrowUp':
+      if (index > 0) {
+        nextList = mediaLists[index - 1].childNodes;
+        next = nextList[nextList.length - 1];
+      }
+      // End of line
+      // go around?
+      break;
+
+    case 'ArrowRight':
+    case 'ArrowDown':
+      if (index < mediaLists.length - 1) {
+        nextList = mediaLists[index + 1].childNodes;
+        console.log(index, mediaLists, nextList);
+        [next] = nextList;
+      }
+      // End of line
+      // go around?
+      break;
+
+    default:
+      next = null;
+      break;
+  }
+
+  return next;
+};
+
+export { jumpList, nextSelected };
 
 export default null;
