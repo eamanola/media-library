@@ -46,6 +46,43 @@ const MediaList = ({ list = null, title }) => {
     dispatch(togglePlayed(video));
   };
 
+  const jumpList = (key) => {
+    const mediaLists = [...document.querySelectorAll('.media-list')];
+    const index = mediaLists.indexOf(mediaList.current);
+
+    let nextList;
+    let next;
+
+    switch (key) {
+      case 'ArrowLeft':
+      case 'ArrowUp':
+        if (index > 0) {
+          nextList = mediaLists[index - 1].childNodes;
+          next = nextList[nextList.length - 1];
+        }
+
+        // go around?
+
+        break;
+      case 'ArrowRight':
+      case 'ArrowDown':
+        if (index < mediaLists.length - 1) {
+          nextList = mediaLists[index + 1].childNodes;
+          console.log(index, mediaLists, nextList);
+          [next] = nextList;
+        }
+
+        // go around?
+
+        break;
+      default:
+        next = null;
+        break;
+    }
+
+    return next;
+  };
+
   const onKeyDown = (e) => {
     const { key } = e;
     const params = {
@@ -59,23 +96,7 @@ const MediaList = ({ list = null, title }) => {
       next = nextSelected(params);
     } catch ({ message, suggestion }) {
       console.log(message);
-      switch (key) {
-        case 'ArrowLeft':
-          next = suggestion;
-          break;
-        case 'ArrowRight':
-          next = suggestion;
-          break;
-        case 'ArrowUp':
-          next = suggestion;
-          break;
-        case 'ArrowDown':
-          next = suggestion;
-          break;
-        default:
-          next = null;
-          break;
-      }
+      next = jumpList(key) || suggestion;
     }
 
     if (next) {
