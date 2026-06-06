@@ -3,9 +3,9 @@ import config from '../../../../config';
 const mediaSrc = (type, id, streamIndex, transcode) => [
   config.BACKEND_URL,
   '/stream',
-  transcode ? '/transcode' : '',
   `/${id}`,
   `/${type}`,
+  transcode ? '/transcode' : '',
   `/${streamIndex}`,
 ]
   .filter((element) => element !== '')
