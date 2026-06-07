@@ -11,6 +11,12 @@
   visibility: hidden;
 }
 
+.controls:hover.hide,
+.hide-ui .controls:hover {
+  opacity: unset;
+  visibility: unset;
+}
+
 .controls {
   position: absolute;
   left: 0;
