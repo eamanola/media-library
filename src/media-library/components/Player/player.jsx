@@ -45,15 +45,15 @@ const togglePlay = () => {
   }
 };
 
-const onClick = (e) => {
-  const videoEl = document.querySelector('.player video');
-  // let controls events through
-  if (e.target === videoEl) {
-    e.preventDefault();
-    e.stopPropagation();
-    togglePlay(e.target);
-  }
-};
+// const onClick = (e) => {
+//   const videoEl = document.querySelector('.player video');
+//   // let controls events through
+//   if (e.target === videoEl) {
+//     e.preventDefault();
+//     e.stopPropagation();
+//     togglePlay(e.target);
+//   }
+// };
 
 const onKeyUp = (e) => {
   if (e.key === ' ') {
@@ -254,7 +254,7 @@ const Player = () => {
     <>
       <div
         className={classNames.join(' ')}
-        onClick={CUSTOM_CONTROLS === true ? onClick : null}
+        // onClick={CUSTOM_CONTROLS === true ? onClick : null}
         onDoubleClick={CUSTOM_CONTROLS === true ? onDoubleClick : null}
         onKeyUp={CUSTOM_CONTROLS === true ? onKeyUp : null}
         onMouseMove={CUSTOM_CONTROLS === true ? showUI : null}
