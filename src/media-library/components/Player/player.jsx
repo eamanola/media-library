@@ -55,11 +55,37 @@ const togglePlay = () => {
 //   }
 // };
 
+const changeVolume = (delta) => {
+  const audioEl = document.querySelector('.player audio');
+
+  if (audioEl === null) return;
+
+  const { volume } = audioEl;
+
+  let newVolume = volume + delta;
+  newVolume = Math.max(newVolume, 0.0);
+  newVolume = Math.min(newVolume, 1.0);
+
+  audioEl.volume = newVolume;
+};
+
 const onKeyUp = (e) => {
-  if (e.key === ' ') {
+  const { key } = e;
+  let preventDefault = false;
+  if (key === ' ') {
+    preventDefault = true;
+    togglePlay(e.target);
+  } else if (key === 'ArrowUp') {
+    preventDefault = true;
+    changeVolume(+0.1);
+  } else if (key === 'ArrowDown') {
+    preventDefault = true;
+    changeVolume(-0.1);
+  }
+
+  if (preventDefault) {
     e.preventDefault();
     e.stopPropagation();
-    togglePlay(e.target);
   }
 };
 
