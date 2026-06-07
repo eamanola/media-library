@@ -32,6 +32,9 @@ const Progress = ({
   const abuffers = abuffered?.length > 0 ? getBuffers(abuffered, duration) : [];
 
   const onClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     const { nativeEvent } = e;
 
     const { offsetX: x } = nativeEvent;
