@@ -84,6 +84,8 @@ export default [
   // general
   {
     rules: {
+      '@stylistic/array-bracket-newline': ['error', 'consistent'],
+      '@stylistic/array-element-newline': ['error', 'consistent'],
       '@stylistic/multiline-ternary': ['error', 'always-multiline'],
       'no-console': [
         SHOW_WARNINGS,
