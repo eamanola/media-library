@@ -6,6 +6,7 @@ import { actions } from '../../reducers';
 import SubFolder from '../SubFolder';
 import MediaItem from '../MediaItem';
 import { jumpList, nextSelected } from './keyboard';
+import { PATH_PLAYER } from '../../config';
 import './styles.css';
 
 const ENABLE_REMOTE = true;
@@ -39,7 +40,7 @@ const MediaList = ({ list = null, title }) => {
   };
 
   const onPlayExp = ({ displayId }) => () => {
-    navigate(`/player/${displayId}`);
+    navigate(`/${PATH_PLAYER}/${displayId}`);
   };
 
   const onTogglePlayed = (video) => () => {

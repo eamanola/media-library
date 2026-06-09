@@ -1,0 +1,23 @@
+const CLASSNAME_PLAYER = 'player';
+const PATH_PLAYER = 'player';
+const SELECTOR_AUDIO = `.${CLASSNAME_PLAYER} audio`;
+const SELECTOR_PLAYER = '.player';
+const SELECTOR_VIDEO = `.${CLASSNAME_PLAYER} video`;
+
+const config = {
+  CLASSNAME_PLAYER,
+  PATH_PLAYER,
+  SELECTOR_AUDIO,
+  SELECTOR_PLAYER,
+  SELECTOR_VIDEO,
+};
+
+export {
+  CLASSNAME_PLAYER,
+  PATH_PLAYER,
+  SELECTOR_AUDIO,
+  SELECTOR_PLAYER,
+  SELECTOR_VIDEO,
+};
+
+export default config;

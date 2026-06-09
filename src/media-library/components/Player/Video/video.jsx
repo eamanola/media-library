@@ -5,6 +5,7 @@ import Av from './AV';
 import mediaSrc, { fontSrc } from './media-src';
 import './libass-wasm-overrides.css';
 import logger from '../../../../logger';
+import { SELECTOR_VIDEO } from '../../../config';
 
 const Video = ({
   id,
@@ -43,7 +44,7 @@ const Video = ({
           lossyRender: 'wasm-blend',
           onError: console.error,
           subUrl,
-          video: document.querySelector('video'),
+          video: document.querySelector(SELECTOR_VIDEO),
           workerUrl: '/libass-wasm/js/subtitles-octopus-worker.js',
         });
 
@@ -65,7 +66,7 @@ const Video = ({
         track.setAttribute('src', subUrl);
         // track.setAttribute('default', true);
 
-        const videoEl = document.querySelector('video');
+        const videoEl = document.querySelector(SELECTOR_VIDEO);
         videoEl.appendChild(track);
 
         const { textTracks } = videoEl;

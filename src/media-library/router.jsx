@@ -1,11 +1,12 @@
 import React from 'react';
 
 import { FileBrowser, FrontPage, Player } from './components';
+import { PATH_PLAYER } from './config';
 
 const router = [
   {
     element: <Player />,
-    path: 'player/:videoId',
+    path: `${PATH_PLAYER}/:videoId`,
   },
   {
     element: <FrontPage />,

@@ -68,11 +68,11 @@ const FrontPage = () => {
 
       {
         mediaLibrary.map(({ title }, index) => (
-          <>
-            <FileBrowser key={`medialib-${title}`} mediaLibTitle={title} />
+          <span key={`medialib-${title}`}>
+            <FileBrowser mediaLibTitle={title} />
 
-            {index < mediaLibrary.length - 1 ? <hr key={`linebreak-${title}`} /> : null}
-          </>
+            {index < mediaLibrary.length - 1 ? <hr /> : null}
+          </span>
         ))
       }
     </>

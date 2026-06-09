@@ -8,6 +8,13 @@ import Video from './Video';
 import './styles.css';
 import Controls from './Controls';
 import logger from '../../../logger';
+import {
+  CLASSNAME_PLAYER,
+  SELECTOR_AUDIO,
+  SELECTOR_PLAYER,
+  SELECTOR_VIDEO,
+  PATH_PLAYER,
+} from '../../config';
 
 const { getProbes, togglePlayed } = actions;
 
@@ -21,7 +28,7 @@ let hideUITimeout = 0;
 const HIDE_UI_TIMEOUT = 5000;
 
 const toggleFullscreen = () => {
-  const wrapper = document.querySelector('.player');
+  const wrapper = document.querySelector(SELECTOR_PLAYER);
 
   if (document.fullscreenElement === wrapper) {
     document.exitFullscreen();
@@ -37,7 +44,7 @@ const onDoubleClick = (e) => {
 };
 
 const togglePlay = () => {
-  const videoEl = document.querySelector('.player video');
+  const videoEl = document.querySelector(SELECTOR_VIDEO);
   if (videoEl.paused) {
     videoEl.play();
   } else {
@@ -46,7 +53,7 @@ const togglePlay = () => {
 };
 
 // const onClick = (e) => {
-//   const videoEl = document.querySelector('.player video');
+//   const videoEl = document.querySelector(SELECTOR_VIDEO);
 //   // let controls events through
 //   if (e.target === videoEl) {
 //     e.preventDefault();
@@ -56,7 +63,7 @@ const togglePlay = () => {
 // };
 
 const changeVolume = (delta) => {
-  const audioEl = document.querySelector('.player audio');
+  const audioEl = document.querySelector(SELECTOR_AUDIO);
 
   if (audioEl === null) return;
 
@@ -272,7 +279,7 @@ const Player = () => {
     }
   };
 
-  const classNames = ['player'];
+  const classNames = [CLASSNAME_PLAYER];
   if (loading) classNames.push('loading');
   if (hideUI) classNames.push('hide-ui');
 
@@ -319,7 +326,7 @@ const Player = () => {
                 top: '50%',
               }}
             >
-              <Link reloadDocument to={`/player/${next.video.displayId}`}>
+              <Link reloadDocument to={`/${PATH_PLAYER}/${next.video.displayId}`}>
                 next
               </Link>
             </span>
@@ -373,13 +380,13 @@ const Player = () => {
         )}
 
         {!!previous && (
-          <Link reloadDocument to={`/player/${previous.displayId}`}>
+          <Link reloadDocument to={`/${PATH_PLAYER}/${previous.displayId}`}>
             previous
           </Link>
         )}
 
         {!!next && (
-          <Link reloadDocument to={`/player/${next.video.displayId}`}>
+          <Link reloadDocument to={`/${PATH_PLAYER}/${next.video.displayId}`}>
             next
           </Link>
         )}
