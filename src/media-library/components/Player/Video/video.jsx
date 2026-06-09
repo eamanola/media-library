@@ -7,6 +7,9 @@ import './libass-wasm-overrides.css';
 import logger from '../../../../logger';
 import { SELECTOR_AUDIO, SELECTOR_VIDEO } from '../../../config';
 
+let retryAttempts = 0;
+const MAX_RETRIES = 5;
+
 const Video = ({
   id,
   probe,
@@ -101,20 +104,45 @@ const Video = ({
 
   // video cannot change, only 1 video track
 
+  const onMediaError = (mediaEl) => {
+    // https://developer.mozilla.org/en-US/docs/Web/API/MediaError/code
+    const MEDIA_ERR_NETWORK = 2;
+    const MEDIA_ERR_SRC_NOT_SUPPORTED = 4;
+
+    let transcode = false;
+
+    const { code } = mediaEl.error || {};
+    if (code === MEDIA_ERR_SRC_NOT_SUPPORTED) {
+      transcode = true;
+    } else if (code === MEDIA_ERR_NETWORK && retryAttempts < MAX_RETRIES) {
+      const { currentTime } = mediaEl;
+      setTimeout(() => {
+        // eslint-disable-next-line no-param-reassign
+        mediaEl.currentTime = Math.max(currentTime - 5, 0);
+        mediaEl.play();
+      }, Math.min(1000 * retryAttempts, 3000));
+
+      mediaEl.load();
+
+      retryAttempts += 1;
+      console.log('reloading', 'attempts:', retryAttempts);
+    }
+
+    return { transcode };
+  };
+
   const onAudioError = (err) => {
     const audioEl = document.querySelector(SELECTOR_AUDIO);
 
     console.log('audio error:', audioTrack, 'transode:', transcodeAudio);
-    console.error(err);
-    console.error(audioEl.error);
+    console.log(audioEl.error);
+    console.log(err);
 
-    // https://developer.mozilla.org/en-US/docs/Web/API/MediaError/code
-    const MEDIA_ERR_SRC_NOT_SUPPORTED = 4;
-    if (audioEl.error?.code === MEDIA_ERR_SRC_NOT_SUPPORTED) {
-      if (transcodeAudio === false) {
-        setTranscodeAudio(true);
-        console.log('transcoding audio');
-      }
+    const { transcode } = onMediaError(audioEl);
+
+    if (transcode && transcodeAudio === false) {
+      setTranscodeAudio(true);
+      console.log('transcoding audio');
     }
   };
 
@@ -122,16 +150,14 @@ const Video = ({
     const videoEl = document.querySelector(SELECTOR_VIDEO);
 
     console.log('video error:', videoTrack, 'transode:', transcodeVideo);
-    console.error(err);
-    console.error(videoEl.error);
+    console.log(videoEl.error);
+    console.log(err);
 
-    // https://developer.mozilla.org/en-US/docs/Web/API/MediaError/code
-    const MEDIA_ERR_SRC_NOT_SUPPORTED = 4;
-    if (videoEl.error?.code === MEDIA_ERR_SRC_NOT_SUPPORTED) {
-      if (transcodeVideo === false) {
-        setTranscodeVideo(true);
-        console.log('transcoding video');
-      }
+    const { transcode } = onMediaError(videoEl);
+
+    if (transcode && transcodeVideo === false) {
+      setTranscodeVideo(true);
+      console.log('transcoding video');
     }
   };
 
