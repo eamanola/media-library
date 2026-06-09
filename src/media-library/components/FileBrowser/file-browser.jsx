@@ -3,6 +3,7 @@ import { useLocation } from 'react-router';
 import { useSelector } from 'react-redux';
 
 import MediaList from '../MediaList';
+import Navigation from '../Navigation';
 import logger from '../../../logger';
 
 const FileBrowser = ({ mediaLibTitle = null }) => {
@@ -39,8 +40,15 @@ const FileBrowser = ({ mediaLibTitle = null }) => {
 
   if (folder === null) return null;
 
+  const folders = pathname.split('/');
+  folders.pop();
+
   return (
-    <MediaList folder={folder} />
+    <>
+      { pathname !== '/' ? <Navigation path={folders.join('/')} /> : null }
+
+      <MediaList folder={folder} />
+    </>
   );
 };
 

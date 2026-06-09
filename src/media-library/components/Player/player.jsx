@@ -7,6 +7,7 @@ import { actions } from '../../reducers';
 import Video from './Video';
 import './styles.css';
 import Controls from './Controls';
+import Navigation from '../Navigation';
 import logger from '../../../logger';
 import {
   CLASSNAME_PLAYER,
@@ -291,19 +292,8 @@ const Player = () => {
 
   return (
     <>
-      <>
-        <Link to="/">
-          Home
-        </Link>
+      <Navigation path={`/${backTo.join('/')}`} />
 
-        {
-          backTo.map((title, index) => (
-            <Link key={`navigate-${title}`} to={`/${backTo.slice(0, index + 1).join('/')}`}>
-              {title}
-            </Link>
-          ))
-        }
-      </>
       <div
         className={classNames.join(' ')}
         // onClick={CUSTOM_CONTROLS === true ? onClick : null}
