@@ -5,7 +5,7 @@ import Av from './AV';
 import mediaSrc, { fontSrc } from './media-src';
 import './libass-wasm-overrides.css';
 import logger from '../../../../logger';
-import { SELECTOR_VIDEO } from '../../../config';
+import { SELECTOR_AUDIO, SELECTOR_VIDEO } from '../../../config';
 
 const Video = ({
   id,
@@ -102,20 +102,36 @@ const Video = ({
   // video cannot change, only 1 video track
 
   const onAudioError = (err) => {
-    if (transcodeAudio === false) {
-      setTranscodeAudio(true);
-      console.log('transcoding audio', 'was:', audioTrack);
-    } else {
-      console.error('audio', err);
+    const audioEl = document.querySelector(SELECTOR_AUDIO);
+
+    console.log('audio error:', audioTrack, 'transode:', transcodeAudio);
+    console.error(err);
+    console.error(audioEl.error);
+
+    // https://developer.mozilla.org/en-US/docs/Web/API/MediaError/code
+    const MEDIA_ERR_SRC_NOT_SUPPORTED = 4;
+    if (audioEl.error?.code === MEDIA_ERR_SRC_NOT_SUPPORTED) {
+      if (transcodeAudio === false) {
+        setTranscodeAudio(true);
+        console.log('transcoding audio');
+      }
     }
   };
 
   const onVideoError = (err) => {
-    if (transcodeVideo === false) {
-      setTranscodeVideo(true);
-      console.log('transcoding video', 'was:', videoTrack);
-    } else {
-      console.error('video', err);
+    const videoEl = document.querySelector(SELECTOR_VIDEO);
+
+    console.log('video error:', videoTrack, 'transode:', transcodeVideo);
+    console.error(err);
+    console.error(videoEl.error);
+
+    // https://developer.mozilla.org/en-US/docs/Web/API/MediaError/code
+    const MEDIA_ERR_SRC_NOT_SUPPORTED = 4;
+    if (videoEl.error?.code === MEDIA_ERR_SRC_NOT_SUPPORTED) {
+      if (transcodeVideo === false) {
+        setTranscodeVideo(true);
+        console.log('transcoding video');
+      }
     }
   };
 
