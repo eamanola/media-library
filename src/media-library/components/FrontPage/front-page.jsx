@@ -63,7 +63,15 @@ const FrontPage = () => {
           : null
       }
 
-      <FileBrowser />
+      {
+        mediaLibrary.map(({ title }, index) => (
+          <>
+            <FileBrowser key={`medialib-${title}`} mediaLibTitle={title} />
+
+            {index < mediaLibrary.length - 1 ? <hr key={`linebreak-${title}`} /> : null}
+          </>
+        ))
+      }
     </>
   );
 };

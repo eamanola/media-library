@@ -71,11 +71,15 @@ const AMediaList = ({ folder = null }) => {
   const list = folder.children.map(({ children, title, video }) => {
     const isSubFolder = Array.isArray(children);
 
+    const isFrontPage = pathname === '/';
+    // prepend media lib title
+    const pathPrefix = isFrontPage ? `/${folder.title}` : pathname;
+
     // subfolder
     if (isSubFolder) {
       return {
         isSubFolder,
-        path: join(pathname, title),
+        path: join(pathPrefix, title),
         title,
         unPlayed: countUnPlayed({ children }, played),
       };

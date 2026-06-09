@@ -5,11 +5,10 @@ import { useSelector } from 'react-redux';
 import MediaList from '../MediaList';
 import logger from '../../../logger';
 
-const FileBrowser = () => {
+const FileBrowser = ({ mediaLibTitle = null }) => {
   const { pathname } = useLocation();
 
   const mediaLibrary = useSelector(({ mediaLibrary: state }) => state);
-
   const [folder, setFolder] = useState(null);
 
   useEffect(() => {
@@ -20,18 +19,21 @@ const FileBrowser = () => {
           .filter((part) => part !== '')
           .map((part) => decodeURIComponent(part));
 
-        const firstLib = mediaLibrary[0];
+        const libTitle = mediaLibTitle || path.shift();
+        const mediaLib = mediaLibrary.find(({ title }) => title === libTitle);
+
         const target = path.reduce((currentFolder, subFolder) => currentFolder.children.find(
           ({ title }) => title === subFolder,
-        ), firstLib);
+        ), mediaLib);
 
+        // if target !== mediaLib show navigation;
         setFolder(target);
         return target;
       };
 
       selectFolder();
     }
-  }, [mediaLibrary, pathname]);
+  }, [mediaLibrary, mediaLibTitle, pathname]);
 
   useEffect(() => { logger.log('FileBrowser: set folder', folder); }, [folder]);
 

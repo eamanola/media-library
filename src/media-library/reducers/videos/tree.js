@@ -63,11 +63,6 @@ const seasonTree = (groupedBySeason) => groupedBySeason
     return [...tree, { title: video.filename, video: { ...video, title: video.filename } }];
   }, []);
 
-// if (groupedByTitle.length === 1) {
-//   // one item season folder, skip
-//   const [season] = groupedByTitle;
-//   return seasonTree(season);
-// }
 const titleTree = (groupedByTitle) => groupedByTitle
   .sort((a, b) => (getValue(a, 'season') || 0) - (getValue(b, 'season') || 0))
   .reduce((tree, season) => {
@@ -108,9 +103,11 @@ const mediaLibTree = (groupedByMediaLib) => groupedByMediaLib
 
 const toTree = (grouped) => grouped.reduce((tree, mediaLib) => {
   const children = mediaLibTree(mediaLib);
-  const title = getValue(mediaLib, 'mediaLib');
+  const title = getValue(mediaLib, 'mediaLib').split('/').pop();
 
-  return [...tree, children.length === 1 ? children[0] : { children, title }];
+  // always return medialibs as folder
+  // return [...tree, children.length === 1 ? children[0] : { children, title }];
+  return [...tree, { children, title }];
 }, []);
 
 const createTree = (videos) => toTree(group(videos));
