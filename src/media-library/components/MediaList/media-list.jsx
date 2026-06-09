@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import { useDispatch } from 'react-redux';
 
 import { actions } from '../../reducers';
@@ -19,6 +19,7 @@ const {
 const MediaList = ({ list = null, title }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   // TODO:
   const [selected, setSelected] = useState(null);
@@ -40,7 +41,8 @@ const MediaList = ({ list = null, title }) => {
   };
 
   const onPlayExp = ({ displayId }) => () => {
-    navigate(`/${PATH_PLAYER}/${displayId}`);
+    const folderPath = pathname === '/' ? `/${title}` : pathname;
+    navigate(`/${PATH_PLAYER}${folderPath}/${displayId}`);
   };
 
   const onTogglePlayed = (video) => () => {

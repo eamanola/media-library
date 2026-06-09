@@ -6,7 +6,7 @@ import { PATH_PLAYER } from './config';
 const router = [
   {
     element: <Player />,
-    path: `${PATH_PLAYER}/:videoId`,
+    path: `${PATH_PLAYER}/*`,
   },
   {
     element: <FrontPage />,

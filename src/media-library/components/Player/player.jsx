@@ -106,7 +106,9 @@ const Player = () => {
   const dispatch = useDispatch();
   const mediaLibrary = useSelector(({ mediaLibrary: state }) => state);
   const played = useSelector(({ played: state }) => state);
-  const { videoId } = useParams();
+  const { '*': path } = useParams();
+  const backTo = path.split('/');
+  const videoId = backTo.pop();
 
   const [videoStream, setVideoStream] = useState(null);
   const [audioStream, setAudioStream] = useState(null);
@@ -136,8 +138,10 @@ const Player = () => {
     return null;
   };
 
+  const currentLib = mediaLibrary.find(({ title }) => title === backTo[0]);
+
   const previous = null;
-  const { current, next } = mediaLibrary.length > 0 ? findVideo(mediaLibrary[0]) : {};
+  const { current, next } = currentLib ? findVideo(currentLib) : {};
 
   const { probe } = useSelector(
     (({ probes }) => probes.find(({ probeId }) => probeId === current?.video.videoId)),
@@ -283,8 +287,23 @@ const Player = () => {
   if (loading) classNames.push('loading');
   if (hideUI) classNames.push('hide-ui');
 
+  const playerPath = `/${[PATH_PLAYER, ...backTo].join('/')}`;
+
   return (
     <>
+      <>
+        <Link to="/">
+          Home
+        </Link>
+
+        {
+          backTo.map((title, index) => (
+            <Link key={`navigate-${title}`} to={`/${backTo.slice(0, index + 1).join('/')}`}>
+              {title}
+            </Link>
+          ))
+        }
+      </>
       <div
         className={classNames.join(' ')}
         // onClick={CUSTOM_CONTROLS === true ? onClick : null}
@@ -326,7 +345,7 @@ const Player = () => {
                 top: '50%',
               }}
             >
-              <Link reloadDocument to={`/${PATH_PLAYER}/${next.video.displayId}`}>
+              <Link reloadDocument to={`${playerPath}/${next.video.displayId}`}>
                 next
               </Link>
             </span>
@@ -380,13 +399,13 @@ const Player = () => {
         )}
 
         {!!previous && (
-          <Link reloadDocument to={`/${PATH_PLAYER}/${previous.displayId}`}>
+          <Link reloadDocument to={`${playerPath}/${previous.displayId}`}>
             previous
           </Link>
         )}
 
         {!!next && (
-          <Link reloadDocument to={`/${PATH_PLAYER}/${next.video.displayId}`}>
+          <Link reloadDocument to={`${playerPath}/${next.video.displayId}`}>
             next
           </Link>
         )}
