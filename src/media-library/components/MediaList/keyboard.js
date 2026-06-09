@@ -36,10 +36,7 @@ const handleLeft = (listItem) => {
 
   // End of line
   // eslint-disable-next-line no-throw-literal
-  throw {
-    message: 'Out Of Bound',
-    suggestion: listItem.parentNode.childNodes[listItem.parentNode.childNodes.length - 1],
-  };
+  throw { message: 'Out Of Bound', suggestion: listItem.parentNode.lastChild };
 };
 
 const handleRight = (listItem) => {
@@ -49,16 +46,14 @@ const handleRight = (listItem) => {
 
   // End of line
   // eslint-disable-next-line no-throw-literal
-  throw {
-    message: 'Out Of Bound',
-    suggestion: listItem.parentNode.childNodes[0],
-  };
+  throw { message: 'Out Of Bound', suggestion: listItem.parentNode.firstChild };
 };
 
 const handleUp = (listItem) => {
   const container = listItem.parentNode;
-  const containerWidth = listItem.parentNode.clientWidth;
-  const elementIndex = [...container.childNodes].indexOf(listItem);
+  const children = [...container.childNodes];
+  const containerWidth = container.clientWidth;
+  const elementIndex = children.indexOf(listItem);
 
   if (isDisplayBlock(listItem)) {
     if (listItem.previousSibling) {
@@ -67,16 +62,22 @@ const handleUp = (listItem) => {
 
     // End of line
     // eslint-disable-next-line no-throw-literal
-    throw {
-      message: 'Out Of Bound',
-      suggestion: listItem.parentNode.childNodes[0],
-    };
+    throw { message: 'Out Of Bound', suggestion: container.firstChild };
   }
 
   let traversed = 0;
+  // let lastLeft = children[elementIndex].offsetLeft;
 
   for (let i = elementIndex; i >= 0; i -= 1) {
-    const current = container.childNodes[i];
+    const current = children[i];
+
+    // // line changed
+    // if (lastLeft < current.offsetLeft) {
+    //   const trailingWhiteSpace = containerWidth - current.offsetLeft - getWidth(current);
+    //   traversed += trailingWhiteSpace;
+    // }
+    // lastLeft = current.offsetLeft;
+
     const width = getWidth(current);
     traversed += width;
 
@@ -88,16 +89,14 @@ const handleUp = (listItem) => {
 
   // End of line
   // eslint-disable-next-line no-throw-literal
-  throw {
-    message: 'Out Of Bound',
-    suggestion: listItem.parentNode.childNodes[0],
-  };
+  throw { message: 'Out Of Bound', suggestion: container.firstChild };
 };
 
 const handleDown = (listItem) => {
   const container = listItem.parentNode;
-  const containerWidth = listItem.parentNode.clientWidth;
-  const elementIndex = [...container.childNodes].indexOf(listItem);
+  const children = [...container.childNodes];
+  const containerWidth = container.clientWidth;
+  const elementIndex = children.indexOf(listItem);
 
   if (isDisplayBlock(listItem)) {
     if (listItem.nextSibling) {
@@ -105,17 +104,25 @@ const handleDown = (listItem) => {
     }
     // End of line
     // eslint-disable-next-line no-throw-literal
-    throw {
-      message: 'Out Of Bound',
-      suggestion: listItem.parentNode.childNodes[listItem.parentNode.childNodes.length - 1],
-    };
+    throw { message: 'Out Of Bound', suggestion: container.lastChild };
   }
 
   let traversed = 0;
+  // let lastLeft = children[elementIndex].offsetLeft;
 
-  for (let i = elementIndex; i < container.childNodes.length; i += 1) {
-    const current = container.childNodes[i];
-    const width = current.offsetWidth;
+  for (let i = elementIndex; i < children.length; i += 1) {
+    const current = children[i];
+
+    // // line changed
+    // if (lastLeft > current.offsetLeft) {
+    //   // take trailing white space
+    //   const previous = current.previousSibling;
+    //   const trailingWhiteSpace = containerWidth - previous.offsetLeft - getWidth(previous);
+    //   traversed += trailingWhiteSpace;
+    // }
+    // lastLeft = current.offsetLeft;
+
+    const width = getWidth(current);
     traversed += width;
 
     // traverse one container width worth
@@ -126,10 +133,7 @@ const handleDown = (listItem) => {
 
   // End of line
   // eslint-disable-next-line no-throw-literal
-  throw {
-    message: 'Out Of Bound',
-    suggestion: listItem.parentNode.childNodes[listItem.parentNode.childNodes.length - 1],
-  };
+  throw { message: 'Out Of Bound', suggestion: container.lastChild };
 };
 
 // End of line handling
