@@ -40,7 +40,10 @@ const FrontPage = () => {
           return nexts;
         };
 
-        const nexts = playNext(mediaLibrary[0], played);
+        const nexts = mediaLibrary.reduce((all, mediaLib) => [
+          ...all, ...playNext(mediaLib, played),
+        ], []);
+
         logger.log('FileBrowser: set play next', nexts);
         setNextsList(nexts);
       };
