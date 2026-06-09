@@ -15,8 +15,8 @@ const isFolder = (element) => element.classList.contains('sub-folder');
 
 const isMediaItem = (element) => element.classList.contains('media-item');
 
-const getListItem = (target) => {
-  let listItem = target;
+const getListItem = ({ currentTarget, target }) => {
+  let listItem = currentTarget || target;
 
   while (!isMediaItem(listItem) && !isFolder(listItem)) {
     listItem = listItem.parentNode;
@@ -141,8 +141,9 @@ const handleDown = (listItem) => {
 // media-list (or the container) contains only, and only media-items and sub-folders
 // event target is inside the container, child or child of
 // focus must be within container
-const nextSelected = ({ key, target }) => {
-  const listItem = getListItem(target);
+const nextSelected = ({ key, currentTarget, target }) => {
+  // note: currentTarget is always listItem
+  const listItem = getListItem({ currentTarget, target });
   if (!listItem) return null;
 
   let next;
@@ -168,13 +169,14 @@ const nextSelected = ({ key, target }) => {
   return next;
 };
 
-const jumpList = ({ key, target }) => {
+const jumpList = ({ key, currentTarget, target }) => {
   const mediaLists = [...document.querySelectorAll('.media-list')];
 
   // nowhere to jump
   if (mediaLists.length < 2) return null;
 
-  const index = mediaLists.indexOf(target.parentNode);
+  const listItem = getListItem({ currentTarget, target });
+  const index = mediaLists.indexOf(listItem.parentNode);
 
   let nextList;
   let next;

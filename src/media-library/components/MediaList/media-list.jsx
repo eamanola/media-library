@@ -50,19 +50,13 @@ const MediaList = ({ list = null, title }) => {
   };
 
   const onKeyDown = (e) => {
-    const { key } = e;
-    const params = {
-      key,
-      target: mediaList.current.querySelector(`[data-selected-id="${selected}"]`),
-    };
-
     let next;
 
     try {
-      next = nextSelected(params);
+      next = nextSelected(e);
     } catch ({ suggestion }) {
       try {
-        next = jumpList(params) || suggestion;
+        next = jumpList(e) || suggestion;
       } catch ({ suggestion: jumpSuggestion }) {
         next = jumpSuggestion || suggestion;
       }
@@ -77,10 +71,6 @@ const MediaList = ({ list = null, title }) => {
   };
 
   const onFocus = ({ target }) => {
-    // to mix tab and arrow key navigations
-    // when [data-selected-id] not present
-    // traverse from target to parent with [data-selected-id] (max at .media-list)
-    // and set selected
     const selectedId = target.getAttribute('data-selected-id');
     if (selectedId) {
       // label.played fires after .media-list
