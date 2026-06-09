@@ -60,9 +60,12 @@ const MediaList = ({ list = null, title }) => {
 
     try {
       next = nextSelected(params);
-    } catch ({ message, suggestion }) {
-      console.log(message);
-      next = jumpList(params) || suggestion;
+    } catch ({ suggestion }) {
+      try {
+        next = jumpList(params) || suggestion;
+      } catch ({ suggestion: jumpSuggestion }) {
+        next = jumpSuggestion || suggestion;
+      }
     }
 
     if (next) {

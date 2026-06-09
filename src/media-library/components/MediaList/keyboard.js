@@ -170,10 +170,15 @@ const nextSelected = ({ key, target }) => {
 
 const jumpList = ({ key, target }) => {
   const mediaLists = [...document.querySelectorAll('.media-list')];
+
+  // nowhere to jump
+  if (mediaLists.length < 2) return null;
+
   const index = mediaLists.indexOf(target.parentNode);
 
   let nextList;
   let next;
+  let suggestion;
 
   switch (key) {
     case 'ArrowLeft':
@@ -182,19 +187,33 @@ const jumpList = ({ key, target }) => {
         nextList = mediaLists[index - 1].childNodes;
         next = nextList[nextList.length - 1];
       }
+
       // End of line
-      // go around?
+      if (!next) {
+        nextList = mediaLists[mediaLists.length - 1].childNodes;
+        suggestion = nextList[nextList.length - 1];
+
+        // eslint-disable-next-line no-throw-literal
+        throw { message: 'Out Of Bound', suggestion };
+      }
+
       break;
 
     case 'ArrowRight':
     case 'ArrowDown':
       if (index < mediaLists.length - 1) {
         nextList = mediaLists[index + 1].childNodes;
-        console.log(index, mediaLists, nextList);
         [next] = nextList;
       }
+
       // End of line
-      // go around?
+      if (!next) {
+        nextList = mediaLists[0].childNodes;
+        [suggestion] = nextList;
+
+        // eslint-disable-next-line no-throw-literal
+        throw { message: 'Out Of Bound', suggestion };
+      }
       break;
 
     default:

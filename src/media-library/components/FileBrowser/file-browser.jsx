@@ -27,7 +27,6 @@ const FileBrowser = ({ mediaLibTitle = null }) => {
           ({ title }) => title === subFolder,
         ), mediaLib);
 
-        // if target !== mediaLib show navigation;
         setFolder(target);
         return target;
       };
