@@ -66,17 +66,19 @@ const handleUp = (listItem) => {
   }
 
   let traversed = 0;
-  // let lastLeft = children[elementIndex].offsetLeft;
+  let lastLeft = children[elementIndex].offsetLeft;
+  // using offsetLeft, not offsetTop to detect line changes
+  // elements are inline in a row, but top(or height) may vary within the row
 
   for (let i = elementIndex; i >= 0; i -= 1) {
     const current = children[i];
 
-    // // line changed
-    // if (lastLeft < current.offsetLeft) {
-    //   const trailingWhiteSpace = containerWidth - current.offsetLeft - getWidth(current);
-    //   traversed += trailingWhiteSpace;
-    // }
-    // lastLeft = current.offsetLeft;
+    // line changed
+    if (lastLeft < current.offsetLeft) {
+      const trailingWhiteSpace = containerWidth - current.offsetLeft - getWidth(current);
+      traversed += trailingWhiteSpace;
+    }
+    lastLeft = current.offsetLeft;
 
     const width = getWidth(current);
     traversed += width;
@@ -108,19 +110,19 @@ const handleDown = (listItem) => {
   }
 
   let traversed = 0;
-  // let lastLeft = children[elementIndex].offsetLeft;
+  let lastLeft = children[elementIndex].offsetLeft;
 
   for (let i = elementIndex; i < children.length; i += 1) {
     const current = children[i];
 
-    // // line changed
-    // if (lastLeft > current.offsetLeft) {
-    //   // take trailing white space
-    //   const previous = current.previousSibling;
-    //   const trailingWhiteSpace = containerWidth - previous.offsetLeft - getWidth(previous);
-    //   traversed += trailingWhiteSpace;
-    // }
-    // lastLeft = current.offsetLeft;
+    // line changed
+    if (lastLeft > current.offsetLeft) {
+      // take trailing white space
+      const previous = current.previousSibling;
+      const trailingWhiteSpace = containerWidth - previous.offsetLeft - getWidth(previous);
+      traversed += trailingWhiteSpace;
+    }
+    lastLeft = current.offsetLeft;
 
     const width = getWidth(current);
     traversed += width;
