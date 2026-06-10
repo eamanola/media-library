@@ -15,6 +15,9 @@ const onNetworkError = (target) => {
   const { currentTime } = target;
 
   // TODO: better way to do this?
+  // note: doesn really work without issue:
+  // known cases:
+  // - transcode & cache: requires empty cache
   retryTimeout = setTimeout(() => {
     // eslint-disable-next-line no-param-reassign
     target.currentTime = Math.max(currentTime - 5, 0);
