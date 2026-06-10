@@ -10,7 +10,8 @@ const ass = ({ fonts, src, videoId }) => {
   const octopus = new SubtitlesOctopus({
     fallbackFont: '/fonts/default.woff2',
     fonts: (fonts || []).map(({ filename }) => fontSrc(videoId, filename)),
-    lazyFileLoading: true,
+    // causes issues with gzip
+    // lazyFileLoading: true,
     legacyWorkerUrl: '/libass-wasm/js/libassjs-worker-legacy.js',
     // lossyRender: 'js-blend',
     lossyRender: 'wasm-blend',
