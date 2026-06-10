@@ -9,14 +9,16 @@ import logger from '../../../../logger';
 import { SELECTOR_AUDIO, SELECTOR_VIDEO } from '../../../config';
 
 const Video = ({
-  id,
-  probe,
-  videoTrack,
   audioTrack = null,
-  subtitleTrack = null,
+  controls,
+  fonts = null,
+  onEnded = null,
   onReady = null,
   onTimeUpdate = null,
-  onEnded = null,
+  subtitleTrack = null,
+  videoId,
+  videoTrack,
+
 }) => {
   const [transcodeAudio, setTranscodeAudio] = useState(false);
   const [transcodeVideo, setTranscodeVideo] = useState(false);
@@ -25,7 +27,7 @@ const Video = ({
   useEffect(() => {
     if (subtitleTrack) {
       logger.log('onSubChanged', subtitleTrack);
-      const dispose = subtitle(id, subtitleTrack, probe.fonts);
+      const dispose = subtitle(videoId, subtitleTrack, fonts);
 
       return dispose;
     }
@@ -33,8 +35,8 @@ const Video = ({
     return () => null;
   }, [
     subtitleTrack,
-    id,
-    probe,
+    videoId,
+    fonts,
   ]);
 
   useEffect(() => {
@@ -89,12 +91,13 @@ const Video = ({
     }
   };
 
-  const videoSrc = () => mediaSrc('video', id, videoTrack.index, transcodeVideo);
-  const audioSrc = () => mediaSrc('audio', id, audioTrack.index, transcodeAudio);
+  const videoSrc = () => mediaSrc('video', videoId, videoTrack.index, transcodeVideo);
+  const audioSrc = () => mediaSrc('audio', videoId, audioTrack.index, transcodeAudio);
 
   return (
     <Av
       audioSrc={audioTrack ? audioSrc() : null}
+      controls={controls}
       onAudioError={audioTrack ? onAudioError : null}
       onEnded={onVideoEnded}
       onReady={onReady}

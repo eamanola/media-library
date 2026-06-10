@@ -314,12 +314,12 @@ const Player = () => {
           <Video
             audioTrack={audioStream}
             controls={!CUSTOM_CONTROLS}
-            id={current.video.videoId}
+            fonts={probe?.fonts}
             onEnded={onEnded}
             onReady={onReady}
             onTimeUpdate={onTimeUpdate}
-            probe={probe}
             subtitleTrack={subtitleStream}
+            videoId={current.video.videoId}
             videoTrack={videoStream}
           />
 
