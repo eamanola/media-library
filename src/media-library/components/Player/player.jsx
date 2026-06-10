@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams, Link } from 'react-router';
 
 // import subContent from './test.ass';
-import { actions } from '../../reducers';
+import { actions, helpers } from '../../reducers';
 import Video from './Video';
 import './styles.css';
 import Controls from './Controls';
@@ -18,6 +18,7 @@ import {
 } from '../../config';
 
 const { getProbes, togglePlayed } = actions;
+const { folderByDisplayId } = helpers;
 
 const PREF_LANG = 'jpn';
 const PREF_SUBS = 'eng';
@@ -103,6 +104,35 @@ const onEnded = () => {
   }
 };
 
+const getVideos = (videoId, mediaLibTitle, mediaLibrary) => {
+  if (mediaLibrary.length) {
+    const currentMediaLib = mediaLibrary.find(({ title }) => title === mediaLibTitle);
+    const folderVideos = folderByDisplayId(
+      videoId,
+      { folder: currentMediaLib, state: mediaLibrary },
+    ).children.filter(({ video }) => !!video);
+    const videoIndex = folderVideos.findIndex(({ video }) => video.displayId === videoId);
+
+    const previous = videoIndex > 0 ? folderVideos[videoIndex - 1] : null;
+    const current = folderVideos[videoIndex];
+    const next = videoIndex < folderVideos.length - 1
+      ? folderVideos[videoIndex + 1]
+      : null;
+
+    return { current, next, previous };
+  }
+
+  return {};
+};
+
+const getTitleString = (video) => {
+  let titleString = video.title;
+  titleString = `${titleString}${video.season ? ` S${video.season}` : ''}`;
+  titleString = `${titleString}${video.episode ? ` E${video.episode}` : ''}`;
+
+  return titleString;
+};
+
 const Player = () => {
   const dispatch = useDispatch();
   const mediaLibrary = useSelector(({ mediaLibrary: state }) => state);
@@ -118,46 +148,7 @@ const Player = () => {
   const [showNext, setShowNext] = useState(false);
   const [hideUI, setHideUI] = useState(false);
 
-  const findVideo = (aFolder) => {
-    const videos = aFolder.children.filter(({ video }) => !!video);
-    const found = videos.find(({ video }) => video.displayId === videoId);
-    if (found) {
-      const index = videos.indexOf(found);
-      const nextOne = index >= 0 && index < videos.length ? videos[index + 1] : null;
-      return {
-        current: found,
-        next: nextOne,
-      };
-    }
-
-    const subFolders = aFolder.children.filter(({ children }) => Array.isArray(children));
-    for (let i = 0; i < subFolders.length; i += 1) {
-      const respone = findVideo(subFolders[i]);
-      if (respone !== null) return respone;
-    }
-
-    return null;
-  };
-
-  const previous = null;
-  let current = null;
-  let next = null;
-  if (backTo.length === 0) {
-    for (let i = 0; i < mediaLibrary.length; i += 1) {
-      const { current: cur, next: nex } = findVideo(mediaLibrary[i]);
-
-      if (cur) {
-        current = cur;
-        next = nex;
-        break;
-      }
-    }
-  } else {
-    const currentMediaLib = mediaLibrary.find(({ title }) => title === backTo[0]);
-    const { current: cur, next: nex } = currentMediaLib ? findVideo(currentMediaLib) : {};
-    current = cur;
-    next = nex;
-  }
+  const { previous, current, next } = getVideos(videoId, backTo[0], mediaLibrary);
 
   const { probe } = useSelector(
     (({ probes }) => probes.find(({ probeId }) => probeId === current?.video.videoId)),
@@ -280,9 +271,7 @@ const Player = () => {
   // const next = null;
   // mediaLibrary[mediaLibrary.indexOf(video) + 1];
 
-  let titleString = current.video.title;
-  titleString = `${titleString}${current.video.season ? ` S${current.video.season}` : ''}`;
-  titleString = `${titleString}${current.video.episode ? ` E${current.video.episode}` : ''}`;
+  const titleString = getTitleString(current.video);
 
   const showUI = () => {
     if (hideUITimeout) {
@@ -404,7 +393,7 @@ const Player = () => {
         )}
 
         {!!previous && (
-          <Link reloadDocument to={`${playerPath}/${previous.displayId}`}>
+          <Link reloadDocument to={`${playerPath}/${previous.video.displayId}`}>
             previous
           </Link>
         )}

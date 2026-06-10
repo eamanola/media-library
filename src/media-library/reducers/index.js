@@ -1,4 +1,4 @@
-import videos, { getVideos } from './videos';
+import videos, { actions as videoActions, helpers as videoHelpers } from './videos';
 import { play } from './playback';
 import played, { getPlayed, togglePlayed } from './played';
 import thumbnails, { createThumbnails } from './create-thumbnails';
@@ -8,9 +8,13 @@ const actions = {
   createThumbnails,
   getPlayed,
   getProbes,
-  getVideos,
   play,
   togglePlayed,
+  ...videoActions,
+};
+
+const helpers = {
+  ...videoHelpers,
 };
 
 const reducers = {
@@ -22,6 +26,7 @@ const reducers = {
 
 export {
   actions,
+  helpers,
 };
 
 export default reducers;
