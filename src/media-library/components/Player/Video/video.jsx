@@ -91,19 +91,19 @@ const Video = ({
     }
   };
 
-  const videoSrc = mediaSrc('video', videoId, videoTrack.index, transcodeVideo);
-  const audioSrc = mediaSrc('audio', videoId, audioTrack.index, transcodeAudio);
+  const videoSrc = () => mediaSrc('video', videoId, videoTrack.index, transcodeVideo);
+  const audioSrc = () => mediaSrc('audio', videoId, audioTrack.index, transcodeAudio);
 
   return (
     <Av
-      audioSrc={audioTrack ? audioSrc : null}
+      audioSrc={audioTrack ? audioSrc() : null}
       controls={controls}
       onAudioError={audioTrack ? onAudioError : null}
       onEnded={onVideoEnded}
       onReady={onReady}
       onTimeUpdate={onTimeUpdate}
       onVideoError={onVideoError}
-      videoSrc={videoSrc}
+      videoSrc={videoSrc()}
     />
   );
 };
