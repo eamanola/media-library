@@ -1,4 +1,5 @@
 const CLASSNAME_PLAYER = 'player';
+const FOLDER_TITLE_PLAY_NEXT = 'play next';
 const PATH_PLAYER = 'player';
 const SELECTOR_AUDIO = `.${CLASSNAME_PLAYER} audio`;
 const SELECTOR_PLAYER = '.player';
@@ -6,6 +7,7 @@ const SELECTOR_VIDEO = `.${CLASSNAME_PLAYER} video`;
 
 const config = {
   CLASSNAME_PLAYER,
+  FOLDER_TITLE_PLAY_NEXT,
   PATH_PLAYER,
   SELECTOR_AUDIO,
   SELECTOR_PLAYER,
@@ -14,6 +16,7 @@ const config = {
 
 export {
   CLASSNAME_PLAYER,
+  FOLDER_TITLE_PLAY_NEXT,
   PATH_PLAYER,
   SELECTOR_AUDIO,
   SELECTOR_PLAYER,

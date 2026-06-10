@@ -139,10 +139,25 @@ const Player = () => {
     return null;
   };
 
-  const currentLib = mediaLibrary.find(({ title }) => title === backTo[0]);
-
   const previous = null;
-  const { current, next } = currentLib ? findVideo(currentLib) : {};
+  let current = null;
+  let next = null;
+  if (backTo.length === 0) {
+    for (let i = 0; i < mediaLibrary.length; i += 1) {
+      const { current: cur, next: nex } = findVideo(mediaLibrary[i]);
+
+      if (cur) {
+        current = cur;
+        next = nex;
+        break;
+      }
+    }
+  } else {
+    const currentMediaLib = mediaLibrary.find(({ title }) => title === backTo[0]);
+    const { current: cur, next: nex } = currentMediaLib ? findVideo(currentMediaLib) : {};
+    current = cur;
+    next = nex;
+  }
 
   const { probe } = useSelector(
     (({ probes }) => probes.find(({ probeId }) => probeId === current?.video.videoId)),

@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import logger from '../../../logger';
 import FileBrowser from '../FileBrowser';
 import MediaList from '../MediaList';
+import { FOLDER_TITLE_PLAY_NEXT } from '../../config';
 
 const FrontPage = () => {
   const mediaLibrary = useSelector(({ mediaLibrary: state }) => state);
@@ -58,7 +59,7 @@ const FrontPage = () => {
         nextsList?.length > 0
           ? (
             <>
-              <MediaList folder={{ children: nextsList, title: 'play next' }} />
+              <MediaList folder={{ children: nextsList, title: FOLDER_TITLE_PLAY_NEXT }} />
 
               <hr />
             </>

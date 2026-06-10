@@ -6,7 +6,7 @@ import { actions } from '../../reducers';
 import SubFolder from '../SubFolder';
 import MediaItem from '../MediaItem';
 import { jumpList, nextSelected } from './keyboard';
-import { PATH_PLAYER } from '../../config';
+import { FOLDER_TITLE_PLAY_NEXT, PATH_PLAYER } from '../../config';
 import './styles.css';
 
 const ENABLE_REMOTE = true;
@@ -41,7 +41,19 @@ const MediaList = ({ list = null, title }) => {
   };
 
   const onPlayExp = ({ displayId }) => () => {
-    const folderPath = pathname === '/' ? `/${title}` : pathname;
+    let folderPath;
+    // front page
+    if (pathname === '/') {
+      if (title === FOLDER_TITLE_PLAY_NEXT) {
+        folderPath = '/';
+      } else {
+        // media lib
+        folderPath = `/${title}`;
+      }
+    } else {
+      folderPath = pathname;
+    }
+
     navigate(`/${PATH_PLAYER}${folderPath}/${displayId}`);
   };
 
