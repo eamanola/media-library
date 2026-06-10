@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import SubtitlesOctopus from 'libass-wasm';
 
 import Av from './AV';
-import mediaSrc, { fontSrc } from './media-src';
+import subtitle from './subtitles';
+import mediaSrc from './media-src';
+import onMediaError from './media-error';
 import './libass-wasm-overrides.css';
 import logger from '../../../../logger';
 import { SELECTOR_AUDIO, SELECTOR_VIDEO } from '../../../config';
-
-let retryAttempts = 0;
-const MAX_RETRIES = 5;
 
 const Video = ({
   id,
@@ -27,61 +25,9 @@ const Video = ({
   useEffect(() => {
     if (subtitleTrack) {
       logger.log('onSubChanged', subtitleTrack);
-      const { codec, index } = subtitleTrack;
+      const dispose = subtitle(id, subtitleTrack, probe.fonts);
 
-      const supported = ['ass', 'webvtt'].includes(codec);
-      if (!supported) { console.warn('todo sub', codec); }
-
-      const transcode = !supported;
-      const subUrl = mediaSrc('subtitle', id, index, transcode);
-
-      if (codec === 'ass') {
-        logger.log('create', subtitleTrack);
-
-        const octopus = new SubtitlesOctopus({
-          fallbackFont: '/fonts/default.woff2',
-          fonts: probe.fonts.map(({ filename }) => fontSrc(id, filename)),
-          lazyFileLoading: true,
-          legacyWorkerUrl: '/libass-wasm/js/libassjs-worker-legacy.js',
-          // lossyRender: 'js-blend',
-          lossyRender: 'wasm-blend',
-          onError: console.error,
-          subUrl,
-          video: document.querySelector(SELECTOR_VIDEO),
-          workerUrl: '/libass-wasm/js/subtitles-octopus-worker.js',
-        });
-
-        return () => {
-          logger.log('dispose', subtitleTrack);
-          octopus.dispose();
-        };
-      }
-
-      // transcode defaults to webvtt
-      // playlist-manager-server formats for more info
-      if (codec === 'webvtt' || transcode) {
-        logger.log('webvtt');
-        const { language, title } = subtitleTrack;
-        const track = document.createElement('track');
-        track.setAttribute('label', title || language);
-        track.setAttribute('kind', 'subtitles');
-        track.setAttribute('srclang', language);
-        track.setAttribute('src', subUrl);
-        // track.setAttribute('default', true);
-
-        const videoEl = document.querySelector(SELECTOR_VIDEO);
-        videoEl.appendChild(track);
-
-        const { textTracks } = videoEl;
-        const latestTract = textTracks[textTracks.length - 1];
-        latestTract.mode = 'showing';
-
-        return () => {
-          logger.log('webvtt remove');
-          latestTract.mode = 'disabled';
-          track.remove();
-        };
-      }
+      return dispose;
     }
 
     return () => null;
@@ -103,33 +49,6 @@ const Video = ({
   }
 
   // video cannot change, only 1 video track
-
-  const onMediaError = (mediaEl) => {
-    // https://developer.mozilla.org/en-US/docs/Web/API/MediaError/code
-    const MEDIA_ERR_NETWORK = 2;
-    const MEDIA_ERR_SRC_NOT_SUPPORTED = 4;
-
-    let transcode = false;
-
-    const { code } = mediaEl.error || {};
-    if (code === MEDIA_ERR_SRC_NOT_SUPPORTED) {
-      transcode = true;
-    } else if (code === MEDIA_ERR_NETWORK && retryAttempts < MAX_RETRIES) {
-      const { currentTime } = mediaEl;
-      setTimeout(() => {
-        // eslint-disable-next-line no-param-reassign
-        mediaEl.currentTime = Math.max(currentTime - 5, 0);
-        mediaEl.play();
-      }, Math.min(1000 * retryAttempts, 3000));
-
-      mediaEl.load();
-
-      retryAttempts += 1;
-      console.log('reloading', 'attempts:', retryAttempts);
-    }
-
-    return { transcode };
-  };
 
   const onAudioError = (err) => {
     const audioEl = document.querySelector(SELECTOR_AUDIO);
