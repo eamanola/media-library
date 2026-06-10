@@ -78,6 +78,7 @@ const AMediaList = ({ folder = null }) => {
     // subfolder
     if (isSubFolder) {
       return {
+        children,
         isSubFolder,
         path: join(pathPrefix, title),
         title,

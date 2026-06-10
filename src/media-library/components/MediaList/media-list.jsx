@@ -45,8 +45,8 @@ const MediaList = ({ list = null, title }) => {
     navigate(`/${PATH_PLAYER}${folderPath}/${displayId}`);
   };
 
-  const onTogglePlayed = (video) => () => {
-    dispatch(togglePlayed(video));
+  const onTogglePlayed = (videos) => () => {
+    dispatch(togglePlayed(videos));
   };
 
   const onKeyDown = (e) => {
@@ -96,6 +96,7 @@ const MediaList = ({ list = null, title }) => {
                 key={item.title}
                 onFocus={ENABLE_REMOTE ? onFocus : null}
                 onKeyDown={ENABLE_REMOTE ? onKeyDown : null}
+                onTogglePlayed={onTogglePlayed(item.children.map(({ video }) => video))}
                 path={item.path}
                 selectedId={item.title}
                 title={item.title}
@@ -112,7 +113,7 @@ const MediaList = ({ list = null, title }) => {
                 onKeyDown={ENABLE_REMOTE ? onKeyDown : null}
                 onPlay={onPlay(item.video)}
                 onPlayExp={onPlayExp(item.video)}
-                onTogglePlayed={onTogglePlayed(item.video)}
+                onTogglePlayed={onTogglePlayed([item.video])}
                 selectedId={item.video.videoId}
                 thumbnail={item.thumbnail}
                 video={item.video}

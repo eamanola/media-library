@@ -6,6 +6,7 @@ import './styles.css';
 const SubFolder = ({
   onKeyDown,
   onFocus,
+  onTogglePlayed,
   path,
   selectedId,
   title,
@@ -32,6 +33,23 @@ const SubFolder = ({
       <Link to={path}>
         {`${title}${unPlayed > 0 ? ` (${unPlayed})` : ''}`}
       </Link>
+
+      <label
+        className="sub-folder-played-label"
+        htmlFor={`played-${title}`}
+      >
+        <input
+          checked={unPlayed === 0}
+          id={`played-${title}`}
+          onChange={onTogglePlayed}
+          type="checkbox"
+        />
+
+        {' '}
+
+        Played
+
+      </label>
     </div>
   );
 };

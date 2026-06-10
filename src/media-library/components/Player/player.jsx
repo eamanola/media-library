@@ -251,7 +251,7 @@ const Player = () => {
       const playedObj = played.find(({ mediaId }) => current.video.displayId === mediaId);
 
       if (playedObj?.isPlayed !== true) {
-        dispatch(togglePlayed(current.video));
+        dispatch(togglePlayed([current.video]));
         console.log('played');
       }
 

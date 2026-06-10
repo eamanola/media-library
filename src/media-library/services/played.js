@@ -31,7 +31,7 @@ const createPlayed = async (mediaId, isPlayed) => {
   }
 };
 
-const updatePlayed = async (playedObj) => {
+const updateOnePlayed = async (playedObj) => {
   try {
     const response = await fetch(`${BACKEND_URL}/played/${playedObj.id}`, {
       body: JSON.stringify(playedObj),
@@ -49,9 +49,28 @@ const updatePlayed = async (playedObj) => {
   }
 };
 
+const updatePlayed = async (playedList) => {
+  try {
+    const response = await fetch(`${BACKEND_URL}/played`, {
+      body: JSON.stringify(playedList),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'PUT',
+    });
+
+    return response.json();
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};
+
 export {
   createPlayed,
   played,
+  updateOnePlayed,
   updatePlayed,
 };
 
