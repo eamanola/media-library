@@ -103,7 +103,7 @@ const mediaLibTree = (groupedByMediaLib) => groupedByMediaLib
 
 const toTree = (grouped) => grouped.reduce((tree, mediaLib) => {
   const children = mediaLibTree(mediaLib);
-  const title = getValue(mediaLib, 'mediaLib').split('/').pop();
+  const title = getValue(mediaLib, 'mediaLib');
 
   // always return medialibs as folder
   // return [...tree, children.length === 1 ? children[0] : { children, title }];
