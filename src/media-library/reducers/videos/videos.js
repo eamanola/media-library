@@ -1,5 +1,4 @@
 import { videos as fetchVideos } from '../../services/videos';
-import testName from './test-names.json';
 import addDisplayIds from './add-display-ids';
 import addMediaInfo from './add-media-info';
 import { createTree } from './tree';
@@ -24,26 +23,25 @@ const reducer = (state, action) => {
 
 const USE_MOCK = false;
 
-const getMock = () => [
-  {
+const getMock = async () => {
+  const { default: testNames } = await import('./test-names.json');
+
+  return [{
     mediaLib: 'mocks',
-    videos: testName.map(({ filename }) => filename)
-      .filter((filename) => /(?:mkv|mp4)$/u.test(filename)),
-  },
-];
+    videos: testNames.map(({ filename }, index) => ({ id: index, path: filename }))
+      .filter(({ path }) => /(?:mkv|mp4)$/u.test(path)),
+  }];
+};
 
 const formatMediaLibs = ({ mediaLib, videos }) => videos
   .map((video) => ({ mediaLib, ...video }));
 
 const getVideos = () => async (dispatch) => {
-  const videos = (USE_MOCK ? getMock() : await fetchVideos())
+  const videos = (USE_MOCK ? await getMock() : await fetchVideos())
     .map(formatMediaLibs).flat()
     .map(addMediaInfo)
     .map(addDisplayIds)
-    .map(({ id, ...rest }) => ({
-      ...rest,
-      videoId: id,
-    }));
+    .map(({ id, ...rest }) => ({ ...rest, videoId: id }));
 
   const mediaLibrary = createTree(videos);
 
