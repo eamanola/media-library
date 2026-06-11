@@ -7,7 +7,7 @@ const findFolder = (folder, value, { property = 'videoId' }) => {
 
   const subFolders = folder.children.filter(({ children }) => Array.isArray(children));
   for (let i = 0; i < subFolders.length; i += 1) {
-    const respone = findFolder(subFolders[i], property, value);
+    const respone = findFolder(subFolders[i], value, { property });
     if (respone !== null) return respone;
   }
 
@@ -16,7 +16,8 @@ const findFolder = (folder, value, { property = 'videoId' }) => {
 
 const findFolderBy = (value, { folder = null, property = 'videoId', state = [] }) => {
   if (folder) {
-    return findFolder(folder, value, { property });
+    const respone = findFolder(folder, value, { property });
+    return respone;
   }
 
   for (let i = 0; i < state.length; i += 1) {
