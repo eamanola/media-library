@@ -60,7 +60,13 @@ const seasonTree = (groupedBySeason) => groupedBySeason
     }
 
     // console.warn('experimental: seasonTree. just a folder without season info? ', video);
-    return [...tree, { title: video.filename, video: { ...video, title: video.filename } }];
+    return [
+      ...tree,
+      {
+        title: video.path.split('/').pop(),
+        video: { ...video, title: video.path.split('/').pop() },
+      },
+    ];
   }, []);
 
 const titleTree = (groupedByTitle) => groupedByTitle

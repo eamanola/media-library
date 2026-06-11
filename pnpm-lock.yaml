@@ -16,7 +16,7 @@ importers:
         version: 4.1.0
       media-filename-parser:
         specifier: github:eamanola/media-filename-parser
-        version: git+https://git@github.com:eamanola/media-filename-parser.git#55d12dfa1ee9056b102b492afb8461a56c5a6b86
+        version: git+https://git@github.com:eamanola/media-filename-parser.git#e8fd6faab34db228352a7d0e7dee7b4c98df7388
       react:
         specifier: ^19.2.6
         version: 19.2.6
@@ -1178,9 +1178,9 @@ packages:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
     engines: {node: '>= 0.4'}
 
-  media-filename-parser@git+https://git@github.com:eamanola/media-filename-parser.git#55d12dfa1ee9056b102b492afb8461a56c5a6b86:
-    resolution: {commit: 55d12dfa1ee9056b102b492afb8461a56c5a6b86, repo: git@github.com:eamanola/media-filename-parser.git, type: git}
-    version: 0.2.13
+  media-filename-parser@git+https://git@github.com:eamanola/media-filename-parser.git#e8fd6faab34db228352a7d0e7dee7b4c98df7388:
+    resolution: {commit: e8fd6faab34db228352a7d0e7dee7b4c98df7388, repo: git@github.com:eamanola/media-filename-parser.git, type: git}
+    version: 0.2.18
 
   minimatch@10.2.5:
     resolution: {integrity: sha512-MULkVLfKGYDFYejP07QOurDLLQpcjk7Fw+7jXS2R2czRQzR56yHRveU5NDJEOviH+hETZKSkIk5c+T23GjFUMg==}
@@ -2713,7 +2713,7 @@ snapshots:
 
   math-intrinsics@1.1.0: {}
 
-  media-filename-parser@git+https://git@github.com:eamanola/media-filename-parser.git#55d12dfa1ee9056b102b492afb8461a56c5a6b86: {}
+  media-filename-parser@git+https://git@github.com:eamanola/media-filename-parser.git#e8fd6faab34db228352a7d0e7dee7b4c98df7388: {}
 
   minimatch@10.2.5:
     dependencies:

@@ -1,6 +1,7 @@
 import { videos as fetchVideos } from '../../services/videos';
 import testName from './test-names.json';
 import addDisplayIds from './add-display-ids';
+import addMediaInfo from './add-media-info';
 import { createTree } from './tree';
 
 const initialState = [];
@@ -37,6 +38,7 @@ const formatMediaLibs = ({ mediaLib, videos }) => videos
 const getVideos = () => async (dispatch) => {
   const videos = (USE_MOCK ? getMock() : await fetchVideos())
     .map(formatMediaLibs).flat()
+    .map(addMediaInfo)
     .map(addDisplayIds)
     .map(({ id, ...rest }) => ({
       ...rest,

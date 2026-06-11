@@ -6,7 +6,7 @@ const addIds = (video) => {
   const displayId = [];
 
   const {
-    episode, extra, filename, season, title, version, year,
+    episode, extra, path, season, title, version, year,
   } = video;
 
   if (title) { displayId.push(title.replace(/\s/ug, '_')); }
@@ -18,7 +18,7 @@ const addIds = (video) => {
     // not a recognizeed show
     // case folder, but not a season
     // takes in movies (not show, and not folder), but it is what it is
-    displayId.push(filename.replace(/[\s/]/ug, '_'));
+    displayId.push(path.split('/').pop().replace(/[\s/]/ug, '_'));
   }
 
   const withId = {
