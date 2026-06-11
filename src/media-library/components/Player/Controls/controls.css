@@ -1,55 +1,69 @@
+/* general styles */
 .controls {
   padding: 0.5em;
   background-color: #000000aa;
   color: var(--default-color);
-  transition: opacity 0.5s ease-in-out, visibility 0.5s;
 }
 
+.controls button {
+  border-radius: 0.25em;
+  border: var(--border);
+}
+
+/* increase size outside of :fullscreen */
+.controls {
+  font-size: 2rem;
+}
+:fullscreen .controls {
+  font-size: 1rem;
+}
+.controls button {
+  font-size: inherit;
+}
+
+/* hide logic */
+.controls {
+  transition: opacity 0.5s ease-in-out, visibility 0.5s;
+}
 .controls.hide,
 .hide-ui .controls {
   opacity: 0;
   visibility: hidden;
 }
-
 .controls:hover.hide,
 .hide-ui .controls:hover {
   opacity: unset;
   visibility: unset;
 }
 
+/* positioning and layout */
 .controls {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
 }
-
 .controls-container {
   display: flex;
   gap: 0.5em;
 }
-
 .controls-container .progress {
   flex: 1;
 }
 
+/* button states */
 .controls button {
   background-color: inherit;
   color: inherit;
-  border-radius: 0.25em;
-  border: var(--border);
 }
-
 .controls button:hover {
   background-color: var(--accent-color);
   color: var(--active-color);
 }
-
 .controls button:active {
   background-color: var(--active-color);
   color: var(--accent-color);
 }
-
 .controls button:disabled {
   background-color: var(--disabled-color);
   color: var(--disabled-color);
