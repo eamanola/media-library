@@ -6,14 +6,12 @@ const { BACKEND_URL } = appConfig;
 const probes = async (ids) => {
   try {
     const response = await fetch(
-      `${BACKEND_URL}/probes`,
+      `${BACKEND_URL}/probes?${ids.map((id) => `id=${id}`).join('&')}`,
       {
-        body: JSON.stringify(ids),
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        method: 'POST',
       },
     );
 
