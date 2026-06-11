@@ -3,7 +3,7 @@ import {
 } from 'media-filename-parser';
 
 const addMediaInfo = ({ path, ...rest }) => {
-  const subpath = path.replace(/^\//u, '');
+  const subpath = path;
 
   return {
     ...rest,
