@@ -38,6 +38,10 @@ const MediaItem = ({
     }
   };
 
+  // several mediaItems of same video can be on page, eg play-next
+  // eslint-disable-next-line react-hooks/purity
+  const playedCheckBoxId = `played-${video.displayId}-${Math.random()}`;
+
   return (
     <div
       className="media-item"
@@ -74,11 +78,11 @@ const MediaItem = ({
 
       <label
         className="media-item-played-label"
-        htmlFor={`played-${video.displayId}`}
+        htmlFor={playedCheckBoxId}
       >
         <input
           checked={isPlayed === true}
-          id={`played-${video.displayId}`}
+          id={playedCheckBoxId}
           onChange={onTogglePlayed}
           type="checkbox"
         />
