@@ -1,3 +1,13 @@
 .subfolder:has(.subfolder-open:hover) {
   outline-color: var(--accent-color);
 }
+
+.subfolder-open {
+  display: inline-block;
+  outline: none;
+  border: none;
+}
+
+.subfolder-cover-image {
+  max-height: 20em;
+}

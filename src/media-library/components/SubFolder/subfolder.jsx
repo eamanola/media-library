@@ -14,8 +14,8 @@ const SubFolder = ({
   unPlayed = 0,
 }) => {
   const onFocusLocal = (e) => {
-    if (e.target.className === 'sub-folder') {
-      e.target.children[0].focus();
+    if (e.target.classList.contains('subfolder')) {
+      e.target.querySelector('.subfolder-open').focus();
     }
 
     if (onFocus) {
@@ -42,7 +42,7 @@ const SubFolder = ({
     >
       {/* eslint-disable-next-line react/forbid-component-props */}
       <Link className="subfolder-open" to={path}>
-        <img alt={folder.title} src={coverImage} />
+        <img alt={folder.title} className="subfolder-cover-image" src={coverImage} />
       </Link>
 
       <div>

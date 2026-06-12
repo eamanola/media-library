@@ -105,7 +105,7 @@ const AMediaList = ({ folder = null }) => {
       if (state) {
         const { meta } = state;
         if (meta) {
-          coverImage = meta.coverImage.large;
+          coverImage = meta.image;
         }
       }
 
