@@ -45,8 +45,12 @@ const SubFolder = ({
         <img alt={folder.title} className="subfolder-cover-image" src={coverImage} />
       </Link>
 
-      <div>
-        {folder.title}
+      <div className="subfolder-title">
+        {folder.title.split('-').map((part) => (
+          <div key={`${folder.title}-${part}`}>
+            {part}
+          </div>
+        ))}
       </div>
 
       <label

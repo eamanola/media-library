@@ -11,3 +11,11 @@
 .subfolder-cover-image {
   max-height: 20em;
 }
+
+.subfolder-title {
+  min-height: 3em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
