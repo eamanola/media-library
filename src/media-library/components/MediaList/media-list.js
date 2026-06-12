@@ -9,6 +9,7 @@ import MediaList from './media-list.jsx';
 
 const {
   createThumbnails,
+  getMetas,
   getProbes,
 } = actions;
 
@@ -24,10 +25,11 @@ const AMediaList = ({ folder = null }) => {
   const thumbnails = useSelector(({ thumbnails: state }) => state);
   const probes = useSelector(({ probes: state }) => state);
   const played = useSelector(({ played: state }) => state);
+  const metas = useSelector(({ metas: state }) => state);
 
   useEffect(() => {
     if (folder?.children.length) {
-      const updateMeta = async () => {
+      const updateProbes = async () => {
         const videosWithoutProbe = folder.children
           .filter(({ video }) => !!video)
           .filter(({ video }) => !probes.some(({ probeId }) => probeId === video.videoId));
@@ -37,7 +39,7 @@ const AMediaList = ({ folder = null }) => {
           dispatch(getProbes(videosWithoutProbe.map(({ video }) => video)));
         }
       };
-      updateMeta();
+      updateProbes();
     }
   }, [
     dispatch,
@@ -64,6 +66,26 @@ const AMediaList = ({ folder = null }) => {
     dispatch,
     folder,
     thumbnails,
+  ]);
+
+  useEffect(() => {
+    if (folder?.children.length) {
+      const updateMetas = async () => {
+        const foldersWithoutMeta = folder.children
+          .filter(({ children }) => !!children)
+          .filter(({ title }) => !metas.some(({ query }) => query === title));
+
+        if (foldersWithoutMeta.length) {
+          logger.log('MediaList:', folder.title, 'set metas', foldersWithoutMeta.length);
+          dispatch(getMetas(foldersWithoutMeta));
+        }
+      };
+      updateMetas();
+    }
+  }, [
+    dispatch,
+    folder,
+    metas,
   ]);
 
   if (!folder?.children.length) return null;

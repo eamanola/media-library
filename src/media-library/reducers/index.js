@@ -3,9 +3,11 @@ import { play } from './playback';
 import played, { getPlayed, togglePlayed } from './played';
 import thumbnails, { createThumbnails } from './create-thumbnails';
 import probes, { getProbes } from './probes';
+import metas, { getMetas } from './metas/metas';
 
 const actions = {
   createThumbnails,
+  getMetas,
   getPlayed,
   getProbes,
   play,
@@ -19,6 +21,7 @@ const helpers = {
 
 const reducers = {
   mediaLibrary: videos,
+  metas,
   played,
   probes,
   thumbnails,
