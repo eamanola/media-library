@@ -4,12 +4,13 @@ import { Link } from 'react-router';
 import './styles.css';
 
 const SubFolder = ({
-  onKeyDown,
+  coverImage,
+  folder,
   onFocus,
+  onKeyDown,
   onTogglePlayed,
   path,
   selectedId,
-  title,
   unPlayed = 0,
 }) => {
   const onFocusLocal = (e) => {
@@ -22,25 +23,39 @@ const SubFolder = ({
     }
   };
 
+  let unPlayedStr = null;
+  if (unPlayed > 0) {
+    if (unPlayed === folder.children.length) {
+      unPlayedStr = ` (${folder.children.length})`;
+    } else {
+      unPlayedStr = ` (${folder.children.length - unPlayed}/${folder.children.length})`;
+    }
+  }
+
   return (
     <div
-      className="sub-folder"
+      className="media-item subfolder"
       data-selected-id={selectedId}
       onFocus={onFocusLocal}
       onKeyDown={onKeyDown}
       tabIndex={-1}
     >
-      <Link to={path}>
-        {`${title}${unPlayed > 0 ? ` (${unPlayed})` : ''}`}
+      {/* eslint-disable-next-line react/forbid-component-props */}
+      <Link className="subfolder-open" to={path}>
+        <img alt={folder.title} src={coverImage} />
       </Link>
 
+      <div>
+        {folder.title}
+      </div>
+
       <label
-        className="sub-folder-played-label"
-        htmlFor={`played-${title}`}
+        className="media-item-played-label"
+        htmlFor={`played-${folder.title}`}
       >
         <input
           checked={unPlayed === 0}
-          id={`played-${title}`}
+          id={`played-${folder.title}`}
           onChange={onTogglePlayed}
           type="checkbox"
         />
@@ -48,6 +63,8 @@ const SubFolder = ({
         {' '}
 
         Played
+
+        { unPlayedStr }
 
       </label>
     </div>

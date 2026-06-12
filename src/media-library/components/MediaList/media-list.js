@@ -99,11 +99,21 @@ const AMediaList = ({ folder = null }) => {
 
     // subfolder
     if (isSubFolder) {
+      // const coverImage = 'https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx145665-Qs53Mta5ngqs.jpg';
+      let coverImage = null;
+      const state = metas.find(({ query }) => query === title);
+      if (state) {
+        const { meta } = state;
+        if (meta) {
+          coverImage = meta.coverImage.large;
+        }
+      }
+
       return {
-        children,
+        coverImage,
+        folder: { children, title },
         isSubFolder,
         path: join(pathPrefix, title),
-        title,
         unPlayed: countUnPlayed({ children }, played),
       };
     }

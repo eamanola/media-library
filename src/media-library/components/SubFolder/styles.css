@@ -1,9 +1,3 @@
-.sub-folder {
-  display: block;
-}
-
-.sub-folder-played-label input[type="checkbox"] {
-  outline: none;
-  accent-color: var(--accent-color);
-  color: white;
+.subfolder:has(.subfolder-open:hover) {
+  outline-color: var(--accent-color);
 }

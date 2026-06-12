@@ -105,13 +105,14 @@ const MediaList = ({ list = null, title }) => {
           list.map((item) => (item.isSubFolder
             ? (
               <SubFolder
-                key={item.title}
+                coverImage={item.coverImage}
+                folder={item.folder}
+                key={item.folder.title}
                 onFocus={ENABLE_REMOTE ? onFocus : null}
                 onKeyDown={ENABLE_REMOTE ? onKeyDown : null}
-                onTogglePlayed={onTogglePlayed(item.children.map(({ video }) => video))}
+                onTogglePlayed={onTogglePlayed(item.folder.children.map(({ video }) => video))}
                 path={item.path}
-                selectedId={item.title}
-                title={item.title}
+                selectedId={item.folder.title}
                 unPlayed={item.unPlayed}
               />
             )
