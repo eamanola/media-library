@@ -27,6 +27,15 @@ const AMediaList = ({ folder = null }) => {
   const played = useSelector(({ played: state }) => state);
   const metas = useSelector(({ metas: state }) => state);
 
+  const isFrontPage = pathname === '/';
+  let metaPrefix = '';
+  if (!isFrontPage) {
+    const path = decodeURIComponent(pathname).split('/').filter((part) => !!part);
+    // remove media lib
+    path.shift();
+    metaPrefix = path.join(' ');
+  }
+
   useEffect(() => {
     if (folder?.children.length) {
       const updateProbes = async () => {
@@ -73,6 +82,7 @@ const AMediaList = ({ folder = null }) => {
       const updateMetas = async () => {
         const foldersWithoutMeta = folder.children
           .filter(({ children }) => !!children)
+          .map(({ title }) => ({ title: `${metaPrefix} ${title}` }))
           .filter(({ title }) => !metas.some(({ query }) => query === title));
 
         if (foldersWithoutMeta.length) {
@@ -86,6 +96,7 @@ const AMediaList = ({ folder = null }) => {
     dispatch,
     folder,
     metas,
+    metaPrefix,
   ]);
 
   if (!folder?.children.length) return null;
@@ -93,7 +104,6 @@ const AMediaList = ({ folder = null }) => {
   const list = folder.children.map(({ children, title, video }) => {
     const isSubFolder = Array.isArray(children);
 
-    const isFrontPage = pathname === '/';
     // prepend media lib title
     const pathPrefix = isFrontPage ? `/${folder.title}` : pathname;
 
@@ -101,7 +111,7 @@ const AMediaList = ({ folder = null }) => {
     if (isSubFolder) {
       // const coverImage = 'https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx145665-Qs53Mta5ngqs.jpg';
       let coverImage = null;
-      const state = metas.find(({ query }) => query === title);
+      const state = metas.find(({ query }) => query === `${metaPrefix} ${title}`);
       if (state) {
         const { meta } = state;
         if (meta) {
