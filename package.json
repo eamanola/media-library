@@ -1,12 +1,12 @@
 {
   "name": "fullstack-demo-react",
-  "version": "0.1.191",
+  "version": "0.1.192",
   "private": true,
   "main": "src/index.jsx",
   "type": "module",
   "dependencies": {
+    "@jellyfin/libass-wasm": "^4.2.4",
     "automata-api": "git+ssh://git@codeberg.org/eamanola/automata-api",
-    "libass-wasm": "^4.1.0",
     "media-filename-parser": "github:eamanola/media-filename-parser",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
@@ -16,7 +16,7 @@
     "redux-thunk": "^3.1.0"
   },
   "scripts": {
-    "copy-libass-wasm": "cp -R node_modules/libass-wasm/dist public/libass-wasm",
+    "copy-libass-wasm": "cp -R node_modules/@jellyfin/libass-wasm/dist public/libass-wasm",
     "start": "vite",
     "dev": "VITE_ENABLE_LOGGING=1 vite",
     "build": "pnpm run copy-libass-wasm && vite build",

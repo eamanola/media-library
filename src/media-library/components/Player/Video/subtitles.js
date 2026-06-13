@@ -1,4 +1,4 @@
-import SubtitlesOctopus from 'libass-wasm';
+import SubtitlesOctopus from '@jellyfin/libass-wasm';
 
 import mediaSrc, { fontSrc } from './media-src';
 import logger from '../../../../logger';

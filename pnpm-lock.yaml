@@ -8,12 +8,12 @@ importers:
 
   .:
     dependencies:
+      '@jellyfin/libass-wasm':
+        specifier: ^4.2.4
+        version: 4.2.4
       automata-api:
         specifier: git+ssh://git@codeberg.org/eamanola/automata-api
         version: git+ssh://git@codeberg.org/eamanola/automata-api#a90d78b685b22c7dc4f7a1ef03e475bee241c7b5
-      libass-wasm:
-        specifier: ^4.1.0
-        version: 4.1.0
       media-filename-parser:
         specifier: github:eamanola/media-filename-parser
         version: git+https://git@github.com:eamanola/media-filename-parser.git#e8fd6faab34db228352a7d0e7dee7b4c98df7388
@@ -221,6 +221,9 @@ packages:
   '@humanwhocodes/retry@0.4.3':
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
+
+  '@jellyfin/libass-wasm@4.2.4':
+    resolution: {integrity: sha512-xgOxp0Lmg7djdRpC+RRFaN28QeoMr46tOgL9/xbXqM46RjjVruFC3iK7K8AuGNUZ11Ysil23p0kACQw06GuaRw==}
 
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
@@ -1086,9 +1089,6 @@ packages:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
 
-  libass-wasm@4.1.0:
-    resolution: {integrity: sha512-+RbYT/uuI6VHExCmGyUuMg3A2gQOaCRTzSn8GGDSf3q4cEoUNiINd9u4RGfZXA1UKafW+Hv8bmcKIX4FKbSh0Q==}
-
   lightningcss-android-arm64@1.32.0:
     resolution: {integrity: sha512-YK7/ClTt4kAK0vo6w3X+Pnm0D2cf2vPHbhOXdoNti1Ga0al1P4TBZhwjATvjNwLEBCnKvjJc2jQgHXH0NEwlAg==}
     engines: {node: '>= 12.0.0'}
@@ -1760,6 +1760,8 @@ snapshots:
   '@humanwhocodes/module-importer@1.0.1': {}
 
   '@humanwhocodes/retry@0.4.3': {}
+
+  '@jellyfin/libass-wasm@4.2.4': {}
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
@@ -2647,8 +2649,6 @@ snapshots:
     dependencies:
       prelude-ls: 1.2.1
       type-check: 0.4.0
-
-  libass-wasm@4.1.0: {}
 
   lightningcss-android-arm64@1.32.0:
     optional: true
