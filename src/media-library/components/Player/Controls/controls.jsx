@@ -96,11 +96,24 @@ const Controls = ({
           onPlay={onPlay}
         />
 
-        <Chapters
-          chapters={probe?.chapters}
-          currentTime={currentTime}
-          onChapterSelected={toChapter}
-        />
+        {
+          probe?.chapters && probe?.chapters.length > 0
+            ? (
+              <Chapters
+                chapters={probe?.chapters}
+                currentTime={currentTime}
+                onChapterSelected={toChapter}
+              />
+            )
+            : (
+              <button
+                onClick={() => seekTo(0)}
+                type="button"
+              >
+                &lt;
+              </button>
+            )
+        }
 
         <Progress
           abuffered={audioBuffered}
