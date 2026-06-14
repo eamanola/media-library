@@ -1,9 +1,15 @@
 {
-  "name": "fullstack-demo-react",
-  "version": "0.1.193",
+  "name": "playlist manager",
+  "version": "0.1.194",
   "private": true,
   "main": "src/index.jsx",
   "type": "module",
+  "author": {
+    "name": "Ehsun Amanolahi",
+    "email": "ehsun.amanolahi@gmail.com",
+    "url": "https://codeberg.org/eamanola"
+  },
+  "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@jellyfin/libass-wasm": "^4.2.4",
     "automata-api": "git+ssh://git@codeberg.org/eamanola/automata-api",
