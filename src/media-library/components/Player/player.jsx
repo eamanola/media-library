@@ -279,7 +279,9 @@ const Player = () => {
     }
 
     hideUITimeout = setTimeout(() => {
-      setHideUI(true);
+      const wrapper = document.querySelector(SELECTOR_PLAYER);
+
+      setHideUI(document.fullscreenElement === wrapper);
       hideUITimeout = 0;
     }, HIDE_UI_TIMEOUT);
 

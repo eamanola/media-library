@@ -12,7 +12,7 @@
 
 /* increase size outside of :fullscreen */
 .controls {
-  font-size: 2rem;
+  font-size: 1rem;
 }
 :fullscreen .controls {
   font-size: 1rem;
