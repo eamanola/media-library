@@ -1,4 +1,4 @@
-import { metas as fetchMetas } from '../../services/metas';
+import { fetchMetas } from '../../services/metas';
 import logger from '../../../logger';
 
 const reducer = (state, action) => {
@@ -44,10 +44,7 @@ const getMetas = (folders) => async (dispatch, getState) => {
   logger.log('getMetas: fetched', folders);
 
   dispatch({
-    payload: metas.map(({ q, ...rest }) => ({
-      ...rest,
-      query: q,
-    })),
+    payload: metas.map(({ meta, query }) => ({ meta, query })),
     type: 'SET_METAS',
   });
   lock = false;
