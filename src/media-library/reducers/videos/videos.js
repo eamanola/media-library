@@ -1,4 +1,4 @@
-import { videos as fetchVideos } from '../../services/videos';
+import { fetchVideos } from '../../services/videos';
 import addDisplayIds from './add-display-ids';
 import addMediaInfo from './add-media-info';
 import { createTree } from './tree';

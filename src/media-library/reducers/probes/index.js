@@ -1,4 +1,4 @@
-import { probes as fetchProbes } from '../../services/probes';
+import { fetchProbes } from '../../services/probes';
 import logger from '../../../logger';
 
 const reducer = (state, action) => {

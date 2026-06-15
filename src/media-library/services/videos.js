@@ -3,7 +3,7 @@ import appConfig from '../../config';
 
 const { BACKEND_URL } = appConfig;
 
-const videos = async () => {
+const fetchVideos = async () => {
   try {
     const response = await fetch(`${BACKEND_URL}/videos`);
 
@@ -14,6 +14,6 @@ const videos = async () => {
   }
 };
 
-export { videos };
+export { fetchVideos };
 
 export default null;

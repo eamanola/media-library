@@ -1,6 +1,6 @@
 import {
   createPlayed,
-  played as fetchPlayed,
+  fetchPlayed,
   updateOnePlayed,
   updatePlayed,
 } from '../../services/played';

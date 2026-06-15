@@ -3,7 +3,7 @@ import appConfig from '../../config';
 
 const { BACKEND_URL } = appConfig;
 
-const probes = async (ids) => {
+const fetchProbes = async (ids) => {
   try {
     const response = await fetch(
       `${BACKEND_URL}/probes?${ids.map((id) => `id=${id}`).join('&')}`,
@@ -23,7 +23,7 @@ const probes = async (ids) => {
 };
 
 export {
-  probes,
+  fetchProbes,
 };
 
 export default null;

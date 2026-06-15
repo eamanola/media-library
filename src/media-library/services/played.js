@@ -3,7 +3,7 @@ import appConfig from '../../config';
 
 const { BACKEND_URL } = appConfig;
 
-const played = async (/* list */) => {
+const fetchPlayed = async (/* list */) => {
   try {
     const response = await fetch(`${BACKEND_URL}/played`);
     return response.json();
@@ -69,7 +69,7 @@ const updatePlayed = async (playedList) => {
 
 export {
   createPlayed,
-  played,
+  fetchPlayed,
   updateOnePlayed,
   updatePlayed,
 };
