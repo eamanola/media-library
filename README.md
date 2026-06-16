@@ -1,3 +1,5 @@
+Moved to [codeberg](https://codeberg.org/eamanola/media-library)
+
 # media-library
 
 A playlist manager, and media player in browser.
