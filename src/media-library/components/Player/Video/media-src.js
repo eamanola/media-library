@@ -1,8 +1,8 @@
 import config from '../../../../config';
 
+console.log(config);
 const mediaSrc = (type, id, streamIndex, transcode) => [
-  config.BACKEND_URL,
-  '/stream',
+  config.BACKEND_STREAM_URL,
   transcode ? '/transcode' : '',
   `/${id}`,
   `/${type}`,
@@ -12,7 +12,7 @@ const mediaSrc = (type, id, streamIndex, transcode) => [
   .join('');
 
 const fontSrc = (id, filename) => (
-  `${config.BACKEND_URL}/stream/${id}/fonts/${filename}`
+  `${config.BACKEND_STREAM_URL}/${id}/fonts/${filename}`
 );
 
 export { fontSrc };

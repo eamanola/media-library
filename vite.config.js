@@ -16,6 +16,10 @@ export default defineConfig(({ command, mode }) => {
           rewrite: (path) => path.replace(/^\/api/u, ''),
           target: process.env.BACKEND_URL || 'http://localhost:3001',
         },
+        '/stream': {
+          changeOrigin: false,
+          target: process.env.BACKEND_URL || 'http://localhost:3001',
+        },
       },
     },
   });

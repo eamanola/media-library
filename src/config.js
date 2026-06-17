@@ -8,6 +8,7 @@ const DEV_USER_PASSWORD = isDev ? 'supersecure' : undefined;
 
 const config = {
   // vite proxy, see vite config,
+  BACKEND_STREAM_URL: '/stream',
   BACKEND_URL: '/api',
 };
 
