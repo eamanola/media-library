@@ -93,6 +93,10 @@ const AV = ({
     <>
       <video
         controls={controls || DEBUG}
+        // otherwise redirects may be treated as security threat - due to vite proxy '/api'
+        // also vtt loading
+        // doesn affect audio?
+        crossOrigin="anonymous"
         onCanPlay={onCanPlay}
         onEnded={onEnded}
         onError={onVideoError}
