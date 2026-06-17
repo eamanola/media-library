@@ -40,6 +40,8 @@ const webvtt = ({ language, src, title }) => {
 
   const videoEl = document.querySelector(SELECTOR_VIDEO);
   videoEl.appendChild(track);
+  // otherwise track treats redirect as security threat
+  videoEl.setAttribute('crossorigin', 'anonymous');
 
   const { textTracks } = videoEl;
   const latestTract = textTracks[textTracks.length - 1];
@@ -50,6 +52,7 @@ const webvtt = ({ language, src, title }) => {
 
     latestTract.mode = 'disabled';
     track.remove();
+    videoEl.removeAttribute('crossorigin');
   };
 };
 
