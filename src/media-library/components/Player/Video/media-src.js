@@ -1,6 +1,5 @@
 import config from '../../../../config';
 
-console.log(config);
 const mediaSrc = (type, id, streamIndex, transcode) => [
   config.BACKEND_STREAM_URL,
   transcode ? '/transcode' : '',
